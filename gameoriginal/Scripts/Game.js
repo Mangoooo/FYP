@@ -19,7 +19,7 @@ theGame.Game = function(game)
 
 	this.sprite = null;
 	this.result = null;
-	this.redresult = null;
+	//this.wrongResult = null;
 	this.WaitToDisappear_bool = false;
 	this.Wrong_Timer = null;
     this.WaitToDisappear_bool_Timer = null;
@@ -59,6 +59,9 @@ theGame.Game = function(game)
 	this.clockImage = null;
 	this.clockSkin = null;
 	this.angle = 360;
+	
+	this.bubbleCreate = false;
+
 };
 
 theGame.Game.prototype = 
@@ -126,7 +129,7 @@ theGame.Game.prototype =
 		//timerText
         //this.timerText = this.add.text(this.world.centerX, this.world.centerY, 'Timer: 20', { font: "40px Arial", fill: "#000000", align: "center" });
     	//this.timerText.anchor.setTo(0.5, 0.5);
-		this.moneyText = this.add.text(600, 50, 'Money: 0', { font:"30px Arial", fill: "#000", align: "center"});
+		//this.moneyText = this.add.text(600, 50, 'Money: 0', { font:"30px Arial", fill: "#000", align: "center"});
 		this.CusNumText = this.add.text(460, 40, ': 0', { font:"30px Arial", fill: "#000", align: "center"});
     }, 
        
@@ -144,6 +147,7 @@ theGame.Game.prototype =
 		//console.log(this.greenCorrect);
 		//console.log(this.dude.body.velocity.x);
 		this.randomCusFunc(this.randomCus);
+
 		
 		if(this.money >= 10 && this.money <= 19)
 		{
@@ -190,22 +194,22 @@ theGame.Game.prototype =
 			if(this.randomCus == 1)
 			{
 				this.physics.startSystem(Phaser.Physics.ARCADE);
-				this.dude = this.add.sprite(this.world.width*0.1, this.world.height*0.3, 'dude');
+				this.dude = this.add.sprite(this.world.width*0.05, this.world.height*0.3, 'dude');
 				this.dude.anchor.set(0.5,0.5);
 				this.dude.scale.setTo(2, 2);
 				this.physics.enable(this.dude, Phaser.Physics.ARCADE);
-				this.dude.body.velocity.setTo(100,0);	
+				this.dude.body.velocity.setTo(110,0);	
 
 				this.dude.animations.add('left', [0,1,2,3]);     	
 				this.dude.animations.add('right', [5,6,7,8]);
 				this.dude.animations.add('still', [4]); 
 				
 				this.physics.startSystem(Phaser.Physics.ARCADE);
-				this.dude4 = this.add.sprite(this.world.width*0.15, this.world.height*0.3, 'dude4');
+				this.dude4 = this.add.sprite(this.world.widthX, this.world.height*0.3, 'dude4');
 				this.dude4.anchor.set(0.5,0.5);
 				this.dude4.scale.setTo(2, 2);
 				this.physics.enable(this.dude4, Phaser.Physics.ARCADE);
-				this.dude4.body.velocity.setTo(100,0);
+				this.dude4.body.velocity.setTo(110,0);
 
 				this.dude4.animations.add('left', [0,1,2,3]);     	
 				this.dude4.animations.add('right', [5,6,7,8]);
@@ -214,11 +218,11 @@ theGame.Game.prototype =
 			else if(this.randomCus == 2)
 			{	
 				this.physics.startSystem(Phaser.Physics.ARCADE);
-				this.dude2 = this.add.sprite(this.world.width*0.1, this.world.height*0.3, 'dude2');
+				this.dude2 = this.add.sprite(this.world.widthX, this.world.height*0.4, 'dude2');
 				this.dude2.anchor.set(0.5,0.5);
-				this.dude2.scale.setTo(2, 2);
+				//this.dude2.scale.setTo(2, 2);
 				this.physics.enable(this.dude2, Phaser.Physics.ARCADE);
-				this.dude2.body.velocity.setTo(100,0);
+				this.dude2.body.velocity.setTo(110,0);
 
 				this.dude2.animations.add('left', [0,1,2,3]);     	
 				this.dude2.animations.add('right', [5,6,7,8]);
@@ -227,11 +231,11 @@ theGame.Game.prototype =
 			else if(this.randomCus == 3)
 			{	
 				this.physics.startSystem(Phaser.Physics.ARCADE);
-				this.dude3 = this.add.sprite(this.world.width*0.1, this.world.height*0.3, 'dude3');
+				this.dude3 = this.add.sprite(this.world.widthX, this.world.height*0.3, 'dude3');
 				this.dude3.anchor.set(0.5,0.5);
 				this.dude3.scale.setTo(2, 2);
 				this.physics.enable(this.dude3, Phaser.Physics.ARCADE);
-				this.dude3.body.velocity.setTo(100,0);
+				this.dude3.body.velocity.setTo(110,0);
 
 				this.dude3.animations.add('left', [0,1,2,3]);     	
 				this.dude3.animations.add('right', [5,6,7,8]);
@@ -274,16 +278,16 @@ theGame.Game.prototype =
 		if (this.dude.x < this.world.centerX && this.middle == false)
 		{
 			this.dude.animations.play('right',10, true);
-			this.dude.body.velocity.setTo(100, 0);
+			this.dude.body.velocity.setTo(110, 0);
 			this.dude4.animations.play('right',10, true);
-			this.dude4.body.velocity.setTo(100, 0);
+			this.dude4.body.velocity.setTo(110, 0);
 		}
 		else if(this.dude.x > this.world.centerX+5 && this.middle == false)
 		{
 			this.dude.animations.play('right',10, true);
-			this.dude.body.velocity.setTo(100, 0);
+			this.dude.body.velocity.setTo(110, 0);
 			this.dude4.animations.play('right',10, true);
-			this.dude4.body.velocity.setTo(100, 0);
+			this.dude4.body.velocity.setTo(110, 0);
 		}
 		else
 		{
@@ -293,16 +297,20 @@ theGame.Game.prototype =
 			this.dude4.animations.play('still',10, true);
 			this.middle = true;
 		}
-		if(this.middle == true)
+		
+		if(this.middle == true && this.bubbleCreate == false)
 		{
 			this.bubble = this.add.sprite(this.world.width*0.2, this.world.height*0.2, 'request');
-			
+			this.bubbleCreate = true;
 		}
+		
 		if(this.blueCorrect == true)
 		{
 			this.dude.x += 0.5;
 			this.dude4.x += 0.5;
 			this.middle = false;
+			this.bubble.destroy();
+			this.bubbleCreate = false;
 		}
 	},
 	
@@ -311,14 +319,14 @@ theGame.Game.prototype =
 		this.greencustomer=1;
 		if (this.dude2.x < this.world.centerX && this.middle == false)
 		{
-			this.dude2.animations.play('right',10, true);
-			this.dude2.body.velocity.setTo(100, 0);
+			this.dude2.animations.play('left',10, true);
+			this.dude2.body.velocity.setTo(110, 0);
 			this.middle = false;
 		}
 		else if(this.dude2.x > this.world.centerX+5 && this.middle == false)
 		{
 			this.dude2.animations.play('right',10, true);
-			this.dude2.body.velocity.setTo(100, 0);
+			this.dude2.body.velocity.setTo(110, 0);
 			this.middle = false;
 		}
 		else
@@ -328,21 +336,18 @@ theGame.Game.prototype =
 			this.middle = true;	
 		}
 		
-		if(this.middle == true)
+		if(this.middle == true && this.bubbleCreate == false)
 		{
 			this.bubble = this.add.sprite(this.world.width*0.2, this.world.height*0.2, 'request');
-			console.log(this.middle);
-			
-			if( this.middle == false)
-			{
-				//this.destroyBubble();
-			}
+			this.bubbleCreate = true;
 		}
+		
 		if(this.greenCorrect == true)
 		{
 			this.dude2.x +=0.5;
 			this.middle = false;
-			
+			this.bubble.destroy();
+			this.bubbleCreate = false;
 		}
 	},
 		
@@ -352,12 +357,12 @@ theGame.Game.prototype =
 		if (this.dude3.x < this.world.centerX && this.middle == false)
 		{
 			this.dude3.animations.play('right',10, true);
-			this.dude3.body.velocity.setTo(100, 0);
+			this.dude3.body.velocity.setTo(110, 0);
 		}
 		else if(this.dude3.x > this.world.centerX+5 && this.middle == false)
 		{
 			this.dude3.animations.play('right',10, true);
-			this.dude3.body.velocity.setTo(100, 0);
+			this.dude3.body.velocity.setTo(110, 0);
 		}
 		else
 		{
@@ -365,15 +370,17 @@ theGame.Game.prototype =
 			this.dude3.animations.play('still',10, true);
 			this.middle = true;
 		}
-		if(this.middle == true)
+		if(this.middle == true && this.bubbleCreate == false)
 		{
 			this.bubble = this.add.sprite(this.world.width*0.2, this.world.height*0.2, 'request');
-			
+			this.bubbleCreate = true;
 		}
 		if(this.redCorrect == true)
 		{
 			this.dude3.x +=0.5;
 			this.middle = false;
+			this.bubble.destroy();
+			this.bubbleCreate = false;
 		}
 	},
 
@@ -481,9 +488,10 @@ theGame.Game.prototype =
 		 if (this.yellowGem.events.onInputDown)
             {
                 this.yellowGem.scale.setTo(1.2,1.2);
+				//this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
 				if(this.yellowcustomer!=null)
 				{
-					this.TheDestroyer(this.yellowcustomer,this.green); //destroyer gem
+					this.TheDestroyer(this.yellowcustomer,this.yellow); //destroyer gem
 				}
 				this.red.scale.setTo(1,1); // return gem original size
 				this.blue.scale.setTo(1,1);
@@ -494,6 +502,7 @@ theGame.Game.prototype =
             {    
                 this.yellowGem.scale.setTo(1,1);
 				this.result.kill();
+				
             }
 		},
 			
@@ -502,9 +511,10 @@ theGame.Game.prototype =
 		 if (this.cyanGem.events.onInputDown)
             {
                 this.cyanGem.scale.setTo(1.2,1.2);
+				//this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
 				if(this.cyancustomer!=null)
 				{
-					this.TheDestroyer(this.cyancustomer,this.green); //destroyer gem
+					this.TheDestroyer(this.cyancustomer,this.cyanGem); //destroyer gem
 				}
 				this.red.scale.setTo(1,1); // return gem original size
 				this.blue.scale.setTo(1,1);
@@ -527,10 +537,10 @@ theGame.Game.prototype =
 			this.startTimer = true;
             sprite2.kill();
 			this.setToKill = sprite;
-            this.countDown = 2; //destroyer correct gem and customer time
+            this.countDown = 1; //destroyer correct gem and customer time
 			
 			this.money += 10;
-			this.moneyText.text = 'Money: ' + this.money;
+			//this.moneyText.text = 'Money: ' + this.money;
 			
 			this.CusNum += 1;
 			this.CusNumText.text = ' : ' + this.CusNum;
@@ -543,7 +553,7 @@ theGame.Game.prototype =
 		{
 			this.startTimer = true; 
 			this.setToKill = sprite;
-			this.countDown = 2; //destroyer wrong gem and customer time	
+			//this.countDown = 1; //destroyer wrong gem and customer time	
 		}
 	},
 		
@@ -557,6 +567,7 @@ theGame.Game.prototype =
 				this.result.anchor.set(0.5,0.5);
 				this.redCorrect = true;
 				this.customerArray[2] = true;
+				//this.bubbleCreate.destroy(); 
 				this.spawnCustomer(); // call next customer
                 return true;
             }
@@ -566,6 +577,7 @@ theGame.Game.prototype =
 				this.result.anchor.set(0.5,0.5);
 				this.greenCorrect = true;
 				this.customerArray[1] = true;
+				//this.bubbleCreate.destroy(); 
 				this.spawnCustomer();
                 return true;
             }
@@ -575,6 +587,7 @@ theGame.Game.prototype =
 				this.result.anchor.set(0.5,0.5);
 				this.blueCorrect = true;
 				this.customerArray[0] = true;
+				//this.bubbleCreate.destroy(); 
 				this.spawnCustomer();
                 return true;
             }

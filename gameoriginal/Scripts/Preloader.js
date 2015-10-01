@@ -47,16 +47,17 @@ theGame.Preloader.prototype =
 		
 		
 		//customer
-		this.load.image('redcustomer', 'Assets/images/redCustomer.png');
-		this.load.image('bluecustomer', 'Assets/images/blueCustomer.png');
-		this.load.image('greenCustomer', 'Assets/images/greenCustomer.png');
+//		this.load.image('redcustomer', 'Assets/images/redCustomer.png');
+//		this.load.image('bluecustomer', 'Assets/images/blueCustomer.png');
+//		this.load.image('greenCustomer', 'Assets/images/greenCustomer.png');
 		
 		this.load.image('customerIcon', 'Assets/images/customerNO.png');
 		
 		//this.load.spritesheet('greencustomer', 'Assets/images/greencustomer.png', 350, 355, 5);
 		this.load.spritesheet('dude4', 'Assets/images/dude4.png', 32, 48);
 		this.load.spritesheet('dude3', 'Assets/images/dude3.png', 32, 48);
-		this.load.spritesheet('dude2', 'Assets/images/dude2.png', 32, 48);
+//		this.load.spritesheet('dude2', 'Assets/images/dude2.png', 32, 48);
+		this.load.spritesheet('dude2', 'Assets/images/dude2.png', 105, 162);
 		this.load.spritesheet('dude', 'Assets/images/dude.png', 32, 48);
 		
 		//wrong and correct image
