@@ -43,7 +43,7 @@ theGame.Game = function(game)
 	this.greenCorrect = false;
 	this.redCorrect = false;
 	this.blueCorrect = false;
-	this.iconImage = null;
+//	this.iconImage = null;
 	
 	this.middle = false;
 	this.randomCus = null;
@@ -110,8 +110,8 @@ theGame.Game.prototype =
 //		this.moneyImage.scale.setTo(1, 1);
 		
 		//customer icon
-		this.iconImage = this.add.sprite(this.world.width*0.45, this.world.height*0.08, 'customerIcon');
-        this.iconImage.anchor.set(0.5,0.5);
+//		this.iconImage = this.add.sprite(this.world.width*0.45, this.world.height*0.08, 'customerIcon');
+//        this.iconImage.anchor.set(0.5,0.5);
 		
 		//clock
 		this.clockSkin = this.add.sprite(this.world.width*0.08, this.world.height*0.85, 'clockskin');
@@ -130,7 +130,7 @@ theGame.Game.prototype =
         //this.timerText = this.add.text(this.world.centerX, this.world.centerY, 'Timer: 20', { font: "40px Arial", fill: "#000000", align: "center" });
     	//this.timerText.anchor.setTo(0.5, 0.5);
 		//this.moneyText = this.add.text(600, 50, 'Money: 0', { font:"30px Arial", fill: "#000", align: "center"});
-		this.CusNumText = this.add.text(460, 40, ': 0', { font:"30px Arial", fill: "#000", align: "center"});
+		//this.CusNumText = this.add.text(460, 40, ': 0', { font:"30px Arial", fill: "#000", align: "center"});
     }, 
        
     create: function()
@@ -577,7 +577,6 @@ theGame.Game.prototype =
 				this.result.anchor.set(0.5,0.5);
 				this.greenCorrect = true;
 				this.customerArray[1] = true;
-				//this.bubbleCreate.destroy(); 
 				this.spawnCustomer();
                 return true;
             }
@@ -587,7 +586,6 @@ theGame.Game.prototype =
 				this.result.anchor.set(0.5,0.5);
 				this.blueCorrect = true;
 				this.customerArray[0] = true;
-				//this.bubbleCreate.destroy(); 
 				this.spawnCustomer();
                 return true;
             }
