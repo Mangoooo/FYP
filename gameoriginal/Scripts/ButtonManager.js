@@ -7,6 +7,8 @@ function ButtonManager(game)
     this.pauseButton = null;
     this.exitButton = null;
 	this.skipButton = null;
+	this.restartButton = null;
+	this.nextButton = null;
     this.gametype = 0;
 };
 //game play button
@@ -46,11 +48,37 @@ ButtonManager.prototype.createSkipButton = function(posx, posy)
     this.skipButton = this.game.add.button(posx, posy, 'skipButton', this.skip, this,  1,0,2);
     this.skipButton.anchor.set(0.5,0.5);
 },
+	
+ButtonManager.prototype.createNextButton = function(posx, posy)
+{
+
+    this.nextButton = this.game.add.button(posx, posy, 'nextButton', this.restart, this,  1,0,2);
+    this.nextButton.anchor.set(0.5,0.5);
+},
+	
+ButtonManager.prototype.createRestartButton = function(posx, posy)
+{
+
+    this.restartButton = this.game.add.button(posx, posy, 'restartButton', this.next, this,  1,0,2);
+    this.restartButton.anchor.set(0.5,0.5);
+},
     
 ButtonManager.prototype.skip = function() 
 {
 	this.gametype = 1;
 	theGame.FadeScreen.OnEnd = true;
+};
+
+ButtonManager.prototype.restart = function() 
+{
+	this.gametype = 2;
+	theGame.FadeScreen.OnEnd = true;
+};
+
+ButtonManager.prototype.next = function() 
+{
+	this.gametype = 2;
+	//theGame.FadeScreen.OnEnd = true;
 };
 
 

@@ -21,8 +21,6 @@ theGame.Preloader.prototype =
         //Empty Loading bar
         
         //Loading bar 
-		//this.load.setPreloadSprite(this.preloadBar);
-        
         //this.load.setPreloadSprite(this.preloadBar); //use this.preloadbar as a sprite for loadingbar
         
         //Imagae Assets preload here
@@ -30,6 +28,8 @@ theGame.Preloader.prototype =
         this.load.image('MainMenuBackGround', 'Assets/images/mainmenu.png');
         this.load.image('GameBackGround', 'Assets/images/game.png');
         this.load.image('ToturialBackGround', 'Assets/images/tutorial.png');
+		//game over
+		this.load.image('gameover', 'Assets/images/gameover.png');
         
 		//table
 		this.load.image('gemTable', 'Assets/images/table.png');
@@ -37,7 +37,9 @@ theGame.Preloader.prototype =
         //Button
         this.load.image('startButton', 'Assets/images/Play_button.png');
        // this.load.image('tutorialButton', 'Assets/images/tutorialButton.png');
-         this.load.image('skipButton', 'Assets/images/skipButton.png');
+        this.load.image('skipButton', 'Assets/images/skipButton.png');
+		this.load.image('restartButton', 'Assets/images/restartButton.png');
+		this.load.image('nextButton', 'Assets/images/nextButton.png');
 		
 		//gem
 		this.load.image('red', 'Assets/images/red.png');
@@ -68,9 +70,9 @@ theGame.Preloader.prototype =
 		this.load.image('request', 'Assets/images/bubble.png');
 		
 		//money
-		//this.load.spritesheet('moneyImage', 'Assets/images/money.png', 64, 64);
+		this.load.spritesheet('moneyImage', 'Assets/images/coin.png', 100, 150);
 		this.load.image('moneyjar', 'Assets/images/moneyjar.png');
-		this.load.image('coin', 'Assets/images/coin.png');
+		//this.load.image('coin', 'Assets/images/coin.png');
 		
 		//clock
 		this.load.image('clockskin', 'Assets/images/clockskin.png');

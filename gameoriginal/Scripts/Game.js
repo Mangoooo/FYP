@@ -3,6 +3,7 @@ theGame.Game = function(game)
 	this.game;
 	this.add;
     this.gameBackground = null;
+	this.buttonManager = null;
     this.music = null;
     this.uiManager = null;  
 	this.red = null; // gem
@@ -61,7 +62,10 @@ theGame.Game = function(game)
 	this.angle = 360;
 	
 	this.bubbleCreate = false;
-
+	this.gameOverImage = null;
+	this.gameWin = false;
+	this.gameoverCreate = false;
+	this.canclick = false;
 };
 
 theGame.Game.prototype = 
@@ -77,6 +81,10 @@ theGame.Game.prototype =
 		//gemTable
 		this.tableImage = this.add.sprite(this.world.width*0.5, this.world.height*0.85, 'gemTable');
         this.tableImage.anchor.set(0.5,0.5);
+		
+		//game over
+//		this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.85, 'gameover');
+//        this.gameOverImage.anchor.set(0.5,0.5);
 		
 		// gem 
         this.red = this.add.sprite(this.world.width*0.3, this.world.height*0.7, 'red');
@@ -105,8 +113,7 @@ theGame.Game.prototype =
 		this.cyanGem.events.onInputDown.add(this.cyanclick, this);
 		
 		//Money
-//		this.moneyImage = this.add.sprite(this.world.width*0.8, this.world.height*0.7, 'moneyImage');
-//		this.moneyImage.anchor.set(0.5,0.5);
+		
 //		this.moneyImage.scale.setTo(1, 1);
 		
 		//customer icon
@@ -123,14 +130,14 @@ theGame.Game.prototype =
 		this.clockImage.scale.setTo(0.8,0.8);
 		
 		//money jar
-		this.moneyskin = this.add.sprite(this.world.width*0.93, this.world.height*0.85, 'moneyjar');
-        this.moneyskin.anchor.set(0.5,0.5);
+		//this.moneyskin = this.add.sprite(this.world.width*0.93, this.world.height*0.85, 'moneyjar');
+        //this.moneyskin.anchor.set(0.5,0.5);
 		
 		//timerText
-        //this.timerText = this.add.text(this.world.centerX, this.world.centerY, 'Timer: 20', { font: "40px Arial", fill: "#000000", align: "center" });
+        this.timerText = this.add.text(this.world.centerX, this.world.centerY, 'Timer: 20', { font: "40px Arial", fill: "#000000", align: "center" });
     	//this.timerText.anchor.setTo(0.5, 0.5);
-		//this.moneyText = this.add.text(600, 50, 'Money: 0', { font:"30px Arial", fill: "#000", align: "center"});
-		//this.CusNumText = this.add.text(460, 40, ': 0', { font:"30px Arial", fill: "#000", align: "center"});
+		this.moneyText = this.add.text(600, 50, 'Money: 0', { font:"30px Arial", fill: "#000", align: "center"});
+		this.CusNumText = this.add.text(460, 40, ': 0', { font:"30px Arial", fill: "#000", align: "center"});
     }, 
        
     create: function()
@@ -139,37 +146,43 @@ theGame.Game.prototype =
 
 		this.spawnCustomer();
 
-		this.clockImage = this.add.tween(this.clockImage).to( { angle: 360 }, 20000, Phaser.Easing.Linear.None, true);  //10
+		this.clockImage = this.add.tween(this.clockImage).to( { angle: 360 }, 20000, Phaser.Easing.Linear.None, true);  //10		
+		this.moneyImage = this.add.sprite(this.world.width*0.93, this.world.height*0.85, 'moneyImage');
+		this.moneyImage.frame = 0;
+		this.moneyImage.anchor.set(0.5,0.5);
+
     },
 	
 	update: function()
     { 
+		console.log(this.canclick);
 		//console.log(this.greenCorrect);
 		//console.log(this.dude.body.velocity.x);
 		this.randomCusFunc(this.randomCus);
-
+		      
 		
 		if(this.money >= 10 && this.money <= 19)
 		{
-			//this.moneyImage.frame = 1;
-			this.coinImage = this.add.sprite(this.world.width*0.93, this.world.height*0.92, 'coin');
-			this.coinImage.anchor.set(0.5,0.5);
+			this.moneyImage.frame = 1;
+//			this.coinImage = this.add.sprite(this.world.width*0.93, this.world.height*0.92, 'coin');
+//			this.coinImage.anchor.set(0.5,0.5);
+			console.log(this.money);
 		}
 		else if(this.money >= 20 && this.money <= 29)
 		{
-			//this.moneyImage.frame = 2;
-			this.coinImage = this.add.sprite(this.world.width*0.91, this.world.height*0.91, 'coin');
-			this.coinImage.anchor.set(0.5,0.5);
-
+			this.moneyImage.frame = 2;
+//			this.coinImage = this.add.sprite(this.world.width*0.91, this.world.height*0.91, 'coin');
+//			this.coinImage.anchor.set(0.5,0.5);
+			console.log(this.money);
 		}
 		else if(this.money >= 30 && this.money <= 39)
 		{
-			//this.moneyImage.frame = 3;
-			this.coinImage = this.add.sprite(this.world.width*0.95, this.world.height*0.90, 'coin');
-			this.coinImage.anchor.set(0.5,0.5);
+			this.moneyImage.frame = 3;
+//			this.coinImage = this.add.sprite(this.world.width*0.95, this.world.height*0.90, 'coin');
+//			this.coinImage.anchor.set(0.5,0.5);
+			console.log(this.money);
 		}
-		
-		
+
 		if (this.dude != null)  
 		{
 			this.blueCustomerFunc();
@@ -184,6 +197,47 @@ theGame.Game.prototype =
 		}
 		
 		this.clockImage.angle += 1;
+		
+//		if (this.timer <= 0 && this.gameoverCreate == false)
+//				{
+//					this.gameoverCreate == true;
+//					this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'gameover');
+//					this.gameOverImage.anchor.set(0.5,0.5);
+//					this.buttonManager = new ButtonManager(this);
+//					this.buttonManager.createRestartButton(this.world.width*0.5, this.world.height*0.7);
+//
+//					theGame.FadeScreen.update(this.buttonManager.gametype);	
+//					
+//					this.dude = this.add.sprite(this.world.width*0.05, this.world.height*0.3, 'dude');
+//					this.dude4 = this.add.sprite(this.world.widthX, this.world.height*0.3, 'dude4');
+//					this.dude2 = this.add.sprite(this.world.widthX, this.world.height*0.4, 'dude2');
+//					this.dude3 = this.add.sprite(this.world.widthX, this.world.height*0.3, 'dude3');
+//
+//					
+////					this.dude.destroy();
+////					this.dude2.destroy();
+////					this.dude3.destroy();
+////					this.dude4.destroy();
+//
+//					this.WaitToDisappear_bool = false;
+//					this.greenCorrect = false;
+//					this.redCorrect = false;
+//					this.blueCorrect = false;
+//					this.bubbleCreate = false;
+//					this.gameWin = false;
+//					this.middle = false;
+//					this.gameoverCreate = false;					
+//
+//					
+//				}	
+		if (this.CusNum >= 3)
+		{
+			this.buttonManager = new ButtonManager(this);
+			this.buttonManager.createNextButton(this.world.width*0.5, this.world.height*0.5);
+
+			theGame.FadeScreen.update(this.buttonManager.gametype);	
+		}
+		
     },
 	
 	spawnCustomer: function()
@@ -296,6 +350,7 @@ theGame.Game.prototype =
 			this.dude4.body.velocity.setTo(0, 0);
 			this.dude4.animations.play('still',10, true);
 			this.middle = true;
+			this.canclick = true;
 		}
 		
 		if(this.middle == true && this.bubbleCreate == false)
@@ -311,6 +366,7 @@ theGame.Game.prototype =
 			this.middle = false;
 			this.bubble.destroy();
 			this.bubbleCreate = false;
+			//this.canclick = false;
 		}
 	},
 	
@@ -334,6 +390,7 @@ theGame.Game.prototype =
 			this.dude2.body.velocity.setTo(0, 0);
 			this.dude2.animations.play('still',10, true);
 			this.middle = true;	
+			this.canclick = true;
 		}
 		
 		if(this.middle == true && this.bubbleCreate == false)
@@ -348,6 +405,7 @@ theGame.Game.prototype =
 			this.middle = false;
 			this.bubble.destroy();
 			this.bubbleCreate = false;
+			this.canclick = false;
 		}
 	},
 		
@@ -369,6 +427,7 @@ theGame.Game.prototype =
 			this.dude3.body.velocity.setTo(0, 0);
 			this.dude3.animations.play('still',10, true);
 			this.middle = true;
+			this.canclick = true;
 		}
 		if(this.middle == true && this.bubbleCreate == false)
 		{
@@ -379,8 +438,12 @@ theGame.Game.prototype =
 		{
 			this.dude3.x +=0.5;
 			this.middle = false;
-			this.bubble.destroy();
-			this.bubbleCreate = false;
+			if (this.bubbleCreate == true)
+			{
+				this.bubble.destroy();
+				this.bubbleCreate = false;
+				//this.canclick = false;
+			}
 		}
 	},
 
@@ -415,13 +478,15 @@ theGame.Game.prototype =
 		else 
 		{
 			this.timer--;
-			//this.timerText.setText('Timer: ' + this.timer); // print timer number
+			this.timerText.setText('Timer: ' + this.timer); // print timer number
 		}
     },
 	
 	redclick: function()
 	{
 		if (this.red.events.onInputDown)
+		{
+			if (this.canclick == true)
 			{
 				this.red.scale.setTo(1.2,1.2);
 				if(this.redcustomer!=null)
@@ -433,19 +498,23 @@ theGame.Game.prototype =
 				this.yellowGem.scale.setTo(1,1);
 				this.cyanGem.scale.setTo(1,1);
 			}
-			else if(this.red.events.onInputUp)
-			{
+		}
+		else if(this.red.events.onInputUp)
+		{
+				//this.canclick = false;
 				this.red.scale.setTo(1,1);
 				this.result.kill();
-			}
+		}
+		
 	},
 
 	blueclick: function()
 	{
-		
-		 if (this.blue.events.onInputDown)
-            {
-                this.blue.scale.setTo(1.2,1.2);
+		if (this.blue.events.onInputDown)
+		{
+			if (this.canclick == true)
+			{
+				this.blue.scale.setTo(1.2,1.2);
 				if(this.bluecustomer!=null)
 				{
 					this.TheDestroyer(this.bluecustomer,this.blue);
@@ -454,19 +523,23 @@ theGame.Game.prototype =
 				this.green.scale.setTo(1,1);
 				this.yellowGem.scale.setTo(1,1);
 				this.cyanGem.scale.setTo(1,1);
-            }
-            else if(this.blue.events.onInputUp)
-            {    
-                 this.blue.scale.setTo(1,1);
-				 this.result.kill();
-            }
+			}
+        }
+        else if(this.blue.events.onInputUp)
+		{    
+				//this.canclick = false;
+				this.blue.scale.setTo(1,1);
+				this.result.kill();
+		}
 	},
 
 	greenclick: function()
+	{
+		if (this.green.events.onInputDown)
 		{
-		 if (this.green.events.onInputDown)
-            {
-                this.green.scale.setTo(1.2,1.2);
+			if (this.canclick == true)
+			{
+				this.green.scale.setTo(1.2,1.2);
 				if(this.greencustomer!=null)
 				{
 					this.TheDestroyer(this.greencustomer,this.green); //destroyer gem
@@ -475,31 +548,41 @@ theGame.Game.prototype =
 				this.blue.scale.setTo(1,1);
 				this.yellowGem.scale.setTo(1,1);
 				this.cyanGem.scale.setTo(1,1);
-            }
-            else if(this.green.events.onInputUp)
-            {    
-                this.green.scale.setTo(1,1);
+			}
+		}
+			else if(this.green.events.onInputUp)
+			{   if(sprite == this.greencustomer && sprite2 == this.green)
+				{	
+					this.canclick = false;
+				}
+				this.green.scale.setTo(1,1);
 				this.result.kill();
-            }
-		},
+
+		}
+		
+		//console.log(this.canclick);
+	},
 			
 	yellowclick: function()
 		{
 		 if (this.yellowGem.events.onInputDown)
             {
-                this.yellowGem.scale.setTo(1.2,1.2);
-				//this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
-				if(this.yellowcustomer!=null)
+				if (this.canclick == true)
 				{
-					this.TheDestroyer(this.yellowcustomer,this.yellow); //destroyer gem
+					this.yellowGem.scale.setTo(1.2,1.2);
+					if(this.yellowcustomer!=null)
+					{
+						this.TheDestroyer(this.yellowcustomer,this.yellow); //destroyer gem
+					}
+					this.red.scale.setTo(1,1); // return gem original size
+					this.blue.scale.setTo(1,1);
+					this.green.scale.setTo(1,1);
+					this.cyanGem.scale.setTo(1,1);
 				}
-				this.red.scale.setTo(1,1); // return gem original size
-				this.blue.scale.setTo(1,1);
-				this.green.scale.setTo(1,1);
-				this.cyanGem.scale.setTo(1,1);
             }
             else if(this.yellowGem.events.onInputUp)
             {    
+				//this.canclick = false;
                 this.yellowGem.scale.setTo(1,1);
 				this.result.kill();
 				
@@ -510,19 +593,23 @@ theGame.Game.prototype =
 		{
 		 if (this.cyanGem.events.onInputDown)
             {
-                this.cyanGem.scale.setTo(1.2,1.2);
-				//this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
-				if(this.cyancustomer!=null)
+				if (this.canclick == true)
 				{
-					this.TheDestroyer(this.cyancustomer,this.cyanGem); //destroyer gem
+					this.cyanGem.scale.setTo(1.2,1.2);
+					//this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
+					if(this.cyancustomer!=null)
+					{
+						this.TheDestroyer(this.cyancustomer,this.cyanGem); //destroyer gem
+					}
+					this.red.scale.setTo(1,1); // return gem original size
+					this.blue.scale.setTo(1,1);
+					this.green.scale.setTo(1,1);
+					this.yellowGem.scale.setTo(1,1);
 				}
-				this.red.scale.setTo(1,1); // return gem original size
-				this.blue.scale.setTo(1,1);
-				this.green.scale.setTo(1,1);
-				this.yellowGem.scale.setTo(1,1);
             }
             else if(this.cyanGem.events.onInputUp)
             {    
+				//this.canclick = false;
                 this.cyanGem.scale.setTo(1,1);
 				this.result.kill();
             }
@@ -535,30 +622,34 @@ theGame.Game.prototype =
         {
             this.WaitToDisappear_bool = true;
 			this.startTimer = true;
-            sprite2.kill();
+            //sprite2.kill(); // destroyer gem 
 			this.setToKill = sprite;
             this.countDown = 1; //destroyer correct gem and customer time
 			
 			this.money += 10;
-			//this.moneyText.text = 'Money: ' + this.money;
+			this.moneyText.text = 'Money: ' + this.money;
 			
 			this.CusNum += 1;
 			this.CusNumText.text = ' : ' + this.CusNum;
 			
-			this.red.scale.setTo(1,1);
-			this.blue.scale.setTo(1,1);
-			this.green.scale.setTo(1,1);
+//			this.red.scale.setTo(1,1);
+//			this.blue.scale.setTo(1,1);
+//			this.green.scale.setTo(1,1);
         }
 		else
 		{
 			this.startTimer = true; 
 			this.setToKill = sprite;
-			//this.countDown = 1; //destroyer wrong gem and customer time	
+			this.countDown = 1; //destroyer wrong gem and customer time	
 		}
 	},
 		
 	checkCombination: function(sprite,sprite2)
 	{
+			this.Wrong_value = 0;
+            if(this.Wrong_value == 1)
+            {
+            }
 		if(sprite != null && sprite2 != null)
         {
             if(sprite == this.redcustomer && sprite2 == this.red ) // sprite is customer  sprite2 is gem
@@ -567,7 +658,6 @@ theGame.Game.prototype =
 				this.result.anchor.set(0.5,0.5);
 				this.redCorrect = true;
 				this.customerArray[2] = true;
-				//this.bubbleCreate.destroy(); 
 				this.spawnCustomer(); // call next customer
                 return true;
             }
@@ -576,6 +666,7 @@ theGame.Game.prototype =
 				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
 				this.result.anchor.set(0.5,0.5);
 				this.greenCorrect = true;
+				//this.canclick = false;
 				this.customerArray[1] = true;
 				this.spawnCustomer();
                 return true;
@@ -589,13 +680,13 @@ theGame.Game.prototype =
 				this.spawnCustomer();
                 return true;
             }
-           else 
+        }
+		else 
             {   
               	this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
 				this.result.anchor.set(0.5,0.5);
 				this.result.scale.setTo(1,1);
             }
-        }
         return false;
 	}
 };
