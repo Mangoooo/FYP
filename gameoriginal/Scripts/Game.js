@@ -64,8 +64,12 @@ theGame.Game = function(game)
 	this.bubbleCreate = false;
 	this.gameOverImage = null;
 	this.gameWin = false;
-	this.gameoverCreate = false;
-	this.canclick = false;
+	//this.gameoverCreate = false;
+	
+	//this.redCanclick = false;
+	this.greenCanclick = false;
+	//this.blueCanclick = false;
+	//this.nextLevelClick = false;
 };
 
 theGame.Game.prototype = 
@@ -142,6 +146,7 @@ theGame.Game.prototype =
        
     create: function()
     {
+		//this.physics.startSystem(Phaser.Physics.ARCADE);
         this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this); // timer
 
 		this.spawnCustomer();
@@ -150,37 +155,30 @@ theGame.Game.prototype =
 		this.moneyImage = this.add.sprite(this.world.width*0.93, this.world.height*0.85, 'moneyImage');
 		this.moneyImage.frame = 0;
 		this.moneyImage.anchor.set(0.5,0.5);
-
+		
+		this.buttonManager = new ButtonManager(this);
+		theGame.FadeScreen = new FadeManager(this);
+        theGame.FadeScreen.create();
+		
     },
 	
 	update: function()
     { 
-		console.log(this.canclick);
-		//console.log(this.greenCorrect);
-		//console.log(this.dude.body.velocity.x);
+		this.clockImage.angle += 1;
+		
 		this.randomCusFunc(this.randomCus);
-		      
 		
 		if(this.money >= 10 && this.money <= 19)
 		{
 			this.moneyImage.frame = 1;
-//			this.coinImage = this.add.sprite(this.world.width*0.93, this.world.height*0.92, 'coin');
-//			this.coinImage.anchor.set(0.5,0.5);
-			console.log(this.money);
 		}
 		else if(this.money >= 20 && this.money <= 29)
 		{
 			this.moneyImage.frame = 2;
-//			this.coinImage = this.add.sprite(this.world.width*0.91, this.world.height*0.91, 'coin');
-//			this.coinImage.anchor.set(0.5,0.5);
-			console.log(this.money);
 		}
 		else if(this.money >= 30 && this.money <= 39)
 		{
 			this.moneyImage.frame = 3;
-//			this.coinImage = this.add.sprite(this.world.width*0.95, this.world.height*0.90, 'coin');
-//			this.coinImage.anchor.set(0.5,0.5);
-			console.log(this.money);
 		}
 
 		if (this.dude != null)  
@@ -196,48 +194,43 @@ theGame.Game.prototype =
 			this.redCustomerFunc();
 		}
 		
-		this.clockImage.angle += 1;
 		
-//		if (this.timer <= 0 && this.gameoverCreate == false)
-//				{
-//					this.gameoverCreate == true;
-//					this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'gameover');
-//					this.gameOverImage.anchor.set(0.5,0.5);
-//					this.buttonManager = new ButtonManager(this);
-//					this.buttonManager.createRestartButton(this.world.width*0.5, this.world.height*0.7);
-//
-//					theGame.FadeScreen.update(this.buttonManager.gametype);	
-//					
-//					this.dude = this.add.sprite(this.world.width*0.05, this.world.height*0.3, 'dude');
-//					this.dude4 = this.add.sprite(this.world.widthX, this.world.height*0.3, 'dude4');
-//					this.dude2 = this.add.sprite(this.world.widthX, this.world.height*0.4, 'dude2');
-//					this.dude3 = this.add.sprite(this.world.widthX, this.world.height*0.3, 'dude3');
-//
-//					
-////					this.dude.destroy();
-////					this.dude2.destroy();
-////					this.dude3.destroy();
-////					this.dude4.destroy();
-//
-//					this.WaitToDisappear_bool = false;
-//					this.greenCorrect = false;
-//					this.redCorrect = false;
-//					this.blueCorrect = false;
-//					this.bubbleCreate = false;
-//					this.gameWin = false;
-//					this.middle = false;
-//					this.gameoverCreate = false;					
-//
-//					
-//				}	
-		if (this.CusNum >= 3)
+		if (this.timer <= 0 )
 		{
-			this.buttonManager = new ButtonManager(this);
-			this.buttonManager.createNextButton(this.world.width*0.5, this.world.height*0.5);
+			//this.gameoverCreate == true;
+			this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'gameover');
+			this.gameOverImage.anchor.set(0.5,0.5);
 
-			theGame.FadeScreen.update(this.buttonManager.gametype);	
+			this.buttonManager.createRestartButton(this.world.width*0.5, this.world.height*0.7);										
+		}	
+		if (this.buttonManager.restartLevelClick == true)
+		{
+			this.gameOverImage.destroy();
+			this.buttonManager.destroyButtonR();
+			this.timer = 20;
+			this.CusNum = 0;
+			this.money = 0;
+			this.bubble.destroy();
+			//this.totalCustomers = 0;
 		}
 		
+		if (this.CusNum >= 3 )
+		{
+			this.buttonManager.createNextButton(this.world.width*0.5, this.world.height*0.5);		
+		}
+		if (this.buttonManager.nextLevelClick == true)
+		{	
+			this.buttonManager.destroyButton();	
+			this.gameOverImage.destroy();
+			this.CusNum = 0;
+			this.money = 0;
+			this.timer = 20;
+			//this.totalCustomers = 0;
+		}
+		
+		
+		theGame.FadeScreen.update(this.buttonManager.gametype);	
+		//console.log(this.totalCustomers);
     },
 	
 	spawnCustomer: function()
@@ -247,7 +240,6 @@ theGame.Game.prototype =
 			this.randomFunc(1, 3);
 			if(this.randomCus == 1)
 			{
-				this.physics.startSystem(Phaser.Physics.ARCADE);
 				this.dude = this.add.sprite(this.world.width*0.05, this.world.height*0.3, 'dude');
 				this.dude.anchor.set(0.5,0.5);
 				this.dude.scale.setTo(2, 2);
@@ -258,7 +250,6 @@ theGame.Game.prototype =
 				this.dude.animations.add('right', [5,6,7,8]);
 				this.dude.animations.add('still', [4]); 
 				
-				this.physics.startSystem(Phaser.Physics.ARCADE);
 				this.dude4 = this.add.sprite(this.world.widthX, this.world.height*0.3, 'dude4');
 				this.dude4.anchor.set(0.5,0.5);
 				this.dude4.scale.setTo(2, 2);
@@ -271,10 +262,8 @@ theGame.Game.prototype =
 			}
 			else if(this.randomCus == 2)
 			{	
-				this.physics.startSystem(Phaser.Physics.ARCADE);
 				this.dude2 = this.add.sprite(this.world.widthX, this.world.height*0.4, 'dude2');
 				this.dude2.anchor.set(0.5,0.5);
-				//this.dude2.scale.setTo(2, 2);
 				this.physics.enable(this.dude2, Phaser.Physics.ARCADE);
 				this.dude2.body.velocity.setTo(110,0);
 
@@ -284,7 +273,6 @@ theGame.Game.prototype =
 			}  
 			else if(this.randomCus == 3)
 			{	
-				this.physics.startSystem(Phaser.Physics.ARCADE);
 				this.dude3 = this.add.sprite(this.world.widthX, this.world.height*0.3, 'dude3');
 				this.dude3.anchor.set(0.5,0.5);
 				this.dude3.scale.setTo(2, 2);
@@ -295,7 +283,7 @@ theGame.Game.prototype =
 				this.dude3.animations.add('right', [5,6,7,8]);
 				this.dude3.animations.add('still', [4]);		
 			}  
-			this.totalCustomers++;
+			this.totalCustomers +=1;
 		}
 	},
   	
@@ -305,30 +293,35 @@ theGame.Game.prototype =
 		{
 			this.randomCus = this.game.rnd.integerInRange(Min,Max);
 		} 
-		while (this.customerArray[this.randomCus - 1] == true)
+		while (this.customerArray[this.randomCus - 1] == true);
 	},
 	
 	randomCusFunc: function(randomCus)
 	{
-		switch(randomCus)
+		if(this.CusNum <= 3)
 		{
-			case 1:
-				this.blueCustomerFunc();
-				break;
-			
-			case 2:
-				this.greenCustomerFunc();
-				break;
-				
-			case 3:
-				this.redCustomerFunc();
-				break;		
+			switch(randomCus)
+			{
+				case 1:
+					this.blueCustomerFunc();
+					break;
+
+				case 2:
+					this.greenCustomerFunc();
+					break;
+
+				case 3:
+					this.redCustomerFunc();
+					break;		
+			}
 		}
 	},
 	
 	blueCustomerFunc: function()
 	{
 		this.bluecustomer=1;
+		this.physics.enable(this.dude, Phaser.Physics.ARCADE);
+		this.physics.enable(this.dude4, Phaser.Physics.ARCADE);
 		if (this.dude.x < this.world.centerX && this.middle == false)
 		{
 			this.dude.animations.play('right',10, true);
@@ -343,6 +336,7 @@ theGame.Game.prototype =
 			this.dude4.animations.play('right',10, true);
 			this.dude4.body.velocity.setTo(110, 0);
 		}
+		
 		else
 		{
 			this.dude.body.velocity.setTo(0, 0);
@@ -350,7 +344,7 @@ theGame.Game.prototype =
 			this.dude4.body.velocity.setTo(0, 0);
 			this.dude4.animations.play('still',10, true);
 			this.middle = true;
-			this.canclick = true;
+			//this.canclick = true;
 		}
 		
 		if(this.middle == true && this.bubbleCreate == false)
@@ -361,11 +355,14 @@ theGame.Game.prototype =
 		
 		if(this.blueCorrect == true)
 		{
+			if (this.bubbleCreate == true)
+			{
+				this.bubble.destroy();
+				this.bubbleCreate = false;
+			}
 			this.dude.x += 0.5;
 			this.dude4.x += 0.5;
 			this.middle = false;
-			this.bubble.destroy();
-			this.bubbleCreate = false;
 			//this.canclick = false;
 		}
 	},
@@ -373,11 +370,13 @@ theGame.Game.prototype =
 	greenCustomerFunc: function()
 	{
 		this.greencustomer=1;
+		this.physics.enable(this.dude2, Phaser.Physics.ARCADE);
 		if (this.dude2.x < this.world.centerX && this.middle == false)
 		{
 			this.dude2.animations.play('left',10, true);
 			this.dude2.body.velocity.setTo(110, 0);
 			this.middle = false;
+			
 		}
 		else if(this.dude2.x > this.world.centerX+5 && this.middle == false)
 		{
@@ -390,7 +389,7 @@ theGame.Game.prototype =
 			this.dude2.body.velocity.setTo(0, 0);
 			this.dude2.animations.play('still',10, true);
 			this.middle = true;	
-			this.canclick = true;
+			this.greenCanclick = true;
 		}
 		
 		if(this.middle == true && this.bubbleCreate == false)
@@ -401,21 +400,26 @@ theGame.Game.prototype =
 		
 		if(this.greenCorrect == true)
 		{
+			if (this.bubbleCreate == true)
+			{
+				this.bubble.destroy();
+				this.bubbleCreate = false;
+			}
 			this.dude2.x +=0.5;
 			this.middle = false;
-			this.bubble.destroy();
-			this.bubbleCreate = false;
-			this.canclick = false;
+			this.greenCanclick = false;
 		}
 	},
 		
 	redCustomerFunc: function()
 	{
 		this.redcustomer = 1;
+		this.physics.enable(this.dude3, Phaser.Physics.ARCADE);
 		if (this.dude3.x < this.world.centerX && this.middle == false)
 		{
 			this.dude3.animations.play('right',10, true);
 			this.dude3.body.velocity.setTo(110, 0);
+			
 		}
 		else if(this.dude3.x > this.world.centerX+5 && this.middle == false)
 		{
@@ -427,7 +431,8 @@ theGame.Game.prototype =
 			this.dude3.body.velocity.setTo(0, 0);
 			this.dude3.animations.play('still',10, true);
 			this.middle = true;
-			this.canclick = true;
+			this.redCanclick = true;
+			//this.greenCanclick = true;
 		}
 		if(this.middle == true && this.bubbleCreate == false)
 		{
@@ -436,14 +441,14 @@ theGame.Game.prototype =
 		}
 		if(this.redCorrect == true)
 		{
-			this.dude3.x +=0.5;
-			this.middle = false;
 			if (this.bubbleCreate == true)
 			{
 				this.bubble.destroy();
-				this.bubbleCreate = false;
-				//this.canclick = false;
+				this.bubbleCreate = false;	
 			}
+			this.dude3.x +=0.5;
+			this.middle = false;
+			//this.redCanclick = false;
 		}
 	},
 
@@ -486,7 +491,7 @@ theGame.Game.prototype =
 	{
 		if (this.red.events.onInputDown)
 		{
-			if (this.canclick == true)
+			if (this.redCanclick == true)
 			{
 				this.red.scale.setTo(1.2,1.2);
 				if(this.redcustomer!=null)
@@ -497,23 +502,23 @@ theGame.Game.prototype =
 				this.green.scale.setTo(1,1);
 				this.yellowGem.scale.setTo(1,1);
 				this.cyanGem.scale.setTo(1,1);
+				this.greenCanclick = true;
 			}
 		}
 		else if(this.red.events.onInputUp)
 		{
-				//this.canclick = false;
+				//this.redCanclick = false;
 				this.red.scale.setTo(1,1);
 				this.result.kill();
 		}
-		
 	},
 
 	blueclick: function()
 	{
 		if (this.blue.events.onInputDown)
 		{
-			if (this.canclick == true)
-			{
+			//if (this.canclick == true)
+			//{
 				this.blue.scale.setTo(1.2,1.2);
 				if(this.bluecustomer!=null)
 				{
@@ -524,7 +529,7 @@ theGame.Game.prototype =
 				this.yellowGem.scale.setTo(1,1);
 				this.cyanGem.scale.setTo(1,1);
 			}
-        }
+        //}
         else if(this.blue.events.onInputUp)
 		{    
 				//this.canclick = false;
@@ -537,7 +542,7 @@ theGame.Game.prototype =
 	{
 		if (this.green.events.onInputDown)
 		{
-			if (this.canclick == true)
+			if (this.greenCanclick == true)
 			{
 				this.green.scale.setTo(1.2,1.2);
 				if(this.greencustomer!=null)
@@ -549,26 +554,28 @@ theGame.Game.prototype =
 				this.yellowGem.scale.setTo(1,1);
 				this.cyanGem.scale.setTo(1,1);
 			}
+			//else (this.greenCanclick )
+			//{
+				//this.green.scale.setTo(1.2,1.2);	
+			//}
 		}
 			else if(this.green.events.onInputUp)
-			{   if(sprite == this.greencustomer && sprite2 == this.green)
-				{	
-					this.canclick = false;
-				}
+			{   
+				//if(sprite == this.greencustomer && sprite2 == this.green)
+				//{	
+					//this.greenCanclick = false;
+				//}
 				this.green.scale.setTo(1,1);
 				this.result.kill();
-
-		}
-		
-		//console.log(this.canclick);
+			}
 	},
 			
 	yellowclick: function()
 		{
 		 if (this.yellowGem.events.onInputDown)
             {
-				if (this.canclick == true)
-				{
+				//if (this.canclick == true)
+				//{
 					this.yellowGem.scale.setTo(1.2,1.2);
 					if(this.yellowcustomer!=null)
 					{
@@ -578,7 +585,7 @@ theGame.Game.prototype =
 					this.blue.scale.setTo(1,1);
 					this.green.scale.setTo(1,1);
 					this.cyanGem.scale.setTo(1,1);
-				}
+				//}
             }
             else if(this.yellowGem.events.onInputUp)
             {    
@@ -593,10 +600,9 @@ theGame.Game.prototype =
 		{
 		 if (this.cyanGem.events.onInputDown)
             {
-				if (this.canclick == true)
-				{
+				//if (this.canclick == true)
+				//{
 					this.cyanGem.scale.setTo(1.2,1.2);
-					//this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
 					if(this.cyancustomer!=null)
 					{
 						this.TheDestroyer(this.cyancustomer,this.cyanGem); //destroyer gem
@@ -605,7 +611,7 @@ theGame.Game.prototype =
 					this.blue.scale.setTo(1,1);
 					this.green.scale.setTo(1,1);
 					this.yellowGem.scale.setTo(1,1);
-				}
+				//}
             }
             else if(this.cyanGem.events.onInputUp)
             {    
@@ -623,14 +629,14 @@ theGame.Game.prototype =
             this.WaitToDisappear_bool = true;
 			this.startTimer = true;
             //sprite2.kill(); // destroyer gem 
-			this.setToKill = sprite;
+			//this.setToKill = sprite;
             this.countDown = 1; //destroyer correct gem and customer time
 			
 			this.money += 10;
 			this.moneyText.text = 'Money: ' + this.money;
 			
 			this.CusNum += 1;
-			this.CusNumText.text = ' : ' + this.CusNum;
+			this.CusNumText.text = 'CusNum: ' + this.CusNum;
 			
 //			this.red.scale.setTo(1,1);
 //			this.blue.scale.setTo(1,1);
@@ -639,17 +645,13 @@ theGame.Game.prototype =
 		else
 		{
 			this.startTimer = true; 
-			this.setToKill = sprite;
+			//this.setToKill = sprite;
 			this.countDown = 1; //destroyer wrong gem and customer time	
 		}
 	},
 		
 	checkCombination: function(sprite,sprite2)
 	{
-			this.Wrong_value = 0;
-            if(this.Wrong_value == 1)
-            {
-            }
 		if(sprite != null && sprite2 != null)
         {
             if(sprite == this.redcustomer && sprite2 == this.red ) // sprite is customer  sprite2 is gem
@@ -666,7 +668,7 @@ theGame.Game.prototype =
 				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
 				this.result.anchor.set(0.5,0.5);
 				this.greenCorrect = true;
-				//this.canclick = false;
+				//this.greenCanclick = false;
 				this.customerArray[1] = true;
 				this.spawnCustomer();
                 return true;

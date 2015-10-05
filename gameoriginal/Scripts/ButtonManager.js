@@ -9,6 +9,10 @@ function ButtonManager(game)
 	this.skipButton = null;
 	this.restartButton = null;
 	this.nextButton = null;
+	this.nextLevelClick = false;
+	this.restartLevelClick = false;
+	this.gameoverCreate = false;
+
     this.gametype = 0;
 };
 //game play button
@@ -52,14 +56,14 @@ ButtonManager.prototype.createSkipButton = function(posx, posy)
 ButtonManager.prototype.createNextButton = function(posx, posy)
 {
 
-    this.nextButton = this.game.add.button(posx, posy, 'nextButton', this.restart, this,  1,0,2);
+    this.nextButton = this.game.add.button(posx, posy, 'nextButton', this.next, this,  1,0,2);
     this.nextButton.anchor.set(0.5,0.5);
+	
 },
 	
 ButtonManager.prototype.createRestartButton = function(posx, posy)
 {
-
-    this.restartButton = this.game.add.button(posx, posy, 'restartButton', this.next, this,  1,0,2);
+    this.restartButton = this.game.add.button(posx, posy, 'restartButton', this.restart, this,  1,0,2);
     this.restartButton.anchor.set(0.5,0.5);
 },
     
@@ -72,13 +76,25 @@ ButtonManager.prototype.skip = function()
 ButtonManager.prototype.restart = function() 
 {
 	this.gametype = 2;
+	this.gameoverCreate = true;
+	this.restartLevelClick = true;
 	theGame.FadeScreen.OnEnd = true;
 };
 
 ButtonManager.prototype.next = function() 
 {
 	this.gametype = 2;
-	//theGame.FadeScreen.OnEnd = true;
+	this.nextLevelClick = true;
+	theGame.FadeScreen.OnEnd = true;
 };
-
+ButtonManager.prototype.destroyButtonR = function()
+{
+	this.restartButton.destroy();
+	this.nextLevelClick = false;
+}
+ButtonManager.prototype.destroyButton = function()
+{
+	this.nextButton.destroy();
+	this.nextLevelClick = false;
+}
 
