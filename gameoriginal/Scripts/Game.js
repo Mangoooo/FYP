@@ -56,6 +56,7 @@ theGame.Game = function(game)
 
 	this.timer = 20;
 	this.timerText = 0;
+	this.blinkingImage = null;
 	
 	this.clockImage = null;
 	this.clockSkin = null;
@@ -63,13 +64,9 @@ theGame.Game = function(game)
 	
 	this.bubbleCreate = false;
 	this.gameOverImage = null;
-	this.gameWin = false;
-	//this.gameoverCreate = false;
+	this.scorePageImage = null;	
 	
-	//this.redCanclick = false;
-	this.greenCanclick = false;
-	//this.blueCanclick = false;
-	//this.nextLevelClick = false;
+	this.redScoreImage = null;
 };
 
 theGame.Game.prototype = 
@@ -81,48 +78,30 @@ theGame.Game.prototype =
         //Screen Background
         this.gameBackground = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'GameBackGround');
         this.gameBackground.anchor.set(0.5,0.5);
-		
+			
 		//gemTable
 		this.tableImage = this.add.sprite(this.world.width*0.5, this.world.height*0.85, 'gemTable');
         this.tableImage.anchor.set(0.5,0.5);
 		
-		//game over
-//		this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.85, 'gameover');
-//        this.gameOverImage.anchor.set(0.5,0.5);
-		
 		// gem 
-        this.red = this.add.sprite(this.world.width*0.3, this.world.height*0.7, 'red');
-        this.red.anchor.set(0.5,0.5);	
-   		this.red.inputEnabled = true;
-		this.red.events.onInputDown.add(this.redclick, this);
-
-		this.blue = this.add.sprite(this.world.width*0.4, this.world.height*0.8, 'blue'); // 0.4 0.8
-        this.blue.anchor.set(0.5,0.5);
-		this.blue.inputEnabled = true;
-		this.blue.events.onInputDown.add(this.blueclick, this);
+       	this.red = this.add.button(this.world.width*0.3, this.world.height*0.7, 'red', this.redclick, this, 1, 0, 2);
+		this.red.anchor.setTo(0.5,0.5);
 		
-		this.green = this.add.sprite(this.world.width*0.7, this.world.height*0.7, 'green'); // 0.5 0.7
-        this.green.anchor.set(0.5,0.5);
-		this.green.inputEnabled = true;
-		this.green.events.onInputDown.add(this.greenclick, this);
+		this.green = this.add.button(this.world.width*0.7, this.world.height*0.7, 'green', this.greenclick, this, 1, 0, 2);
+		this.green.anchor.setTo(0.5,0.5);
 		
-		this.yellowGem = this.add.sprite(this.world.width*0.6, this.world.height*0.8, 'yellow'); //0.6 0.8
-        this.yellowGem.anchor.set(0.5,0.5);
-		this.yellowGem.inputEnabled = true;
-		this.yellowGem.events.onInputDown.add(this.yellowclick, this);
+		this.blue = this.add.button(this.world.width*0.4, this.world.height*0.8, 'blue', this.blueclick, this, 1, 0, 2);
+		this.blue.anchor.setTo(0.5,0.5);
 		
-		this.cyanGem = this.add.sprite(this.world.width*0.5, this.world.height*0.7, 'cyan'); //0.7 0.7
-        this.cyanGem.anchor.set(0.5,0.5);
-		this.cyanGem.inputEnabled = true;
-		this.cyanGem.events.onInputDown.add(this.cyanclick, this);
+		this.yellowGem = this.add.button(this.world.width*0.6, this.world.height*0.8, 'yellow', this.yellowclick, this, 1, 0, 2);
+		this.yellowGem.anchor.setTo(0.5,0.5);
 		
-		//Money
+		this.cyanGem = this.add.button(this.world.width*0.5, this.world.height*0.7, 'cyan', this.cyanclick, this, 1, 0, 2);
+		this.cyanGem.anchor.setTo(0.5,0.5);
 		
-//		this.moneyImage.scale.setTo(1, 1);
-		
-		//customer icon
-//		this.iconImage = this.add.sprite(this.world.width*0.45, this.world.height*0.08, 'customerIcon');
-//        this.iconImage.anchor.set(0.5,0.5);
+		//red score
+//		this.redScoreImage = this.add.sprite(this.world.width*0.5, this.world.height*0.85, 'redScore');
+//        this.redScoreImage.anchor.set(0.5,0.5);
 		
 		//clock
 		this.clockSkin = this.add.sprite(this.world.width*0.08, this.world.height*0.85, 'clockskin');
@@ -133,10 +112,6 @@ theGame.Game.prototype =
         this.clockImage.anchor.set(0.5,0.5);
 		this.clockImage.scale.setTo(0.8,0.8);
 		
-		//money jar
-		//this.moneyskin = this.add.sprite(this.world.width*0.93, this.world.height*0.85, 'moneyjar');
-        //this.moneyskin.anchor.set(0.5,0.5);
-		
 		//timerText
         this.timerText = this.add.text(this.world.centerX, this.world.centerY, 'Timer: 20', { font: "40px Arial", fill: "#000000", align: "center" });
     	//this.timerText.anchor.setTo(0.5, 0.5);
@@ -146,7 +121,6 @@ theGame.Game.prototype =
        
     create: function()
     {
-		//this.physics.startSystem(Phaser.Physics.ARCADE);
         this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this); // timer
 
 		this.spawnCustomer();
@@ -158,12 +132,21 @@ theGame.Game.prototype =
 		
 		this.buttonManager = new ButtonManager(this);
 		theGame.FadeScreen = new FadeManager(this);
-        theGame.FadeScreen.create();
+        theGame.FadeScreen.create();	
+		
+		this.blinkingImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'blinking');
+		this.blinkingImage.alpha = 0.2;
+		this.blinkingImage.anchor.set(0.5,0.5);
+		this.blinkingImage.frame = 1;	
+		
+		//this.ScaleGem();
 		
     },
 	
 	update: function()
     { 
+		this.ScaleGem();
+		
 		this.clockImage.angle += 1;
 		
 		this.randomCusFunc(this.randomCus);
@@ -194,16 +177,14 @@ theGame.Game.prototype =
 			this.redCustomerFunc();
 		}
 		
-		
 		if (this.timer <= 0 )
 		{
-			//this.gameoverCreate == true;
 			this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'gameover');
 			this.gameOverImage.anchor.set(0.5,0.5);
 
 			this.buttonManager.createRestartButton(this.world.width*0.5, this.world.height*0.7);										
 		}	
-		if (this.buttonManager.restartLevelClick == true)
+		if (this.buttonManager.restartLevelClick == true) 
 		{
 			this.gameOverImage.destroy();
 			this.buttonManager.destroyButtonR();
@@ -214,31 +195,55 @@ theGame.Game.prototype =
 			//this.totalCustomers = 0;
 		}
 		
-		if (this.CusNum >= 3 )
-		{
-			this.buttonManager.createNextButton(this.world.width*0.5, this.world.height*0.5);		
-		}
-		if (this.buttonManager.nextLevelClick == true)
-		{	
-			this.buttonManager.destroyButton();	
-			this.gameOverImage.destroy();
-			this.CusNum = 0;
-			this.money = 0;
-			this.timer = 20;
-			//this.totalCustomers = 0;
-		}
+//		if (this.CusNum >= 3 ) // next level
+//		{
+//			this.buttonManager.createNextButton(this.world.width*0.5, this.world.height*0.5);		
+//		}
+//		if (this.buttonManager.nextLevelClick == true)
+//		{	
+//			this.buttonManager.destroyButton();	
+//			this.gameOverImage.destroy();
+//			this.CusNum = 0;
+//			this.money = 0;
+//			this.timer = 20;
+//		}
 		
+				
+		if (this.CusNum >= 1)
+		{
+			this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'score');
+			this.gameOverImage.anchor.set(0.5,0.5);
+			
+			
+		}
 		
 		theGame.FadeScreen.update(this.buttonManager.gametype);	
-		//console.log(this.totalCustomers);
+		
+		if (this.timer >= 6) // red image
+		{
+			this.blinkingImage.animations.add('red', [0,1]);
+			this.blinkingImage.play('red', 2 , true);
+		}
     },
+	 
+	ScaleGem: function()
+	{
+		this.redScoreImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'redScore');
+        this.redScoreImage.anchor.set(0.5,0.5);
+		this.tween = this.add.tween(this.redScoreImage.scale).to({ x: 2, y: 2 }, 2000, Phaser.Easing.Bounce.Out, true);	
+	},
+	
+//	scaleRedGem: function()
+//	{
+//		
+//	},
 	
 	spawnCustomer: function()
 	{
 		if (this.totalCustomers < 3)
 		{
 			this.randomFunc(1, 3);
-			if(this.randomCus == 1)
+			if(this.randomCus == 1) 
 			{
 				this.dude = this.add.sprite(this.world.width*0.05, this.world.height*0.3, 'dude');
 				this.dude.anchor.set(0.5,0.5);
@@ -363,7 +368,6 @@ theGame.Game.prototype =
 			this.dude.x += 0.5;
 			this.dude4.x += 0.5;
 			this.middle = false;
-			//this.canclick = false;
 		}
 	},
 	
@@ -389,7 +393,6 @@ theGame.Game.prototype =
 			this.dude2.body.velocity.setTo(0, 0);
 			this.dude2.animations.play('still',10, true);
 			this.middle = true;	
-			this.greenCanclick = true;
 		}
 		
 		if(this.middle == true && this.bubbleCreate == false)
@@ -407,7 +410,6 @@ theGame.Game.prototype =
 			}
 			this.dude2.x +=0.5;
 			this.middle = false;
-			this.greenCanclick = false;
 		}
 	},
 		
@@ -448,7 +450,6 @@ theGame.Game.prototype =
 			}
 			this.dude3.x +=0.5;
 			this.middle = false;
-			//this.redCanclick = false;
 		}
 	},
 
@@ -491,25 +492,15 @@ theGame.Game.prototype =
 	{
 		if (this.red.events.onInputDown)
 		{
-			if (this.redCanclick == true)
+			if(this.redcustomer!=null)
 			{
-				this.red.scale.setTo(1.2,1.2);
-				if(this.redcustomer!=null)
-				{
-					this.TheDestroyer(this.redcustomer,this.red);
-				}
-				this.blue.scale.setTo(1,1);
-				this.green.scale.setTo(1,1);
-				this.yellowGem.scale.setTo(1,1);
-				this.cyanGem.scale.setTo(1,1);
-				this.greenCanclick = true;
+				this.TheDestroyer(this.redcustomer,this.red);
 			}
+			this.red.setFrames(1,2);	
 		}
 		else if(this.red.events.onInputUp)
 		{
-				//this.redCanclick = false;
-				this.red.scale.setTo(1,1);
-				this.result.kill();
+			this.result.kill();
 		}
 	},
 
@@ -517,23 +508,14 @@ theGame.Game.prototype =
 	{
 		if (this.blue.events.onInputDown)
 		{
-			//if (this.canclick == true)
-			//{
-				this.blue.scale.setTo(1.2,1.2);
-				if(this.bluecustomer!=null)
-				{
-					this.TheDestroyer(this.bluecustomer,this.blue);
-				}
-				this.red.scale.setTo(1,1);
-				this.green.scale.setTo(1,1);
-				this.yellowGem.scale.setTo(1,1);
-				this.cyanGem.scale.setTo(1,1);
+			if(this.bluecustomer!=null)
+			{
+				this.TheDestroyer(this.bluecustomer,this.blue);
 			}
-        //}
+			this.blue.setFrames(1,2);	
+        }
         else if(this.blue.events.onInputUp)
 		{    
-				//this.canclick = false;
-				this.blue.scale.setTo(1,1);
 				this.result.kill();
 		}
 	},
@@ -542,94 +524,56 @@ theGame.Game.prototype =
 	{
 		if (this.green.events.onInputDown)
 		{
-			if (this.greenCanclick == true)
+			if(this.greencustomer!=null)
 			{
-				this.green.scale.setTo(1.2,1.2);
-				if(this.greencustomer!=null)
-				{
-					this.TheDestroyer(this.greencustomer,this.green); //destroyer gem
-				}
-				this.red.scale.setTo(1,1); // return gem original size
-				this.blue.scale.setTo(1,1);
-				this.yellowGem.scale.setTo(1,1);
-				this.cyanGem.scale.setTo(1,1);
+				this.TheDestroyer(this.greencustomer,this.green); //destroyer gem
 			}
-			//else (this.greenCanclick )
-			//{
-				//this.green.scale.setTo(1.2,1.2);	
-			//}
+			this.green.setFrames(1,2);	
 		}
-			else if(this.green.events.onInputUp)
-			{   
-				//if(sprite == this.greencustomer && sprite2 == this.green)
-				//{	
-					//this.greenCanclick = false;
-				//}
-				this.green.scale.setTo(1,1);
-				this.result.kill();
-			}
+		else if(this.green.events.onInputUp)
+		{   
+			this.result.kill();
+		}
 	},
 			
 	yellowclick: function()
-		{
+	{
 		 if (this.yellowGem.events.onInputDown)
-            {
-				//if (this.canclick == true)
-				//{
-					this.yellowGem.scale.setTo(1.2,1.2);
-					if(this.yellowcustomer!=null)
-					{
-						this.TheDestroyer(this.yellowcustomer,this.yellow); //destroyer gem
-					}
-					this.red.scale.setTo(1,1); // return gem original size
-					this.blue.scale.setTo(1,1);
-					this.green.scale.setTo(1,1);
-					this.cyanGem.scale.setTo(1,1);
-				//}
-            }
-            else if(this.yellowGem.events.onInputUp)
-            {    
-				//this.canclick = false;
-                this.yellowGem.scale.setTo(1,1);
-				this.result.kill();
-				
-            }
-		},
+			{
+				if(this.yellowcustomer!=null)
+				{
+					this.TheDestroyer(this.yellowcustomer,this.yellow); //destroyer gem
+				}
+				this.yellowGem.setFrames(1,2);	
+			}
+			else if(this.yellowGem.events.onInputUp)
+			{    
+				this.result.kill();	
+			}
+	},
 			
 	cyanclick: function()
-		{
+	{
 		 if (this.cyanGem.events.onInputDown)
             {
-				//if (this.canclick == true)
-				//{
-					this.cyanGem.scale.setTo(1.2,1.2);
-					if(this.cyancustomer!=null)
-					{
-						this.TheDestroyer(this.cyancustomer,this.cyanGem); //destroyer gem
-					}
-					this.red.scale.setTo(1,1); // return gem original size
-					this.blue.scale.setTo(1,1);
-					this.green.scale.setTo(1,1);
-					this.yellowGem.scale.setTo(1,1);
-				//}
+				if(this.cyancustomer!=null)
+				{
+					this.TheDestroyer(this.cyancustomer,this.cyanGem); //destroyer gem
+				}
+				this.cyanGem.setFrames(1,2);	
+				
             }
             else if(this.cyanGem.events.onInputUp)
             {    
-				//this.canclick = false;
-                this.cyanGem.scale.setTo(1,1);
 				this.result.kill();
-            }
-			
-		},
+            }	
+	},
 	
 	TheDestroyer: function(sprite,sprite2)
 	{
 		if(this.checkCombination(sprite,sprite2))
         {
-            this.WaitToDisappear_bool = true;
-			this.startTimer = true;
-            //sprite2.kill(); // destroyer gem 
-			//this.setToKill = sprite;
+			this.startTimer = true; // destroyer correct bubble
             this.countDown = 1; //destroyer correct gem and customer time
 			
 			this.money += 10;
@@ -637,14 +581,10 @@ theGame.Game.prototype =
 			
 			this.CusNum += 1;
 			this.CusNumText.text = 'CusNum: ' + this.CusNum;
-			
-//			this.red.scale.setTo(1,1);
-//			this.blue.scale.setTo(1,1);
-//			this.green.scale.setTo(1,1);
         }
 		else
 		{
-			this.startTimer = true; 
+			 this.startTimer = true; 
 			//this.setToKill = sprite;
 			this.countDown = 1; //destroyer wrong gem and customer time	
 		}
@@ -668,7 +608,6 @@ theGame.Game.prototype =
 				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
 				this.result.anchor.set(0.5,0.5);
 				this.greenCorrect = true;
-				//this.greenCanclick = false;
 				this.customerArray[1] = true;
 				this.spawnCustomer();
                 return true;

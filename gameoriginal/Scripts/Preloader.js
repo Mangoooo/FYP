@@ -30,9 +30,14 @@ theGame.Preloader.prototype =
         this.load.image('ToturialBackGround', 'Assets/images/tutorial.png');
 		//game over
 		this.load.image('gameover', 'Assets/images/gameover.png');
+		//score page
+		this.load.image('score', 'Assets/images/scorePage.png');
         
 		//table
 		this.load.image('gemTable', 'Assets/images/table.png');
+		
+		//blinking 
+		this.load.spritesheet('blinking', 'Assets/images/blinking.png', 975, 750);
         
         //Button
         this.load.image('startButton', 'Assets/images/Play_button.png');
@@ -41,22 +46,16 @@ theGame.Preloader.prototype =
 		this.load.image('restartButton', 'Assets/images/restartButton.png');
 		this.load.image('nextButton', 'Assets/images/nextButton.png');
 		
-		//gem
-		this.load.image('red', 'Assets/images/red.png');
-		this.load.image('blue', 'Assets/images/blue.png');
-		this.load.image('green', 'Assets/images/green.png');
-		this.load.image('yellow', 'Assets/images/yellowGem.png');
-		this.load.image('cyan', 'Assets/images/cyanGem.png');
+		//gem	
+		this.load.spritesheet('red', 'Assets/images/red.png', 150, 100);
+		this.load.spritesheet('green', 'Assets/images/green.png', 150, 100);
+		this.load.spritesheet('blue', 'Assets/images/blue.png', 150, 100);
+		this.load.spritesheet('yellow', 'Assets/images/yellowGem.png', 150, 100);
+		this.load.spritesheet('cyan', 'Assets/images/cyanGem.png', 150, 100);
 		
+		this.load.image('redScore', 'Assets/images/scoreRedGem.png');
 		
 		//customer
-//		this.load.image('redcustomer', 'Assets/images/redCustomer.png');
-//		this.load.image('bluecustomer', 'Assets/images/blueCustomer.png');
-//		this.load.image('greenCustomer', 'Assets/images/greenCustomer.png');
-		
-		//this.load.image('customerIcon', 'Assets/images/customerNO.png');
-		
-		//this.load.spritesheet('greencustomer', 'Assets/images/greencustomer.png', 350, 355, 5);
 		this.load.spritesheet('dude4', 'Assets/images/dude4.png', 32, 48);
 		this.load.spritesheet('dude3', 'Assets/images/dude3.png', 32, 48);
 		this.load.spritesheet('dude2', 'Assets/images/dude2.png', 105, 162);
