@@ -19,6 +19,8 @@
 	<script src = "Scripts/MainMenu.js"></script>
 	<script src = "Scripts/Tutorial.js"></script>
     <script src = "Scripts/Game.js"></script>
+	<script src = "Scripts/ScorePage.js"></script>
+	
 
     
 </head>
@@ -35,6 +37,7 @@
         game.state.add('Tutorial',theGame.Tutorial);
 		game.state.add('Game',theGame.Game);
         game.state.add('ShadeColour',theGame.ShadeColour);
+		game.state.add('ScorePage',theGame.ScorePage);
 		
 		//Start state
 		game.state.start('Boot');

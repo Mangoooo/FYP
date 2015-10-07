@@ -33,7 +33,7 @@ theGame.Game = function(game)
 	this.coinImage = null;
 	this.moneyskin = null;
 	
-	this.CusNum = 0;
+//	this.CusNum = 0;
 	this.CusNumText = null;
 	
 	this.dude = null;
@@ -44,9 +44,14 @@ theGame.Game = function(game)
 	this.greenCorrect = false;
 	this.redCorrect = false;
 	this.blueCorrect = false;
-//	this.iconImage = null;
 	
-	this.middle = false;
+	this.redMiddle = false;
+	this.greenMiddle = false;
+	this.blueMiddle = false;
+	this.grayMiddle = false;
+	
+	//this.middle = false;
+	
 	this.randomCus = null;
 	this.customerArray = [false, false, false];
 	this.totalCustomers = 0;
@@ -64,9 +69,17 @@ theGame.Game = function(game)
 	
 	this.bubbleCreate = false;
 	this.gameOverImage = null;
-	this.scorePageImage = null;	
+//	this.scorePageImage = null;	
 	
-	this.redScoreImage = null;
+//	this.redScoreImage = null;
+//	this.tweenTime = false;
+	this.wrongImage = null;
+	
+	this.redCanclick = false;
+	this.greenCanclick = false;
+	this.blueCanclick = false;
+	this.yellowCanclick = false;
+	this.cyanCanclick = false;
 };
 
 theGame.Game.prototype = 
@@ -100,8 +113,9 @@ theGame.Game.prototype =
 		this.cyanGem.anchor.setTo(0.5,0.5);
 		
 		//red score
-//		this.redScoreImage = this.add.sprite(this.world.width*0.5, this.world.height*0.85, 'redScore');
-//        this.redScoreImage.anchor.set(0.5,0.5);
+//		this.redScoreImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'redScore');
+//      this.redScoreImage.anchor.set(0.5,0.5);
+		
 		
 		//clock
 		this.clockSkin = this.add.sprite(this.world.width*0.08, this.world.height*0.85, 'clockskin');
@@ -114,7 +128,7 @@ theGame.Game.prototype =
 		
 		//timerText
         this.timerText = this.add.text(this.world.centerX, this.world.centerY, 'Timer: 20', { font: "40px Arial", fill: "#000000", align: "center" });
-    	//this.timerText.anchor.setTo(0.5, 0.5);
+    	this.timerText.anchor.setTo(0.5, 0.5);
 		this.moneyText = this.add.text(600, 50, 'Money: 0', { font:"30px Arial", fill: "#000", align: "center"});
 		this.CusNumText = this.add.text(460, 40, ': 0', { font:"30px Arial", fill: "#000", align: "center"});
     }, 
@@ -139,14 +153,17 @@ theGame.Game.prototype =
 		this.blinkingImage.anchor.set(0.5,0.5);
 		this.blinkingImage.frame = 1;	
 		
-		//this.ScaleGem();
-		
+		this.redMiddle = false;
+		this.greenMiddle = false;
+		this.blueMiddle = false;
+		this.grayMiddle = false;
+		this.timer = 20;
+		this.CusNum = 0;
+		this.money = 0;	
     },
 	
 	update: function()
     { 
-		this.ScaleGem();
-		
 		this.clockImage.angle += 1;
 		
 		this.randomCusFunc(this.randomCus);
@@ -163,7 +180,51 @@ theGame.Game.prototype =
 		{
 			this.moneyImage.frame = 3;
 		}
+		
+		if (this.timer <= 0 )
+		{
+			this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'gameover');
+			this.gameOverImage.anchor.set(0.5,0.5);
+			this.buttonManager.createRestartButton(this.world.width*0.5, this.world.height*0.7);
+			
+			this.CusNum = 0;
+			this.money = 0;
+			this.redMiddle = false;
+			this.greenMiddle = false;
+			this.blueMiddle = false;
+			this.grayMiddle = false;
+			this.bubble.destroy();
+		}
 
+		if (this.buttonManager.restartLevelClick == true)  // restart
+		{
+			this.gameOverImage.destroy();
+			this.buttonManager.destroyButtonR();
+			
+			if (this.dude != null)  
+			{
+				this.dude.destroy();
+			}
+			if (this.dude2 != null)
+			{
+				this.dude2.destroy();
+			}
+			if (this.dude3 != null)
+			{
+				this.dude3.destroy();
+			}
+			this.redMiddle = false;
+			this.greenMiddle = false;
+			this.blueMiddle = false;
+			this.grayMiddle = false;
+			
+			this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
+			this.time.events.start();
+			this.timer = 20;
+			this.CusNum = 0;
+			this.money = 0;
+		}
+		
 		if (this.dude != null)  
 		{
 			this.blueCustomerFunc();
@@ -177,44 +238,18 @@ theGame.Game.prototype =
 			this.redCustomerFunc();
 		}
 		
-		if (this.timer <= 0 )
-		{
-			this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'gameover');
-			this.gameOverImage.anchor.set(0.5,0.5);
-
-			this.buttonManager.createRestartButton(this.world.width*0.5, this.world.height*0.7);										
-		}	
-		if (this.buttonManager.restartLevelClick == true) 
-		{
-			this.gameOverImage.destroy();
-			this.buttonManager.destroyButtonR();
-			this.timer = 20;
-			this.CusNum = 0;
-			this.money = 0;
-			this.bubble.destroy();
-			//this.totalCustomers = 0;
-		}
 		
-//		if (this.CusNum >= 3 ) // next level
-//		{
-//			this.buttonManager.createNextButton(this.world.width*0.5, this.world.height*0.5);		
-//		}
-//		if (this.buttonManager.nextLevelClick == true)
-//		{	
+		if (this.CusNum >= 3 ) // next level
+		{
+//			this.buttonManager.createNextButton(this.world.width*0.5, this.world.height*0.5);
+			this.buttonManager.createScoreButton(this.world.width*0.5, this.world.height*0.5);		
+		}
+		if (this.buttonManager.nextLevelClick == true)
+		{	
 //			this.buttonManager.destroyButton();	
-//			this.gameOverImage.destroy();
 //			this.CusNum = 0;
 //			this.money = 0;
 //			this.timer = 20;
-//		}
-		
-				
-		if (this.CusNum >= 1)
-		{
-			this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'score');
-			this.gameOverImage.anchor.set(0.5,0.5);
-			
-			
 		}
 		
 		theGame.FadeScreen.update(this.buttonManager.gametype);	
@@ -224,32 +259,20 @@ theGame.Game.prototype =
 			this.blinkingImage.animations.add('red', [0,1]);
 			this.blinkingImage.play('red', 2 , true);
 		}
-    },
-	 
-	ScaleGem: function()
-	{
-		this.redScoreImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'redScore');
-        this.redScoreImage.anchor.set(0.5,0.5);
-		this.tween = this.add.tween(this.redScoreImage.scale).to({ x: 2, y: 2 }, 2000, Phaser.Easing.Bounce.Out, true);	
-	},
-	
-//	scaleRedGem: function()
-//	{
-//		
-//	},
+    }, 
 	
 	spawnCustomer: function()
 	{
 		if (this.totalCustomers < 3)
 		{
-			this.randomFunc(1, 3);
+			this.randomFunc(1,3);
 			if(this.randomCus == 1) 
 			{
 				this.dude = this.add.sprite(this.world.width*0.05, this.world.height*0.3, 'dude');
 				this.dude.anchor.set(0.5,0.5);
 				this.dude.scale.setTo(2, 2);
 				this.physics.enable(this.dude, Phaser.Physics.ARCADE);
-				this.dude.body.velocity.setTo(110,0);	
+				this.dude.body.velocity.setTo(0,0);	
 
 				this.dude.animations.add('left', [0,1,2,3]);     	
 				this.dude.animations.add('right', [5,6,7,8]);
@@ -259,22 +282,25 @@ theGame.Game.prototype =
 				this.dude4.anchor.set(0.5,0.5);
 				this.dude4.scale.setTo(2, 2);
 				this.physics.enable(this.dude4, Phaser.Physics.ARCADE);
-				this.dude4.body.velocity.setTo(110,0);
+				this.dude4.body.velocity.setTo(0,0);
 
 				this.dude4.animations.add('left', [0,1,2,3]);     	
 				this.dude4.animations.add('right', [5,6,7,8]);
-				this.dude4.animations.add('still', [4]);		
+				this.dude4.animations.add('still', [4]);	
+				this.blueMiddle = false;
+				//this.grayMiddle = false;
 			}
 			else if(this.randomCus == 2)
 			{	
 				this.dude2 = this.add.sprite(this.world.widthX, this.world.height*0.4, 'dude2');
 				this.dude2.anchor.set(0.5,0.5);
 				this.physics.enable(this.dude2, Phaser.Physics.ARCADE);
-				this.dude2.body.velocity.setTo(110,0);
+				this.dude2.body.velocity.setTo(0,0);
 
 				this.dude2.animations.add('left', [0,1,2,3]);     	
-				this.dude2.animations.add('right', [5,6,7,8]);
-				this.dude2.animations.add('still', [4]);			
+				this.dude2.animations.add('right',  [5,6,7,8]);
+				this.dude2.animations.add('still', [4]);
+				this.greenMiddle = false;
 			}  
 			else if(this.randomCus == 3)
 			{	
@@ -282,11 +308,12 @@ theGame.Game.prototype =
 				this.dude3.anchor.set(0.5,0.5);
 				this.dude3.scale.setTo(2, 2);
 				this.physics.enable(this.dude3, Phaser.Physics.ARCADE);
-				this.dude3.body.velocity.setTo(110,0);
+				this.dude3.body.velocity.setTo(0,0);
 
 				this.dude3.animations.add('left', [0,1,2,3]);     	
 				this.dude3.animations.add('right', [5,6,7,8]);
-				this.dude3.animations.add('still', [4]);		
+				this.dude3.animations.add('still', [4]);
+				this.redMiddle = false;
 			}  
 			this.totalCustomers +=1;
 		}
@@ -327,32 +354,38 @@ theGame.Game.prototype =
 		this.bluecustomer=1;
 		this.physics.enable(this.dude, Phaser.Physics.ARCADE);
 		this.physics.enable(this.dude4, Phaser.Physics.ARCADE);
-		if (this.dude.x < this.world.centerX && this.middle == false)
+		if (this.dude.x < this.world.width/2 - 2 && this.blueMiddle == false)
 		{
 			this.dude.animations.play('right',10, true);
 			this.dude.body.velocity.setTo(110, 0);
 			this.dude4.animations.play('right',10, true);
 			this.dude4.body.velocity.setTo(110, 0);
 		}
-		else if(this.dude.x > this.world.centerX+5 && this.middle == false)
+		else if(this.dude.x > this.world.width/2 + 2 && this.blueMiddle == false)
 		{
 			this.dude.animations.play('right',10, true);
 			this.dude.body.velocity.setTo(110, 0);
 			this.dude4.animations.play('right',10, true);
 			this.dude4.body.velocity.setTo(110, 0);
+			
+			if (this.dude.x >= this.world.width)
+			{
+				this.dude.x = 0;
+				this.dude4.x = 0;
+				this.dude.destroy();
+				this.dude4.destroy();
+			}
 		}
-		
-		else
+		else if(this.dude.x < this.world.width/2 + 2 && this.dude.x > this.world.width/2 - 2)
 		{
 			this.dude.body.velocity.setTo(0, 0);
 			this.dude.animations.play('still',10, true);
 			this.dude4.body.velocity.setTo(0, 0);
 			this.dude4.animations.play('still',10, true);
-			this.middle = true;
-			//this.canclick = true;
+			this.blueMiddle = true;
+			this.blueCanclick = true;
 		}
-		
-		if(this.middle == true && this.bubbleCreate == false)
+		if(this.blueMiddle == true && this.bubbleCreate == false)
 		{
 			this.bubble = this.add.sprite(this.world.width*0.2, this.world.height*0.2, 'request');
 			this.bubbleCreate = true;
@@ -364,10 +397,11 @@ theGame.Game.prototype =
 			{
 				this.bubble.destroy();
 				this.bubbleCreate = false;
+				this.dude.x += 0.5;
+				this.dude4.x += 0.5;
+				this.blueMiddle = false;
 			}
-			this.dude.x += 0.5;
-			this.dude4.x += 0.5;
-			this.middle = false;
+			this.blueCanclick = false;
 		}
 	},
 	
@@ -375,27 +409,34 @@ theGame.Game.prototype =
 	{
 		this.greencustomer=1;
 		this.physics.enable(this.dude2, Phaser.Physics.ARCADE);
-		if (this.dude2.x < this.world.centerX && this.middle == false)
+		if (this.dude2.x < this.world.width/2 - 2 && this.greenMiddle == false)
 		{
 			this.dude2.animations.play('left',10, true);
-			this.dude2.body.velocity.setTo(110, 0);
-			this.middle = false;
-			
+			this.dude2.body.velocity.setTo(110, 0);		
 		}
-		else if(this.dude2.x > this.world.centerX+5 && this.middle == false)
+		
+		else if(this.dude2.x > this.world.width/2 + 2 && this.greenMiddle == false)
 		{
 			this.dude2.animations.play('right',10, true);
 			this.dude2.body.velocity.setTo(110, 0);
-			this.middle = false;
+			//this.greenMiddle = false;
+			if (this.dude2.x >= this.world.width)
+			{
+				this.dude2.x = 0;
+				this.dude2.animations.stop();
+				this.dude2.destroy();	
+				//this.dude2.body.velocity.x = 0;
+			}
 		}
-		else
+		else if(this.dude2.x < this.world.width/2 + 2 && this.dude2.x > this.world.width/2 - 2)
 		{
 			this.dude2.body.velocity.setTo(0, 0);
 			this.dude2.animations.play('still',10, true);
-			this.middle = true;	
+			this.greenMiddle = true;
+			this.greenCanclick = true;
 		}
 		
-		if(this.middle == true && this.bubbleCreate == false)
+		if(this.greenMiddle == true && this.bubbleCreate == false)
 		{
 			this.bubble = this.add.sprite(this.world.width*0.2, this.world.height*0.2, 'request');
 			this.bubbleCreate = true;
@@ -407,9 +448,10 @@ theGame.Game.prototype =
 			{
 				this.bubble.destroy();
 				this.bubbleCreate = false;
+				this.dude2.x +=0.5; //this.world.width/2 + 11;
+				this.greenMiddle = false;
 			}
-			this.dude2.x +=0.5;
-			this.middle = false;
+			this.greenCanclick = false;
 		}
 	},
 		
@@ -417,26 +459,31 @@ theGame.Game.prototype =
 	{
 		this.redcustomer = 1;
 		this.physics.enable(this.dude3, Phaser.Physics.ARCADE);
-		if (this.dude3.x < this.world.centerX && this.middle == false)
+		if (this.dude3.x < this.world.width/2 - 2 && this.redMiddle == false)
 		{
 			this.dude3.animations.play('right',10, true);
 			this.dude3.body.velocity.setTo(110, 0);
 			
 		}
-		else if(this.dude3.x > this.world.centerX+5 && this.middle == false)
+		else if(this.dude3.x > this.world.width/2 + 2 && this.redMiddle == false)
 		{
 			this.dude3.animations.play('right',10, true);
 			this.dude3.body.velocity.setTo(110, 0);
+			if (this.dude3.x >= this.world.width)
+			{
+				this.dude3.x = 0;
+				this.dude3.destroy();	
+				this.dude3.animations.stop();
+			}
 		}
-		else
+		else if(this.dude3.x < this.world.width/2 + 2 && this.dude3.x > this.world.width/2 - 2)
 		{
 			this.dude3.body.velocity.setTo(0, 0);
 			this.dude3.animations.play('still',10, true);
-			this.middle = true;
+			this.redMiddle = true;
 			this.redCanclick = true;
-			//this.greenCanclick = true;
 		}
-		if(this.middle == true && this.bubbleCreate == false)
+		if(this.redMiddle == true && this.bubbleCreate == false)
 		{
 			this.bubble = this.add.sprite(this.world.width*0.2, this.world.height*0.2, 'request');
 			this.bubbleCreate = true;
@@ -447,9 +494,10 @@ theGame.Game.prototype =
 			{
 				this.bubble.destroy();
 				this.bubbleCreate = false;	
+				this.dude3.x +=0.5;
+				this.redMiddle = false;
 			}
-			this.dude3.x +=0.5;
-			this.middle = false;
+			this.redCanclick = false;
 		}
 	},
 
@@ -466,10 +514,6 @@ theGame.Game.prototype =
 				this.countDown--;
 				if(this.countDown <= 0)
        			{
-					if(this.WaitToDisappear_bool)
-					{
-						//this.setToKill.kill();
-					}
 					this.result.kill(); // wrong destroyer
 					this.startTimer = false;
        			}
@@ -492,11 +536,14 @@ theGame.Game.prototype =
 	{
 		if (this.red.events.onInputDown)
 		{
-			if(this.redcustomer!=null)
+			if (this.redCanclick == true)
 			{
-				this.TheDestroyer(this.redcustomer,this.red);
+				if(this.redcustomer!=null)
+				{
+					this.TheDestroyer(this.redcustomer,this.red);
+				}
+				this.red.setFrames(1,2);	
 			}
-			this.red.setFrames(1,2);	
 		}
 		else if(this.red.events.onInputUp)
 		{
@@ -508,15 +555,18 @@ theGame.Game.prototype =
 	{
 		if (this.blue.events.onInputDown)
 		{
-			if(this.bluecustomer!=null)
+			if (this.blueCanclick == true)
 			{
-				this.TheDestroyer(this.bluecustomer,this.blue);
+				if(this.bluecustomer!=null)
+				{
+					this.TheDestroyer(this.bluecustomer,this.blue);
+				}
+				this.blue.setFrames(1,2);	
 			}
-			this.blue.setFrames(1,2);	
         }
         else if(this.blue.events.onInputUp)
 		{    
-				this.result.kill();
+			this.result.kill();
 		}
 	},
 
@@ -524,11 +574,15 @@ theGame.Game.prototype =
 	{
 		if (this.green.events.onInputDown)
 		{
-			if(this.greencustomer!=null)
+			if (this.greenCanclick == true)
 			{
-				this.TheDestroyer(this.greencustomer,this.green); //destroyer gem
+				if(this.greencustomer!=null)
+				{
+					this.TheDestroyer(this.greencustomer,this.green); 
+				}
+		
+				this.green.setFrames(1,2);
 			}
-			this.green.setFrames(1,2);	
 		}
 		else if(this.green.events.onInputUp)
 		{   
@@ -540,11 +594,14 @@ theGame.Game.prototype =
 	{
 		 if (this.yellowGem.events.onInputDown)
 			{
-				if(this.yellowcustomer!=null)
+				if (this.yellowCanclick == true)
 				{
-					this.TheDestroyer(this.yellowcustomer,this.yellow); //destroyer gem
+					if(this.yellowcustomer!=null)
+					{
+						this.TheDestroyer(this.yellowcustomer,this.yellow); 
+					}
+					this.yellowGem.setFrames(1,2);	
 				}
-				this.yellowGem.setFrames(1,2);	
 			}
 			else if(this.yellowGem.events.onInputUp)
 			{    
@@ -556,12 +613,14 @@ theGame.Game.prototype =
 	{
 		 if (this.cyanGem.events.onInputDown)
             {
-				if(this.cyancustomer!=null)
+				if (this.cyanCanclick == true)
 				{
-					this.TheDestroyer(this.cyancustomer,this.cyanGem); //destroyer gem
+					if(this.cyancustomer!=null)
+					{
+						this.TheDestroyer(this.cyancustomer,this.cyanGem); 
+					}
+					this.cyanGem.setFrames(1,2);	
 				}
-				this.cyanGem.setFrames(1,2);	
-				
             }
             else if(this.cyanGem.events.onInputUp)
             {    
@@ -627,6 +686,14 @@ theGame.Game.prototype =
               	this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
 				this.result.anchor.set(0.5,0.5);
 				this.result.scale.setTo(1,1);
+
+				//this.redcustomer.frame = 	
+				//this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'angry');
+			
+				
+				//if red customer is not equal to null
+				//()
+				//this.red customer. frame = angry face no.
             }
         return false;
 	}

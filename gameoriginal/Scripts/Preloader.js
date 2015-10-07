@@ -5,6 +5,7 @@ theGame.Preloader = function(game)
     this.PreloadBarempty = null;
     this.preloadCover = null;
     this.ready = false;
+	//this.money = null;
 };
 
 theGame.Preloader.prototype = 
@@ -30,9 +31,10 @@ theGame.Preloader.prototype =
         this.load.image('ToturialBackGround', 'Assets/images/tutorial.png');
 		//game over
 		this.load.image('gameover', 'Assets/images/gameover.png');
-		//score page
-		this.load.image('score', 'Assets/images/scorePage.png');
-        
+		
+		//socre page background
+		this.load.image('scoreBackground', 'Assets/images/scorePage.png');
+
 		//table
 		this.load.image('gemTable', 'Assets/images/table.png');
 		
@@ -45,6 +47,7 @@ theGame.Preloader.prototype =
         this.load.image('skipButton', 'Assets/images/skipButton.png');
 		this.load.image('restartButton', 'Assets/images/restartButton.png');
 		this.load.image('nextButton', 'Assets/images/nextButton.png');
+		this.load.image('ScoretButton', 'Assets/images/scoreButton.png');
 		
 		//gem	
 		this.load.spritesheet('red', 'Assets/images/red.png', 150, 100);
@@ -53,13 +56,19 @@ theGame.Preloader.prototype =
 		this.load.spritesheet('yellow', 'Assets/images/yellowGem.png', 150, 100);
 		this.load.spritesheet('cyan', 'Assets/images/cyanGem.png', 150, 100);
 		
+		//scale gem image(star)
 		this.load.image('redScore', 'Assets/images/scoreRedGem.png');
+		this.load.image('greenScore', 'Assets/images/scoreGreenGem.png');
+		this.load.image('blueScore', 'Assets/images/scoreBlueGem.png');
 		
 		//customer
 		this.load.spritesheet('dude4', 'Assets/images/dude4.png', 32, 48);
 		this.load.spritesheet('dude3', 'Assets/images/dude3.png', 32, 48);
 		this.load.spritesheet('dude2', 'Assets/images/dude2.png', 105, 162);
 		this.load.spritesheet('dude', 'Assets/images/dude.png', 32, 48);
+		
+		//angry face
+		this.load.image('angry', 'Assets/images/angryBubble.png');
 		
 		//wrong and correct image
 		this.load.image('correct', 'Assets/images/Correct.png');
