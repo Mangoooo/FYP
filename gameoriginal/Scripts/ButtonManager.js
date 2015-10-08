@@ -91,7 +91,7 @@ ButtonManager.prototype.restart = function()
 
 ButtonManager.prototype.next = function()  // NEXT LEVEL 
 {
-	//this.gametype = 3;
+	this.gametype = 4;
 	this.nextLevelClick = true;
 	theGame.FadeScreen.OnEnd = true;
 };

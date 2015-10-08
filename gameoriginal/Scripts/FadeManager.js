@@ -72,7 +72,11 @@ FadeManager.prototype.fadeOut = function(FadeToStateNum)
 			    	this.OnStart = true;
 			        this.game.state.start('ScorePage');
 			    }break;
-                    
+                case 4:
+			    {
+			    	this.OnStart = true;
+			        this.game.state.start('Level2');
+			    }break;
 			}
 		}
 	}

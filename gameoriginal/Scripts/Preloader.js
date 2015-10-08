@@ -88,6 +88,14 @@ theGame.Preloader.prototype =
 		
         //Fade In/Out
         this.load.image('FadeInOut', 'Assets/images/Fade.png');
+		
+
+		//LEVEL 2 CUSTOMER
+		this.load.spritesheet('greencustomer', 'Assets/images/greenCustomer.png', 105, 162);
+		
+		
+		
+		
     }, 
     
     create: function()

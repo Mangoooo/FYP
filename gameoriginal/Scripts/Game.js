@@ -5,22 +5,23 @@ theGame.Game = function(game)
     this.gameBackground = null;
 	this.buttonManager = null;
     this.music = null;
-    this.uiManager = null;  
+    this.uiManager = null; 
+	
 	this.red = null; // gem
 	this.blue = null;
 	this.green = null;
 	this.yellowGem = null;
 	this.cyanGem = null;
+	
 	this.redcustomer = null; 
 	this.bluecustomer = null;
 	this.greencustomer = null;
 	this.yellowcustomer = null;
 	this.cyancustomer = null;
+	
     this.counter = 100;
-
 	this.sprite = null;
 	this.result = null;
-	//this.wrongResult = null;
 	this.WaitToDisappear_bool = false;
 	this.Wrong_Timer = null;
     this.WaitToDisappear_bool_Timer = null;
@@ -57,6 +58,7 @@ theGame.Game = function(game)
 	this.totalCustomers = 0;
 	
 	this.bubble = null;
+	this.bubbleCreate = false;
 	this.tableImage = null;
 
 	this.timer = 20;
@@ -67,12 +69,8 @@ theGame.Game = function(game)
 	this.clockSkin = null;
 	this.angle = 360;
 	
-	this.bubbleCreate = false;
+
 	this.gameOverImage = null;
-//	this.scorePageImage = null;	
-	
-//	this.redScoreImage = null;
-//	this.tweenTime = false;
 	this.wrongImage = null;
 	
 	this.redCanclick = false;
@@ -111,11 +109,6 @@ theGame.Game.prototype =
 		
 		this.cyanGem = this.add.button(this.world.width*0.5, this.world.height*0.7, 'cyan', this.cyanclick, this, 1, 0, 2);
 		this.cyanGem.anchor.setTo(0.5,0.5);
-		
-		//red score
-//		this.redScoreImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'redScore');
-//      this.redScoreImage.anchor.set(0.5,0.5);
-		
 		
 		//clock
 		this.clockSkin = this.add.sprite(this.world.width*0.08, this.world.height*0.85, 'clockskin');
@@ -181,49 +174,49 @@ theGame.Game.prototype =
 			this.moneyImage.frame = 3;
 		}
 		
-		if (this.timer <= 0 )
-		{
-			this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'gameover');
-			this.gameOverImage.anchor.set(0.5,0.5);
-			this.buttonManager.createRestartButton(this.world.width*0.5, this.world.height*0.7);
-			
-			this.CusNum = 0;
-			this.money = 0;
-			this.redMiddle = false;
-			this.greenMiddle = false;
-			this.blueMiddle = false;
-			this.grayMiddle = false;
-			this.bubble.destroy();
-		}
+//		if (this.timer <= 0 )
+//		{
+//			this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'gameover');
+//			this.gameOverImage.anchor.set(0.5,0.5);
+//			this.buttonManager.createRestartButton(this.world.width*0.5, this.world.height*0.7);
+//			
+//			this.CusNum = 0;
+//			this.money = 0;
+//			this.redMiddle = false;
+//			this.greenMiddle = false;
+//			this.blueMiddle = false;
+//			this.grayMiddle = false;
+//			this.bubble.destroy();
+//		}
 
-		if (this.buttonManager.restartLevelClick == true)  // restart
-		{
-			this.gameOverImage.destroy();
-			this.buttonManager.destroyButtonR();
-			
-			if (this.dude != null)  
-			{
-				this.dude.destroy();
-			}
-			if (this.dude2 != null)
-			{
-				this.dude2.destroy();
-			}
-			if (this.dude3 != null)
-			{
-				this.dude3.destroy();
-			}
-			this.redMiddle = false;
-			this.greenMiddle = false;
-			this.blueMiddle = false;
-			this.grayMiddle = false;
-			
-			this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
-			this.time.events.start();
-			this.timer = 20;
-			this.CusNum = 0;
-			this.money = 0;
-		}
+//		if (this.buttonManager.restartLevelClick == true)  // restart
+//		{
+//			this.gameOverImage.destroy();
+//			this.buttonManager.destroyButtonR();
+//			
+//			if (this.dude != null)  
+//			{
+//				this.dude.destroy();
+//			}
+//			if (this.dude2 != null)
+//			{
+//				this.dude2.destroy();
+//			}
+//			if (this.dude3 != null)
+//			{
+//				this.dude3.destroy();
+//			}
+//			this.redMiddle = false;
+//			this.greenMiddle = false;
+//			this.blueMiddle = false;
+//			this.grayMiddle = false;
+//			
+//			this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
+//			this.time.events.start();
+//			this.timer = 20;
+//			this.CusNum = 0;
+//			this.money = 0;
+//		}
 		
 		if (this.dude != null)  
 		{
@@ -239,7 +232,7 @@ theGame.Game.prototype =
 		}
 		
 		
-		if (this.CusNum >= 3 ) // next level
+		if (this.CusNum >= 1 ) // next level
 		{
 //			this.buttonManager.createNextButton(this.world.width*0.5, this.world.height*0.5);
 			this.buttonManager.createScoreButton(this.world.width*0.5, this.world.height*0.5);		
@@ -514,7 +507,7 @@ theGame.Game.prototype =
 				this.countDown--;
 				if(this.countDown <= 0)
        			{
-					this.result.kill(); // wrong destroyer
+					this.result.kill(); // correct bubble destroyer
 					this.startTimer = false;
        			}
 			}
@@ -578,9 +571,10 @@ theGame.Game.prototype =
 			{
 				if(this.greencustomer!=null)
 				{
+			
 					this.TheDestroyer(this.greencustomer,this.green); 
 				}
-		
+	
 				this.green.setFrames(1,2);
 			}
 		}
@@ -588,6 +582,7 @@ theGame.Game.prototype =
 		{   
 			this.result.kill();
 		}
+		
 	},
 			
 	yellowclick: function()
@@ -618,6 +613,7 @@ theGame.Game.prototype =
 					if(this.cyancustomer!=null)
 					{
 						this.TheDestroyer(this.cyancustomer,this.cyanGem); 
+						
 					}
 					this.cyanGem.setFrames(1,2);	
 				}
@@ -632,9 +628,11 @@ theGame.Game.prototype =
 	{
 		if(this.checkCombination(sprite,sprite2))
         {
+			console.log("rruru");
 			this.startTimer = true; // destroyer correct bubble
+			this.setToKill = true;
             this.countDown = 1; //destroyer correct gem and customer time
-			
+			 
 			this.money += 10;
 			this.moneyText.text = 'Money: ' + this.money;
 			
@@ -643,12 +641,15 @@ theGame.Game.prototype =
         }
 		else
 		{
-			 this.startTimer = true; 
-			//this.setToKill = sprite;
+			console.log("skdfj");
+			this.startTimer = true; 
+			this.setToKill = true;
 			this.countDown = 1; //destroyer wrong gem and customer time	
 		}
 	},
-		
+
+	
+	
 	checkCombination: function(sprite,sprite2)
 	{
 		if(sprite != null && sprite2 != null)
@@ -661,6 +662,7 @@ theGame.Game.prototype =
 				this.customerArray[2] = true;
 				this.spawnCustomer(); // call next customer
                 return true;
+				console.log("red");
             }
 			else if(sprite == this.greencustomer && sprite2 == this.green )
             {
@@ -670,6 +672,7 @@ theGame.Game.prototype =
 				this.customerArray[1] = true;
 				this.spawnCustomer();
                 return true;
+				console.log("green");
             }
 			else if(sprite == this.bluecustomer && sprite2 == this.blue )
             {
@@ -679,22 +682,17 @@ theGame.Game.prototype =
 				this.customerArray[0] = true;
 				this.spawnCustomer();
                 return true;
+				console.log("blue");
             }
-        }
-		else 
-            {   
-              	this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
+			else 
+			{   
+				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
 				this.result.anchor.set(0.5,0.5);
 				this.result.scale.setTo(1,1);
-
-				//this.redcustomer.frame = 	
-				//this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'angry');
-			
-				
-				//if red customer is not equal to null
-				//()
-				//this.red customer. frame = angry face no.
-            }
+				console.log("wrong");
+			}
+        }
+		console.log("wdgfdrong");
         return false;
 	}
 };
