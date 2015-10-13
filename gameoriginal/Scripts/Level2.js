@@ -11,23 +11,9 @@ theGame.Level2 = function(game)
 	this.yellowGem = null;
 	this.orangeGem = null;
 	
-	this.westernCus = null; //red gem
-	this.coupleCus = null; //green gem
-//	this.blueDude = null;
-	this.chinaCus = null; //yellow gem
-	this.IndiaCus = null; // orange gem
-	
-	this.redMiddle = false;
-	this.greenMiddle = false;
-//	this.blueMiddle = false;
-	this.yellowMiddle = false;
-	this.orangeMiddle = false;
-	
-	this.redCorrect = false;
-	this.greenCorrect = false;
-//	this.blueCorrect = false;
-	this.yellowCorrect = false; 
-	this.orangeCorrect = false; 
+	this.clockImage = null;
+	this.clockSkin = null;
+	this.angle = 360;
 	
 	this.bubble = null;
 	this.bubbleCreate = false;
@@ -38,17 +24,9 @@ theGame.Level2 = function(game)
 
 	this.sprite = null;
 	this.sprite2 = null;
-	this.result = null;
+
 	this.setToKill = null;
 	this.countDown = 10;
-	
-	var spawned = false;
-	
-	this.redCanclick = false;
-	this.greenCanclick = false;
-//	this.blueCanclick = false;
-	this.yellowCanclick = false;
-	this.orangeCanclick = false;
 	
 	this.randomCus = null;
 	this.customerArray = [false, false, false, false];
@@ -58,6 +36,9 @@ theGame.Level2 = function(game)
 	this.TestHuman = null;
 	this.rnd = null;
 	this._customer = null;
+	this.result = null;
+	
+	this.timeRun = false;
 };
 
 theGame.Level2.prototype = 
@@ -89,6 +70,15 @@ theGame.Level2.prototype =
 		
 		this.orangeGem = this.add.button(this.world.width*0.5, this.world.height*0.79, 'orange', this.orangeclick, this, 1, 0, 2);
 		this.orangeGem.anchor.setTo(0.5,0.5);
+		
+		//clock
+		this.clockSkin = this.add.sprite(this.world.width*0.175, this.world.height*0.5, 'clockskin');
+        this.clockSkin.anchor.set(0.5,0.5);
+		this.clockSkin.scale.setTo(0.8,0.8);
+		
+		this.clockImage = this.add.sprite(this.world.width*0.175, this.world.height*0.5, 'clock');
+        this.clockImage.anchor.set(0.5,0.5);
+		this.clockImage.scale.setTo(0.8,0.8);
     }, 
        
     create: function()
@@ -100,26 +90,36 @@ theGame.Level2.prototype =
 		
 		
 		this._customer = new CustomerManager(this);
-		this._customer.moveCustomer(0,0,0);
-		
-		this.spawnCustomer();
+		this.randomCus = this.game.rnd.integerInRange(0, 3);
+		this._customer.create(this.randomCus,0,300);
 		
 		this.moneyImage = this.add.sprite(this.world.width*0.93, this.world.height*0.85, 'moneyImage');
 		this.moneyImage.frame = 0;
 		this.moneyImage.anchor.set(0.5,0.5);
+		
+		this.clockImage = this.add.tween(this.clockImage).to( { angle: 360 }, 20000, Phaser.Easing.Linear.None, true);  //10	
        
-//        //Fade in and out
-//        theGame.FadeScreen = new FadeManager(this);
-//        theGame.FadeScreen.create();
+        //Fade in and out
+        theGame.FadeScreen = new FadeManager(this);
+        theGame.FadeScreen.create();
 		
         
     },
   
     update: function()
     { 
+		this.timeDown();
 //		this._customer = new Character();
 //		Character.create(0,0,0);
 		//this.randomCusFunc(this.randomCus);
+		this._customer.moveCustomer();
+		
+		if (this._customer.spawnCus == true)
+		{
+			this.randomCus = this.game.rnd.integerInRange(0, 3);
+			this._customer.create(this.randomCus,0,300);
+			this._customer.spawnCus = false;
+		}
 		
 		if(this.money >= 10 && this.money <= 19)
 		{
@@ -133,25 +133,7 @@ theGame.Level2.prototype =
 		{
 			this.moneyImage.frame = 3;
 		}		
-		
-		if (this.IndiaCus != null)
-		{
-			this.IndiaCustomerFunc();
-		}
-		if(this.coupleCus != null)
-		{
-			this.CoupleCustomerFunc();
-		}
-		if (this.westernCus != null)
-		{
-			this.WesternCustomerFunc();	
-		}
-		if (this.chinaCus != null)
-		{
-		 	this.ChinaCustomerFunc();	
-		}
-//		this.moveCustomer();
-				
+	
 		if (this.money >= 20 ) // next level
 		{
 			this.buttonManager.Level2ScoreButton(this.world.width*0.5, this.world.height*0.5);	
@@ -168,97 +150,6 @@ theGame.Level2.prototype =
 		
     },
 
-	spawnCustomer: function()
-	{
-		console.log(this.customerArray);
-		
-//		this.CustomerManager = new CustomerManager(this);
-//		this.randomCus = this.game.rnd.integerInRange(0, 3);
-//		this.CustomerManager.create(0,0,0);
-//		this.randomCus = this.game.rnd.integerInRange(0, 3);
-//		console.log(this.randomCus);
-//		switch(this.randomCus)
-//		{
-//			case 0:
-//			{
-//				//this.WesternCustomerFunc();
-//				this.TestHuman = this.add.sprite(this.world.widthX, this.world.height*0.3, 'dude3');
-//			}break;
-//			case 1:
-//			{
-//				//this.CoupleCustomerFunc();
-//				this.TestHuman = this.add.sprite(this.world.widthX, this.world.height*0.4, 'dude2');
-//			}break;
-//			case 2:
-//			{
-//				//this.IndiaCustomerFunc();
-//				this.TestHuman = this.add.sprite(this.world.width*0.05, this.world.height*0.3, 'orangedude');
-//			}break;
-//			case 3:
-//			{
-//				//this.ChinaCustomerFunc();
-//				this.TestHuman = this.add.sprite(this.world.width*0.05, this.world.height*0.3, 'dude5');
-//			}break;
-//		}
-//		this.TestHuman.anchor.set(0.5,0.5);
-//		this.physics.enable(this.TestHuman, Phaser.Physics.ARCADE);
-//		this.TestHuman.body.velocity.setTo(0,0);
-//		this.TestHuman.checkWorldBounds = true;
-//		this.TestHuman.events.onOutOfBounds.add(this.leftscreen, this);
-//		this.TestHuman.animations.add('left', [0,1,2,3]);     	
-//		this.TestHuman.animations.add('right',  [5,6,7,8]);
-//		this.TestHuman.animations.add('still', [4]);
-//		this.TestHuman.IsMiddle = false;
-//		this.TestHuman.done = false;
-//		this.TestHuman.spawned=true;
-//		this.totalCustomers += 1;
-	},
-	
-	leftscreen:function()
-	{
-		if(this.result !=null)
-		{
-			this.result.destroy();
-		}
-		this.spawnCustomer();
-	},
-//	moveCustomer:function()
-//	{
-//		if(this.TestHuman.done)
-//		{
-//			this.TestHuman.x ++;
-//			this.TestHuman.animations.play('right',10, true);
-//			if(this.TestHuman.x >this.world.width*0.6)
-//			{
-//				if(this.result !=null)
-//				{
-//					this.result.destroy();
-//				}
-//			}
-//		}
-//		if(this.TestHuman.IsMiddle)
-//		{
-//			if(this.bubbleCreate == false)
-//			{
-//				this.bubble = this.add.sprite(this.world.width*0.2, this.world.height*0.2, 'request');
-//				this.tagnum = this.randomCus;
-//				this.bubbleCreate = true;
-//			}
-//		}else
-//		{
-//			if(this.TestHuman.x < this.game.world.width*0.5)
-//			{
-//				this.TestHuman.x ++;
-//				this.TestHuman.animations.play('right',10, true);
-//			}else
-//			{
-//				this.TestHuman.IsMiddle = true;
-//				this.TestHuman.animations.play('still',10, true);
-//				this.bubble = this.add.sprite(this.world.width*0.2, this.world.height*0.2, 'request');
-//				this.bubbleCreate = true;
-//			}
-//		}
-//	},
 	updateCounter: function() 
     {
 		if (this.counter <= 0)
@@ -297,16 +188,30 @@ theGame.Level2.prototype =
 				console.log("red");
 				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
 				this.result.anchor.set(0.5,0.5);
-				if(this.bubble != null)
+				this._customer.TestHuman.animations.play('angry',10, true);
+				this.timeRun = true;
+				if(this._customer.bubble != null)
 				{
-					this.bubble.destroy();
-					this.TestHuman.done =true;
+					this._customer.bubble.destroy();
+//					this._customer.TestHuman.done =true; 
 				}
 			}else
 			{
 				console.log("wrong");
 			}
 		}
+	},
+	
+	timeDown: function()
+	{
+		if(this.timeRun == true)
+			this.game.time.events.add(Phaser.Timer.SECOND, this.moveToRight, this);
+	},
+	
+	moveToRight: function()
+	{
+		this._customer.TestHuman.done =true;
+		this.timeRun = false;
 	},
 	
 	greenclick: function()
@@ -318,10 +223,11 @@ theGame.Level2.prototype =
 				console.log("GReen");
 				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
 				this.result.anchor.set(0.5,0.5);
-				if(this.bubble != null)
+				this._customer.TestHuman.animations.play('angry',10, true);
+				if(this._customer.bubble != null)
 				{
-					this.bubble.destroy();
-					this.TestHuman.done =true;
+					this._customer.bubble.destroy();
+					this._customer.TestHuman.done =true;
 				}
 				
 			}else
@@ -340,10 +246,11 @@ theGame.Level2.prototype =
 				console.log("yellow");
 				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
 				this.result.anchor.set(0.5,0.5);
-				if(this.bubble != null)
+				this._customer.TestHuman.animations.play('angry',10, true);
+				if(this._customer.bubble != null)
 				{
-					this.bubble.destroy();
-					this.TestHuman.done =true;
+					this._customer.bubble.destroy();
+					this._customer.TestHuman.done =true;
 					//this.IsMiddle = false;
 				}
 				
@@ -361,12 +268,13 @@ theGame.Level2.prototype =
 			if(this.randomCus == 2)
 			{
 				console.log("orange");
-				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-				this.result.anchor.set(0.5,0.5);
-				if(this.bubble != null)
+//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
+//				this.result.anchor.set(0.5,0.5);
+				this._customer.TestHuman.animations.play('angry',10, true);
+				if(this._customer.bubble != null)
 				{
-					this.bubble.destroy();
-					this.TestHuman.done =true;
+					this._customer.bubble.destroy();
+					this._customer.TestHuman.done =true;
 				}
 				
 			}else
@@ -405,59 +313,4 @@ theGame.Level2.prototype =
 		this.money += 10;
 		//this.moneyText.text = 'Money: ' + this.money;
 	},
-	checkCombination: function(sprite,sprite2)
-	{
-//		if(sprite != null && sprite2 != null)
-//        {
-			if(sprite == this.chinaCus && sprite2 == this.yellowGem )
-            {
-				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-				this.result.anchor.set(0.5,0.5);
-				this.yellowCorrect = true;
-				this.spawnCustomer();
-				this.customerArray[3] = true;
-                return true;
-            }
-            if(sprite == this.westernCus && sprite2 == this.redGem )
-            {
-				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-				this.result.anchor.set(0.5,0.5);
-				this.redCorrect = true;
-				this.spawnCustomer();
-				this.customerArray[2] = true;
-                return true;
-            }
-			if(sprite == this.coupleCus && sprite2 == this.greenGem )
-            {
-				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-				this.result.anchor.set(0.5,0.5);
-				this.greenCorrect = true;
-				this.spawnCustomer();
-				this.customerArray[1] = true;
-                return true;
-            }
-			if(sprite == this.IndiaCus && sprite2 == this.orangeGem )
-            {
-				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-				this.result.anchor.set(0.5,0.5);
-				this.orangeCorrect = true;
-				this.spawnCustomer();
-				this.customerArray[0] = true;
-                return true;
-            }
-//			else
-//			{
-//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
-//				this.result.anchor.set(0.5,0.5);
-//				console.log("fgfg");
-//			}
-//        }
-		else
-		{
-			this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
-			this.result.anchor.set(0.5,0.5);
-			console.log("fgfg");
-		}
-        return false;
-	}
 };
