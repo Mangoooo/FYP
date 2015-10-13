@@ -39,8 +39,6 @@ theGame.ScorePage.prototype =
     update: function()
     {
        theGame.FadeScreen.update(this.buttonManager.gametype);
-		
-		
     },
 	
 	greenTween: function()

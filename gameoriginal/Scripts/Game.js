@@ -38,6 +38,7 @@ theGame.Game = function(game)
 //	this.dude = null; // blue gem
 //	this.dude2 = null; // green gem
 //	this.dude3 = null; // India red gem 
+//	this.dude4 = null; // purple gem
 	
 	this.WesternCus = null;
 	this.IndianCus = null;
@@ -78,10 +79,7 @@ theGame.Game = function(game)
 	this.greenCanclick = false;
 	this.blueCanclick = false;
 	this.purpleCanclick = false;
-	this.timeRun = false;
-	
-	this.tableGrounp = null;
-	this.peopleGroup = null;
+
 };
 
 theGame.Game.prototype = 
@@ -115,11 +113,11 @@ theGame.Game.prototype =
 		//clock
 		this.clockSkin = this.add.sprite(this.world.width*0.175, this.world.height*0.5, 'clockskin');
         this.clockSkin.anchor.set(0.5,0.5);
-		//this.clockSkin.scale.setTo(0.8,0.8);
+		this.clockSkin.scale.setTo(0.8,0.8);
 		
 		this.clockImage = this.add.sprite(this.world.width*0.175, this.world.height*0.5, 'clock');
         this.clockImage.anchor.set(0.5,0.5);
-		//this.clockImage.scale.setTo(0.8,0.8);
+		this.clockImage.scale.setTo(0.8,0.8);
 		
 		//timerText
         this.timerText = this.add.text(this.world.centerX, this.world.centerY, 'Timer: 20', { font: "40px Arial", fill: "#000000", align: "center" });
@@ -130,16 +128,13 @@ theGame.Game.prototype =
        
     create: function()
     {
-//		this.tableGrounp = this.add.group();
-//		this.peopleGroup = this.add.group();
-//		this.tableGrounp.add(this.tableImage);
-		
 		console.log("level1");
         this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this); // timer
 
 		this.spawnCustomer();
 
 		this.clockImage = this.add.tween(this.clockImage).to( { angle: 360 }, 20000, Phaser.Easing.Linear.None, true);  //10
+		
 		//Money
 		this.moneyImage = this.add.sprite(this.world.width*0.825, this.world.height*0.5, 'moneyImage');
 		this.moneyImage.frame = 0;
@@ -167,6 +162,8 @@ theGame.Game.prototype =
     { 
 		this.clockImage.angle += 1;
 		
+		this.randomCusFunc(this.randomCus);
+		
 		if(this.money >= 10 && this.money <= 19)
 		{
 			this.moneyImage.frame = 1;
@@ -179,10 +176,6 @@ theGame.Game.prototype =
 		{
 			this.moneyImage.frame = 3;
 		}
-		
-		this.randomCusFunc(this.randomCus);
-		
-		
 		
 //		if (this.timer <= 0 )
 //		{
@@ -228,7 +221,7 @@ theGame.Game.prototype =
 //			this.money = 0;
 //		}
 		
-		if (this.WesternCus != null)  
+		if (this._customer != null)  
 		{
 			this.blueCustomerFunc();
 		}
@@ -258,7 +251,7 @@ theGame.Game.prototype =
 		
 		theGame.FadeScreen.update(this.buttonManager.gametype);	
 		
-		if (this.timer >= 6) // red image blinking
+		if (this.timer >= 6) // red image
 		{
 			this.blinkingImage.animations.add('red', [0,1]);
 			this.blinkingImage.play('red', 2 , true);
@@ -312,7 +305,6 @@ theGame.Game.prototype =
 //				this.dude2.animations.add('right',  [5,6,7,8]);
 //				this.dude2.animations.add('still', [4]);
 				
-				
 				this.greenMiddle = false;
 			}  
 			else if(this.randomCus == 3)
@@ -350,22 +342,22 @@ theGame.Game.prototype =
 	
 	randomCusFunc: function(randomCus)
 	{
-		switch(randomCus)
+		if(this.CusNum <= 3)
 		{
-			case 1:
+			switch(randomCus)
 			{
-				this.blueCustomerFunc();
-			}break;
-				
-			case 2:
-			{
-				this.greenCustomerFunc();
-			}break;
+				case 1:
+					this.blueCustomerFunc();
+					break;
 
-			case 3:
-			{
-				this.redCustomerFunc();
-			}break;		
+				case 2:
+					this.greenCustomerFunc();
+					break;
+
+				case 3:
+					this.redCustomerFunc();
+					break;		
+			}
 		}
 	},
 	
@@ -524,7 +516,7 @@ theGame.Game.prototype =
 				this.countDown--;
 				if(this.countDown <= 0)
        			{
-//					this.result.kill(); // correct bubble destroyer
+					this.result.kill(); // correct bubble destroyer
 					this.startTimer = false;
        			}
 			}
@@ -653,6 +645,7 @@ theGame.Game.prototype =
 //				this.spawnCustomer(); // call next customer
 //				this.scoreredGem += 1;
 //                return true;
+//				console.log("red");
 //            }
 //			else if(sprite == this.greencustomer && sprite2 == this.green )
 //            {
@@ -663,6 +656,7 @@ theGame.Game.prototype =
 //				this.spawnCustomer();
 //				this.scoreGreenGem += 1;
 //                return true;
+//				console.log("green");
 //            }
 //			else if(sprite == this.bluecustomer && sprite2 == this.blue )
 //            {
@@ -673,9 +667,18 @@ theGame.Game.prototype =
 //				this.spawnCustomer();
 //				this.scoreblueGem += 1;
 //                return true;
+//				console.log("blue");
 //            }
 //			
 //        }
+//		else 
+//			{   
+//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'wrong');
+//				this.result.anchor.set(0.5,0.5);
+//				this.result.scale.setTo(1,1);
+//				console.log("wrong");
+//			}
+//		console.log("wdgfdrong");
 //        return false;
 //	}
 };

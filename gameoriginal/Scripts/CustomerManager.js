@@ -17,7 +17,6 @@ CustomerManager.prototype.create = function(RandomNum,posX, posY)
 			{
 				//this.WesternCustomerFunc();
 				this.TestHuman = this.game.add.sprite(posX, posY, 'dude3');
-				
 			}break;
 			case 1:
 			{
@@ -33,17 +32,16 @@ CustomerManager.prototype.create = function(RandomNum,posX, posY)
 			{
 				//this.ChinaCustomerFunc();
 				this.TestHuman = this.game.add.sprite(posX,posY, 'dude5');
-			}break;	
+			}break;
 		}
 		this.TestHuman.anchor.set(0.5,0.5);
 		this.game.physics.enable(this.TestHuman, Phaser.Physics.ARCADE);
 		this.TestHuman.body.velocity.setTo(0,0);
 		this.TestHuman.checkWorldBounds = true;
-		this.TestHuman.events.onOutOfBounds.add(this.leftscreen, this);
+		this.TestHuman.events.onOutOfBounds.add(this.outScreen, this);
 		this.TestHuman.animations.add('left', [0,1,2,3]);     	
+		this.TestHuman.animations.add('right',  [5,6,7,8]);
 		this.TestHuman.animations.add('still', [4]);
-//		this.TestHuman.animations.add('angry', [5]);
-		this.TestHuman.animations.add('right',  [6,7,8,9]);
 		this.TestHuman.IsMiddle = false;
 		this.TestHuman.done = false;
 		this.TestHuman.spawned = true;
@@ -55,12 +53,8 @@ CustomerManager.prototype.update = function()
     
 },
 
-CustomerManager.prototype.leftscreen = function()
+CustomerManager.prototype.outScreen = function()
 {
-//	if(this.result !=null)
-//	{
-//		this.result.destroy();
-//	}
 	this.spawnCus = true;
 },
 	
@@ -69,7 +63,7 @@ CustomerManager.prototype.moveCustomer = function()
 	if(this.TestHuman.done)
 	{
 		this.TestHuman.x ++;
-		this.TestHuman.animations.play('right',10, true);
+		this.TestHuman.animations.play('left',10, true);
 	 	if(this.TestHuman.x >this.game.world.width*0.6)
 		{
 			if(this.result !=null)

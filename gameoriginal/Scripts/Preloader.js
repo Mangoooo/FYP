@@ -49,12 +49,11 @@ theGame.Preloader.prototype =
 		this.load.spritesheet('blinking', 'Assets/images/BG/blinking.png', 975, 750);
         
         //Button
-        this.load.image('startButton', 'Assets/images/Button/Play_button.png');
-       // this.load.image('tutorialButton', 'Assets/images/tutorialButton.png');
-        this.load.image('skipButton', 'Assets/images/Button/skipButton.png');
-		this.load.image('restartButton', 'Assets/images/Button/restartButton.png');
-		this.load.image('nextButton', 'Assets/images/Button/nextButton.png');
-		this.load.image('ScoretButton', 'Assets/images/Button/scoreButton.png');
+        this.load.spritesheet('playButton', 'Assets/images/Button/Play_button.png', 236,66);
+        this.load.spritesheet('skipButton', 'Assets/images/Button/skipButton.png', 236,66);
+//		this.load.image('restartButton', 'Assets/images/Button/restartButton.png', 236,66);
+		this.load.spritesheet('nextButton', 'Assets/images/Button/nextButton.png', 236,66);
+		this.load.spritesheet('ScoretButton', 'Assets/images/Button/scoreButton.png', 236,66);
 		
 		//gem	
 		this.load.spritesheet('red', 'Assets/images/Gem/red.png', 82, 120);
@@ -74,19 +73,21 @@ theGame.Preloader.prototype =
 		this.load.image('purpleScore', 'Assets/images/ScoreGem/scorePurpleGem.png');
 		
 		//customer
-		this.load.spritesheet('dude', 'Assets/images/Customer/dude.png', 90, 162);
-		this.load.spritesheet('dude2', 'Assets/images/Customer/dude2.png', 90, 162);
-		this.load.spritesheet('dude3', 'Assets/images/Customer/dude3.png', 90, 162);
+		this.load.spritesheet('dude', 'Assets/images/Customer/dude.png', 32, 48);
+		this.load.spritesheet('dude2', 'Assets/images/Customer/dude2.png', 105, 162);
+		this.load.spritesheet('dude3', 'Assets/images/Customer/dude3.png', 32, 48);
 		this.load.spritesheet('dude4', 'Assets/images/Customer/dude4.png', 32, 48);
-		this.load.spritesheet('dude5', 'Assets/images/Customer/dude5.png', 90, 162);
-		this.load.spritesheet('orangedude', 'Assets/images/Customer/orangedude.png', 90, 162);
-		this.load.spritesheet('purpledude', 'Assets/images/Customer/purpledude.png', 90, 162);
-		
+		this.load.spritesheet('dude5', 'Assets/images/Customer/dude5.png', 32, 48);
+		this.load.spritesheet('orangedude', 'Assets/images/Customer/orangedude.png', 32, 48);
+		this.load.spritesheet('purpledude', 'Assets/images/Customer/purpledude.png', 32, 48);
 		
 		//////////////////////LEVEL 1 CUSTOMER SPRITE////////////////////////////////
 		this.load.spritesheet('ChineseSprite', 'Assets/images/Level1_Sprite/ChineseSprite.png', 153, 200);
 		this.load.spritesheet('IndianSprite', 'Assets/images/Level1_Sprite/IndianSprite.png', 133, 186);
 		this.load.spritesheet('WesternSprite', 'Assets/images/Level1_Sprite/WesternSprite.png', 133, 186);
+		
+		//angry face
+		this.load.image('angry', 'Assets/images/angryBubble.png');
 		
 		//wrong and correct image
 		this.load.image('correct', 'Assets/images/Correct.png');
@@ -100,8 +101,6 @@ theGame.Preloader.prototype =
 		
 		//money
 		this.load.spritesheet('moneyImage', 'Assets/images/coin.png', 116, 106);
-//		this.load.image('moneyjar', 'Assets/images/moneyjar.png');
-//		this.load.image('coin', 'Assets/images/coin.png');
 		
 		//clock
 		this.load.image('clockskin', 'Assets/images/clockskin.png');
@@ -113,6 +112,9 @@ theGame.Preloader.prototype =
 
 		//LEVEL 2 CUSTOMER
 		this.load.spritesheet('greencustomer', 'Assets/images/greenCustomer.png', 105, 162);
+		
+		///////////////////////////////////////AUDIO//////////////////////////////////////////////////
+		
 
     }, 
     
