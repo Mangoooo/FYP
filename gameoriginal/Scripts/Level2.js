@@ -87,28 +87,36 @@ theGame.Level2.prototype =
 	
         this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this); 
 		this.buttonManager = new ButtonManager(this);
+        
+        //shuffle customerArray every start of this level
+        //console.log(this.customerArray);
+        this.randomCustomer(this.customerArray);
+        //console.log(this.customerArray);
+        //spawn the first customer
+		this.spawnCustomer();
 		
-		//Money image and frame start from 0
-		this.moneyImage = this.add.sprite(this.world.width*0.825, this.world.height*0.5, 'moneyImage');
+		
+		this.moneyImage = this.add.sprite(this.world.width*0.93, this.world.height*0.85, 'moneyImage');
 		this.moneyImage.frame = 0;
 		this.moneyImage.anchor.set(0.5,0.5);
 		
-		//Clock angele and call clock image
 		this.clockImage = this.add.tween(this.clockImage).to( { angle: 360 }, 20000, Phaser.Easing.Linear.None, true);  //10	
        
-        // Random customer
-        this._customer = new CustomerManager(this);
-        console.log(this.customerArray);
-        this.randomCustomer(this.customerArray);
-        console.log(this.customerArray);
-		this._customer.create(this.customerArray[0], 0, 300);
-        console.log(this.totalCustomers);
-		
-        //Fade in and out
-        theGame.FadeScreen = new FadeManager(this);
-        theGame.FadeScreen.create();
+//        //Fade in and out
+//        theGame.FadeScreen = new FadeManager(this);
+//        theGame.FadeScreen.create();
     },
-  
+    spawnCustomer:function()
+    {
+    	if(this.totalCustomers<5)
+    	{
+    		this._customer = new CustomerManager(this);
+			this._customer.create(this.customerArray[this.totalCustomers], 0, 300);
+	        console.log(this.totalCustomers);
+	        this.totalCustomers++;
+	        console.log(this.totalCustomers);
+    	}
+    },
     update: function()
     { 
 //		this._customer = new Character();
@@ -118,11 +126,16 @@ theGame.Level2.prototype =
 		
 		if (this._customer.spawnCus == true)
 		{
-            this._customer = new CustomerManager(this);
-            var totalCustomer = 0;
-            this._customer.create(this.customerArray[this.totalCustomers], 0,300);
-            this._customer.spawnCus = false;
-		}
+			this.spawnCustomer();
+			this._customer.spawnCus =false;
+		}		
+//		if (this._customer.spawnCus == true)
+//		{
+//            this._customer = new CustomerManager(this);
+//            var totalCustomer = 0;
+//            this._customer.create(this.customerArray[this.totalCustomers], 0,300);
+//            this._customer.spawnCus = false;
+//		}
 		
 		if(this.money >= 10 && this.money <= 19)
 		{
@@ -150,19 +163,6 @@ theGame.Level2.prototype =
 			theGame.money1 = this.money;
 		}
 			theGame.FadeScreen.update(this.buttonManager.gametype);	
-		
-//		if (this.WesternCus != null)  
-//		{
-//			this.blueCustomerFunc();
-//		}
-//		if (this.ChineseCus != null)
-//		{
-//			this.greenCustomerFunc();
-//		}
-//		if (this.IndianCus != null)
-//		{
-//			this.redCustomerFunc();
-//		}
 		
     },
     
