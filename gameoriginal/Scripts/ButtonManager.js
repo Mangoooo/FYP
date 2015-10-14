@@ -19,8 +19,8 @@ function ButtonManager(game)
 //game play button
 ButtonManager.prototype.startGameButton = function(posx, posy)
 {
-    this.startButton = this.game.add.button(posx, posy, 'startButton', this.startGame, this,  1,0,2);
-    this.startButton.anchor.set(0.5,0.5);
+	this.startButton = this.game.add.button(posx, posy, 'playButton', this.startGame, this, 0, 0, 1);
+	this.startButton.anchor.set(0.5,0.5);
 },
     
 ButtonManager.prototype.startGame = function() 
@@ -29,84 +29,36 @@ ButtonManager.prototype.startGame = function()
 	theGame.FadeScreen.OnEnd = true;
 },
 
-/*ButtonManager.prototype.creditButton = function() 
-{
-	this.gametype = 1;
-	theGame.FadeScreen.OnEnd = true;
-},*/
-
-//tutorial
-/*ButtonManager.prototype.createTutorialButton = function(posx, posy)
-{
-    this.tutorialButton = this.game.add.button(posx, posy, 'tutorialButton', this.tutorial, this,  1,0,2);
-    this.tutorialButton.anchor.set(0.5,0.5);
-    this.tutorialButton.scale.set(0.5,0.5);
-},
-    
-ButtonManager.prototype.tutorial = function() 
-{
-	this.gametype = 1;
-	theGame.FadeScreen.OnEnd = true;
-},*/
 ButtonManager.prototype.createSkipButton = function(posx, posy)
 {
-    this.skipButton = this.game.add.button(posx, posy, 'skipButton', this.skip, this,  1,0,2);
+    this.skipButton = this.game.add.button(posx, posy, 'skipButton', this.skip, this,  0, 0, 1);
     this.skipButton.anchor.set(0.5,0.5);
 },
-	
-ButtonManager.prototype.createNextButton = function(posx, posy)
-{
-
-    this.nextButton = this.game.add.button(posx, posy, 'nextButton', this.next, this,  1,0,2);
-    this.nextButton.anchor.set(0.5,0.5);
-},
-	
-ButtonManager.prototype.createLevel3Button = function(posx, posy)
-{
-
-    this.level2Button = this.game.add.button(posx, posy, 'nextButton', this.gotoLevel3, this,  1,0,2);
-    this.level2Button.anchor.set(0.5,0.5);
-},
-	
-ButtonManager.prototype.createRestartButton = function(posx, posy)
-{
-    this.restartButton = this.game.add.button(posx, posy, 'restartButton', this.restart, this,  1,0,2);
-    this.restartButton.anchor.set(0.5,0.5);
-},
-    
-ButtonManager.prototype.createScoreButton = function(posx, posy)
-{
-    this.scoreButton = this.game.add.button(posx, posy, 'ScoretButton', this.score, this,  1,0,2);
-    this.scoreButton.anchor.set(0.5,0.5);
-},	
-	
-ButtonManager.prototype.Level2ScoreButton = function(posx, posy)
-{
-    this.scoreButton = this.game.add.button(posx, posy, 'ScoretButton', this.Level2score, this,  1,0,2);
-    this.scoreButton.anchor.set(0.5,0.5);
-},	
-	
 ButtonManager.prototype.skip = function() 
 {
 	this.gametype = 1;
 	theGame.FadeScreen.OnEnd = true;
 };
-
-ButtonManager.prototype.restart = function() 
+	
+ButtonManager.prototype.createNextButton = function(posx, posy)
 {
-	this.gametype = 2;
-	this.gameoverCreate = true;
-	this.restartLevelClick = true;
-	theGame.FadeScreen.OnEnd = true;
-};
 
-ButtonManager.prototype.next = function()  // NEXT LEVEL 
+    this.nextButton = this.game.add.button(posx, posy, 'nextButton', this.gotoLevel2, this, 0, 0, 1);
+    this.nextButton.anchor.set(0.5,0.5);
+},
+ButtonManager.prototype.gotoLevel2 = function()  // NEXT LEVEL 
 {
 	this.gametype = 4;
 	this.nextLevelClick = true;
 	theGame.FadeScreen.OnEnd = true;
 };
+	
+ButtonManager.prototype.createLevel3Button = function(posx, posy)
+{
 
+    this.level2Button = this.game.add.button(posx, posy, 'nextButton', this.gotoLevel3, this,  0, 0, 1);
+    this.level2Button.anchor.set(0.5,0.5);
+},
 ButtonManager.prototype.gotoLevel3 = function()  // NEXT LEVEL 
 {
 	this.gametype = 6;
@@ -114,21 +66,32 @@ ButtonManager.prototype.gotoLevel3 = function()  // NEXT LEVEL
 	theGame.FadeScreen.OnEnd = true;
 };
 
-ButtonManager.prototype.score = function() 
+    
+ButtonManager.prototype.createScoreButton = function(posx, posy)
+{
+    this.scoreButton = this.game.add.button(posx, posy, 'nextButton', this.ShowscorePage, this,  0, 0, 1);
+    this.scoreButton.anchor.set(0.5,0.5);
+},	
+ButtonManager.prototype.ShowscorePage = function() 
 {
 	this.gametype = 3;
 	this.nextLevelClick = true;
 	theGame.FadeScreen.OnEnd = true;
 };
-
+	
+ButtonManager.prototype.Level2ScoreButton = function(posx, posy)
+{
+    this.scoreButton = this.game.add.button(posx, posy, 'nextButton', this.Level2score, this,  0, 0, 1);
+    this.scoreButton.anchor.set(0.5,0.5);
+},	
+	
 ButtonManager.prototype.Level2score = function() 
 {
 	this.gametype = 5;
 	this.nextLevelClick = true;
 	theGame.FadeScreen.OnEnd = true;
 };
-
-
+	
 ButtonManager.prototype.destroyButtonR = function()
 {
 	this.restartButton.destroy();
@@ -139,6 +102,17 @@ ButtonManager.prototype.destroyButton = function()
 	this.nextButton.destroy();
 	this.nextLevelClick = false;
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 

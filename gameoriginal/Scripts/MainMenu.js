@@ -16,8 +16,8 @@ theGame.MainMenu.prototype =
         
         //Button
         this.buttonManager = new ButtonManager(this);
-//        this.buttonManager.startGameButton(this.world.width*0.5, this.world.height*0.5);
-		this.buttonManager.createNextButton(this.world.width*0.5, this.world.height*0.5);	
+        this.buttonManager.startGameButton(this.world.width*0.25, this.world.height*0.8);
+//		this.buttonManager.createLevel3Button(this.world.width*0.5, this.world.height*0.5);	
         
         //Fade in and out
         theGame.FadeScreen = new FadeManager(this);

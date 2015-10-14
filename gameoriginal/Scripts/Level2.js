@@ -37,6 +37,8 @@ theGame.Level2 = function(game)
 	this.rnd = null;
 	this._customer = null;
 	this.result = null;
+	
+	this.CusNum = 0;
     
     this.totalCustomers = 0;
 };
@@ -87,55 +89,49 @@ theGame.Level2.prototype =
 	
         this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this); 
 		this.buttonManager = new ButtonManager(this);
-        
-        //shuffle customerArray every start of this level
+		
+		/////////////Random customer/////////////////
+		
+		//shuffle customerArray every start of this level
         //console.log(this.customerArray);
         this.randomCustomer(this.customerArray);
         //console.log(this.customerArray);
         //spawn the first customer
 		this.spawnCustomer();
 		
-		
-		this.moneyImage = this.add.sprite(this.world.width*0.93, this.world.height*0.85, 'moneyImage');
+		//Money image and frame start from 0
+		this.moneyImage = this.add.sprite(this.world.width*0.825, this.world.height*0.5, 'moneyImage');
 		this.moneyImage.frame = 0;
 		this.moneyImage.anchor.set(0.5,0.5);
 		
+		//Clock angele and call clock image
 		this.clockImage = this.add.tween(this.clockImage).to( { angle: 360 }, 20000, Phaser.Easing.Linear.None, true);  //10	
-       
-//        //Fade in and out
-//        theGame.FadeScreen = new FadeManager(this);
-//        theGame.FadeScreen.create();
+        //Fade in and out
+        theGame.FadeScreen = new FadeManager(this);
+        theGame.FadeScreen.create();
     },
-    spawnCustomer:function()
+	
+	spawnCustomer:function()
     {
-    	if(this.totalCustomers<5)
+    	if(this.totalCustomers<4)
     	{
     		this._customer = new CustomerManager(this);
-			this._customer.create(this.customerArray[this.totalCustomers], 0, 300);
+			this._customer.create(this.customerArray[this.totalCustomers], 0, 325);
 	        console.log(this.totalCustomers);
 	        this.totalCustomers++;
 	        console.log(this.totalCustomers);
     	}
     },
+  
     update: function()
     { 
-//		this._customer = new Character();
-//		Character.create(0,0,0);
-		//this.randomCusFunc(this.randomCus);
 		this._customer.moveCustomer();
 		
 		if (this._customer.spawnCus == true)
 		{
 			this.spawnCustomer();
 			this._customer.spawnCus =false;
-		}		
-//		if (this._customer.spawnCus == true)
-//		{
-//            this._customer = new CustomerManager(this);
-//            var totalCustomer = 0;
-//            this._customer.create(this.customerArray[this.totalCustomers], 0,300);
-//            this._customer.spawnCus = false;
-//		}
+		}	
 		
 		if(this.money >= 10 && this.money <= 19)
 		{
@@ -150,20 +146,27 @@ theGame.Level2.prototype =
 			this.moneyImage.frame = 3;
 		}		
 	
-		if (this.money >= 20 ) // next level
+		if (this.timer <= 0 )
+		{
+			this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'gameover');
+			this.gameOverImage.anchor.set(0.5,0.5);
+		}
+		
+		if (this.CusNum >= 3 ) // next level
 		{
 			this.buttonManager.Level2ScoreButton(this.world.width*0.5, this.world.height*0.5);	
+			this.time.events.stop();
+			this.clockImage.stop();
 		}
-		if (this.buttonManager.nextLevelClick == true)
+		if (this.buttonManager.nextLevelClick == true)    
 		{	
 //			this.buttonManager.destroyButton();	
 //			this.CusNum = 0;
 //			this.money = 0;
-//			this.timer = 20;
+			this.timer = 20;
 			theGame.money1 = this.money;
 		}
-			theGame.FadeScreen.update(this.buttonManager.gametype);	
-		
+			theGame.FadeScreen.update(this.buttonManager.gametype);		
     },
     
     randomCustomer: function(array)
@@ -214,8 +217,10 @@ theGame.Level2.prototype =
 			if(this.customerArray[0])
 			{
 				console.log("red");
-				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-				this.result.anchor.set(0.5,0.5);
+//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
+//				this.result.anchor.set(0.5,0.5);
+				this.money += 10;
+				this.CusNum += 1;
 				if(this._customer.bubble != null)
 				{
 					this._customer.bubble.destroy();
@@ -235,8 +240,10 @@ theGame.Level2.prototype =
 			if(this.customerArray[1])
 			{
 				console.log("GReen");
-				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-				this.result.anchor.set(0.5,0.5);
+//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
+//				this.result.anchor.set(0.5,0.5);
+				this.money += 10;
+				this.CusNum += 1;
 				if(this._customer.bubble != null)
 				{
 					this._customer.bubble.destroy();
@@ -250,29 +257,6 @@ theGame.Level2.prototype =
 		}
 	},
 
-	yellowclick: function()
-	{
-		if (this.yellowGem.events.onInputDown)
-		{
-			if(this.customerArray[3])
-			{
-				console.log("yellow");
-				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-				this.result.anchor.set(0.5,0.5);
-				if(this._customer.bubble != null)
-				{
-					this._customer.bubble.destroy();
-					this._customer.TestHuman.done =true;
-					//this.IsMiddle = false;
-				}
-				
-			}else
-			{
-				console.log("wrong");
-			}
-		}
-	},
-			
 	orangeclick: function()
 	{
 		if (this.orangeGem.events.onInputDown)
@@ -280,8 +264,10 @@ theGame.Level2.prototype =
 			if(this.customerArray[2])
 			{
 				console.log("orange");
-				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-				this.result.anchor.set(0.5,0.5);
+//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
+//				this.result.anchor.set(0.5,0.5);
+				this.money += 10;
+				this.CusNum += 1;
 				if(this._customer.bubble != null)
 				{
 					this._customer.bubble.destroy();
@@ -295,6 +281,31 @@ theGame.Level2.prototype =
 		}
 	},
 	
+	yellowclick: function()
+	{
+		if (this.yellowGem.events.onInputDown)
+		{
+			if(this.customerArray[3])
+			{
+				console.log("yellow");
+//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
+//				this.result.anchor.set(0.5,0.5);
+				this.money += 10;
+				this.CusNum += 1;
+				if(this._customer.bubble != null)
+				{
+					this._customer.bubble.destroy();
+					this._customer.TestHuman.done =true;
+					//this.IsMiddle = false;
+				}
+				
+			}else
+			{
+				console.log("wrong");
+			}
+		}
+	},
+
 	blueclick: function()
 	{
 		if (this.blueGem.events.onInputDown)
@@ -321,7 +332,7 @@ theGame.Level2.prototype =
 			this.countDown = 1;
 		}
 		
-		this.money += 10;
+		//this.money += 10;
 		//this.moneyText.text = 'Money: ' + this.money;
 	},
 };
