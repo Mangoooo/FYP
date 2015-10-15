@@ -8,6 +8,8 @@ theGame.Preloader = function(game)
 	this.money1 = 0;
 	this.money2 = 0;
 	this.money3 = 0;
+	
+	this.ShowGems = false;
 };
 
 theGame.Preloader.prototype = 

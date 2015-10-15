@@ -43,6 +43,7 @@ theGame.Game = function(game)
 	this.randomBubble = null;
 
 	this.timerRun = false;
+	
 
 };
 
@@ -84,10 +85,8 @@ theGame.Game.prototype =
 		this.clockImage.scale.setTo(0.8,0.8);
 		
 		//timerText
-        this.timerText = this.add.text(this.world.centerX, this.world.centerY, ' ', { font: "40px Arial", fill: "#000000", align: "center" });
-    	this.timerText.anchor.setTo(0.5, 0.5);
-		this.moneyText = this.add.text(600, 50, 'Money: 0', { font:"30px Arial", fill: "#000", align: "center"});
-		this.CusNumText = this.add.text(460, 40, ': 0', { font:"30px Arial", fill: "#000", align: "center"});
+//        this.timerText = this.add.text(this.world.centerX, this.world.centerY, ' ', { font: "40px Arial", fill: "#000000", align: "center" });
+//    	this.timerText.anchor.setTo(0.5, 0.5);
     }, 
        
     create: function()
@@ -228,16 +227,16 @@ theGame.Game.prototype =
 			if(this.customerArray[0] == 0 && this._customer.randomBubble == 0 )
 			{
 				this._customer.TestHuman.animations.play('happy',10, true);
-				console.log("bluehappy");
 				this.money += 10;
 				this.timeRun = true;
+				this.ShowGems = true;
 				this._customer.destroyBubble();
-//				this._customer.TestHuman.done =true; 
 			}
 			else 
 			{
-				console.log("bluewrong");
 				this.timeRun = true;
+				this._customer.Angry = true;
+				this.ShowGems = false;
 				this._customer.destroyBubble();
 				this._customer.TestHuman.animations.play('angry',10, true);
 			}
@@ -252,16 +251,15 @@ theGame.Game.prototype =
 			if(this.customerArray[1] == 1 && this._customer.randomBubble == 1)
 			{
 				this._customer.TestHuman.animations.play('happy',6, true);
-				console.log("redhappy");
 				this.money += 10;
-				
 				this.timeRun = true;
+				this.ShowGems = true;
 				this._customer.destroyBubble();
-//				this._customer.TestHuman.done =true; 
 			}else
 			{
-				console.log("wrong");
 				this.timeRun = true;
+				this._customer.Angry = true;
+				this.ShowGems = false;
 				this._customer.destroyBubble();
 				this._customer.TestHuman.animations.play('angry',10, true);
 			}
@@ -276,17 +274,17 @@ theGame.Game.prototype =
 			if(this.customerArray[2] == 2 && this._customer.randomBubble == 2)
 			{
 				this._customer.TestHuman.animations.play('happy',10, true);
-				console.log("greenhappy");
 				this.money += 10;
 				this.CusNum += 1;
 				this.timeRun = true;
+				this.ShowGems = true;
 				this._customer.destroyBubble();
-//				this._customer.TestHuman.done =true; 
 			}
 			else 
 			{
-				console.log("greenwrong");
 				this.timeRun = true;
+				this._customer.Angry = true;
+				this.ShowGems = false;
 				this._customer.destroyBubble();
 				this._customer.TestHuman.animations.play('angry',10, true);
 			}
@@ -298,8 +296,9 @@ theGame.Game.prototype =
 	{
 		if (this.purpleGem.events.onInputDown)
 		{
-			console.log("wrong");
 			this.timeRun = true;
+			this._customer.Angry = true;
+			this.ShowGems = false;
 			this._customer.destroyBubble();
 			this._customer.TestHuman.animations.play('angry',10, true);
 			this.CusNum += 1;
@@ -309,7 +308,7 @@ theGame.Game.prototype =
 	updateCounter: function() 
     {
 		this.timer--;
-		this.timerText.setText('Timer: ' + this.timer); // print timer number
+//		this.timerText.setText('Timer: ' + this.timer); // print timer number
 
     },
 };

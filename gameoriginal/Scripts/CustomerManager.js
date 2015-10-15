@@ -10,6 +10,7 @@ function CustomerManager(game)
 	//this.RandomNum = null;
 	this.randomBubble = null;
 	this.customerNum = null;
+	this.Angry = false;
 }
 
 CustomerManager.prototype.create = function(RandomNum,posX, posY)
@@ -101,7 +102,14 @@ CustomerManager.prototype.moveCustomer = function()
 	if(this.TestHuman.done)
 	{
 		this.TestHuman.x += 3;
-		this.TestHuman.animations.play('left',10, true);
+		if (this.Angry == false)
+		{
+			this.TestHuman.animations.play('happyRight',10, true);
+		}
+		else if (this.Angry == true)
+		{
+			this.TestHuman.animations.play('angryRight',10, true);
+		}
 	 	if(this.TestHuman.x >this.game.world.width*0.6)
 		{
 			if(this.result !=null)
