@@ -152,7 +152,7 @@ theGame.Level2.prototype =
 			this.gameOverImage.anchor.set(0.5,0.5);
 		}
 		
-		if (this.CusNum >= 3 ) // next level
+		if (this.CusNum >= 4 ) // next level
 		{
 			this.buttonManager.Level2ScoreButton(this.world.width*0.5, this.world.height*0.5);	
 			this.time.events.stop();

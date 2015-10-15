@@ -46,7 +46,7 @@ theGame.Preloader.prototype =
 		//game over
 		this.load.image('gameover', 'Assets/images/BG/gameover.png');
 		
-		this.load.image('BBG', 'Assets/images/BG/ButtonBG.png');
+//		this.load.image('BBG', 'Assets/images/BG/ButtonBG.png');
 
 		//table
 		this.load.image('gemTable1', 'Assets/images/table1.png');

@@ -7,53 +7,43 @@ theGame.Game = function(game)
     this.music = null;
     this.uiManager = null; 
 	
-	this.red = null; // gem
+	////////Gems//////////
+	this.red = null; 
 	this.blue = null;
 	this.green = null;
 	this.purpleGem = null;
 	
+	////////Images//////////
 	this.clockImage = null;
 	this.clockSkin = null;
-	this.angle = 360;
-	
 	this.bubble = null;
-	this.bubbleCreate = false;
 	this.tableImage = null;
-	
-	this.money = 0;
-	this.moneyText = null;
 	this.moneyImage = null;
-	
-	this.CusNum = 0;
-	this.CusNumText = null;
-	
-	this.timer = 50;
-	this.timerText = 0;
 	this.blinkingImage = null;
+	this.gameOverImage = null;
 	
+	////////Text//////////
+	this.timerText = null;
+	this.CusNumText = null;
+	this.moneyText = null;
+	
+	////////Value//////////
+	this.money = 0;
+	this.CusNum = 0;
 	this.counter = 10;
-    this.text = 0;
-    this.selectGemValue = null;
-	
-	this.randomCus = null;
-	this.customerArray = [0, 2, 3];
+	this.timer = 50;
+	this.angle = 360;
+	this.customerArray = [0, 1, 2];
 	this.totalCustomers = 0;
 	
-	this.TestHuman = null;
-	
-	this._customer = null;
-	
-	this.gameOverImage = null;
-	this.ButtonBG = null;
-	
-    this.counter = 100;
+	///////////////////////
 	this.result = null;
-	this.setToKill = null;
-	this.countDown = 10;
-	
-	this.WesternCus = null;
-	this.IndianCus = null;
-	this.ChineseCus = null;
+	this.TestHuman = null;
+	this._customer = null;
+	this.randomBubble = null;
+
+	this.timerRun = false;
+
 };
 
 theGame.Game.prototype = 
@@ -94,17 +84,17 @@ theGame.Game.prototype =
 		this.clockImage.scale.setTo(0.8,0.8);
 		
 		//timerText
-//        this.timerText = this.add.text(this.world.centerX, this.world.centerY, ' ', { font: "40px Arial", fill: "#000000", align: "center" });
-//    	this.timerText.anchor.setTo(0.5, 0.5);
-//		this.moneyText = this.add.text(600, 50, 'Money: 0', { font:"30px Arial", fill: "#000", align: "center"});
-//		this.CusNumText = this.add.text(460, 40, ': 0', { font:"30px Arial", fill: "#000", align: "center"});
+        this.timerText = this.add.text(this.world.centerX, this.world.centerY, ' ', { font: "40px Arial", fill: "#000000", align: "center" });
+    	this.timerText.anchor.setTo(0.5, 0.5);
+		this.moneyText = this.add.text(600, 50, 'Money: 0', { font:"30px Arial", fill: "#000", align: "center"});
+		this.CusNumText = this.add.text(460, 40, ': 0', { font:"30px Arial", fill: "#000", align: "center"});
     }, 
        
     create: function()
     {
 		console.log("level1");
         this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this); // timer
-
+		
 		this.buttonManager = new ButtonManager(this);
 		
 		//////////////random/////////////
@@ -112,40 +102,46 @@ theGame.Game.prototype =
         //console.log(this.customerArray);
 //        this.randomCustomer(this.customerArray);
         console.log("customer array"+this.customerArray);
+		
         //spawn the first customer
 		this.spawnCustomer();
-
-		this.clockImage = this.add.tween(this.clockImage).to( { angle: 360 }, 50000, Phaser.Easing.Linear.None, true);  //10
+		
+		//Rotate clock 
+		this.clockImage = this.add.tween(this.clockImage).to( { angle: 360 }, 50000, Phaser.Easing.Linear.None, true);  //50
 		
 		//Money
 		this.moneyImage = this.add.sprite(this.world.width*0.825, this.world.height*0.5, 'moneyImage');
 		this.moneyImage.frame = 0;
 		this.moneyImage.anchor.set(0.5,0.5);
 		
-		
+		// fade manager
 		theGame.FadeScreen = new FadeManager(this);
         theGame.FadeScreen.create();	
 		
+		// red blinking image 
 		this.blinkingImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'blinking');
 		this.blinkingImage.alpha = 0.2;
 		this.blinkingImage.anchor.set(0.5,0.5);
 		this.blinkingImage.frame = 1;	
     },
-	
-	 
-	
+
 	update: function()
     { 
 		this.clockImage.angle += 1;
 		
+		this.timeDown();
+		
+		// move customer
 		this._customer.moveCustomer();
 		
+		//Spawn customer
 		if (this._customer.spawnCus == true)
 		{
 			this.spawnCustomer();
 			this._customer.spawnCus =false;
 		}	
 		
+		//print money box / how many you have
 		if(this.money >= 10 && this.money <= 19)
 		{
 			this.moneyImage.frame = 1;
@@ -159,26 +155,31 @@ theGame.Game.prototype =
 			this.moneyImage.frame = 3;
 		}
 		
+		// print out game over image when timer over
 		if (this.timer <= 0 )
 		{
 			this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'gameover');
 			this.gameOverImage.anchor.set(0.5,0.5);
 		}
 
-		if (this.CusNum >= 3 ) // next level
+		//come out next button go to level 2
+		if (this.CusNum >= 3 && this._customer.TestHuman.done == true) // next level
 		{
 			this.buttonManager.createScoreButton(this.world.width*0.5, this.world.height*0.5);	
 			this.time.events.stop();
-			this.clockImage.stop();
-			
+			this.clockImage.stop();	
 		}
+		
+		// calculate total money
 		if (this.buttonManager.nextLevelClick == true)
 		{	
 			theGame.money1 = this.money;
 		}
 		
+		// call button
 		theGame.FadeScreen.update(this.buttonManager.gametype);	
 		
+		//remind play count down 6S 
 		if (this.timer >= 6) // red image
 		{
 			this.blinkingImage.animations.add('red', [0,1]);
@@ -186,18 +187,15 @@ theGame.Game.prototype =
 		}
     }, 
 	
-//	randomCustomer: function(array)
-//    {
-//         for (var i = array.length - 1; i > 0; i--) 
-//         {
-//            var j = Math.floor(Math.random() * (i + 1));
-//            var temp = array[i];
-//            array[i] = array[j];
-//            array[j] = temp;
-//        }
-//        return array;
-//    },
-	
+	spawnCustomer:function()
+    {
+    	if(this.totalCustomers<3)
+    	{
+    		this._customer = new CustomerManager(this);
+			this._customer.create(this.customerArray[this.totalCustomers], 0, 325);
+	        this.totalCustomers++;
+    	}
+    },
 
 	TestTime:function()
 	{
@@ -206,82 +204,93 @@ theGame.Game.prototype =
 			this.result.destroy();
 		}
 	},
+	
+	timeDown: function()
+	{
+		if(this.timeRun == true)
+		{
+			this.game.time.events.add(Phaser.Timer.SECOND, this.moveToRight, this);
+		}
+	},
+	
+	moveToRight: function()
+	{
+		this._customer.TestHuman.done =true;
+		this.timeRun = false;
+	},
+	
 
-	blueclick: function()
+	blueclick: function() //Western customer / blue gem is correct
 	{
 		if (this.blue.events.onInputDown)
 		{
-			if(this.customerArray[0])
+			//this.customerArray[0] == 0 && bubble ||(this.customerArray[0] == 0 && bubble2)
+			if(this.customerArray[0] == 0 && this._customer.randomBubble == 0 )
 			{
-				console.log("blue");
-//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-//				this.result.anchor.set(0.5,0.5);
-//				this.WesternCus.animations.play('happy',10, true);
+				this._customer.TestHuman.animations.play('happy',10, true);
+				console.log("bluehappy");
 				this.money += 10;
-				this.CusNum += 1;
-				if(this._customer.bubble != null)
-				{
-					this._customer.bubble.destroy();
-					this._customer.TestHuman.done =true; 
-				}
+				this.timeRun = true;
+				this._customer.destroyBubble();
+//				this._customer.TestHuman.done =true; 
 			}
 			else 
 			{
 				console.log("bluewrong");
+				this.timeRun = true;
+				this._customer.destroyBubble();
+				this._customer.TestHuman.animations.play('angry',10, true);
 			}
+			this.CusNum += 1;
 		}
-//			if (this.blueCanclick == true)
-//			{
-//			}
 	},
 
-	
-	redclick: function()
+	redclick: function() //Indian customer / red gem is correct
 	{
-		if (this.red.events.onInputDown)
+		if (this.red.events.onInputDown) 
 		{
-			if(this.customerArray[2])
+			if(this.customerArray[1] == 1 && this._customer.randomBubble == 1)
 			{
-				console.log("red");
-//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-//				this.result.anchor.set(0.5,0.5);
-//				this.IndianCus.animations.play('happy',6, true);
+				this._customer.TestHuman.animations.play('happy',6, true);
+				console.log("redhappy");
 				this.money += 10;
-				this.CusNum += 1;
-				if(this._customer.bubble != null)
-				{
-					this._customer.bubble.destroy();
-					this._customer.TestHuman.done =true; 
-				}
+				
+				this.timeRun = true;
+				this._customer.destroyBubble();
+//				this._customer.TestHuman.done =true; 
 			}else
 			{
 				console.log("wrong");
+				this.timeRun = true;
+				this._customer.destroyBubble();
+				this._customer.TestHuman.animations.play('angry',10, true);
 			}
+			this.CusNum += 1;
 		}
 	},
 	
-	greenclick: function()
+	greenclick: function() //chinese customer / green gem is correct
 	{
 		if (this.green.events.onInputDown)
 		{
-			if(this.customerArray[3])
+			if(this.customerArray[2] == 2 && this._customer.randomBubble == 2)
 			{
-				console.log("green");
-//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-//				this.result.anchor.set(0.5,0.5);
-//				this.ChineseCus.animations.play('happy',10, true);
+				this._customer.TestHuman.animations.play('happy',10, true);
+				console.log("greenhappy");
 				this.money += 10;
 				this.CusNum += 1;
-				if(this._customer.bubble != null)
-				{
-					this._customer.bubble.destroy();
-					this._customer.TestHuman.done =true; 
-				}
+				this.timeRun = true;
+				this._customer.destroyBubble();
+//				this._customer.TestHuman.done =true; 
 			}
 			else 
 			{
 				console.log("greenwrong");
+				this.timeRun = true;
+				this._customer.destroyBubble();
+				this._customer.TestHuman.animations.play('angry',10, true);
 			}
+			this.CusNum += 1;
 		}	
 	},
 			
@@ -290,7 +299,11 @@ theGame.Game.prototype =
 		if (this.purpleGem.events.onInputDown)
 		{
 			console.log("wrong");
-		}
+			this.timeRun = true;
+			this._customer.destroyBubble();
+			this._customer.TestHuman.animations.play('angry',10, true);
+			this.CusNum += 1;
+		}	
 	},
 	
 	updateCounter: function() 

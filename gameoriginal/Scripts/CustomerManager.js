@@ -6,6 +6,10 @@ function CustomerManager(game)
 	this.bubble = null;
 	this.bubbleCreate = false;
 	this.spawnCus = false;
+	this._Request = false;
+	//this.RandomNum = null;
+	this.randomBubble = null;
+	this.customerNum = null;
 }
 
 CustomerManager.prototype.create = function(RandomNum,posX, posY)
@@ -15,25 +19,31 @@ CustomerManager.prototype.create = function(RandomNum,posX, posY)
 		{
 			case 0:
 			{
-				//this.WesternCustomerFunc();
-				this.TestHuman = this.game.add.sprite(posX, posY, 'WesternSprite2');
+				// Western Customer / RED
+				this.TestHuman = this.game.add.sprite(posX, posY, 'WesternSprite');
+				this.customerNum = 0;
 			}break;
 			case 1:
 			{
-				//this.CoupleCustomerFunc();
-				this.TestHuman = this.game.add.sprite(posX, posY, 'CoupleSprite2');
+				// India Customer / ORANGE
+				this.TestHuman = this.game.add.sprite(posX, posY, 'IndianSprite');
+				this.customerNum = 1;
 			}break;
 			case 2:
 			{
-				//this.IndiaCustomerFunc();
-				this.TestHuman = this.game.add.sprite(posX, posY, 'IndianSprite2');
+				//Chinese Customer / YELLOW
+				this.TestHuman = this.game.add.sprite(posX,posY, 'ChineseSprite');
+				this.customerNum = 2;
 			}break;
 			case 3:
 			{
-				//this.ChinaCustomerFunc();
-				this.TestHuman = this.game.add.sprite(posX,posY, 'ChineseSprite2');
+				// Couple Customer / GREEN
+				this.TestHuman = this.game.add.sprite(posX, posY, 'CoupleSprite2');
+				
 			}break;
+			
 		}
+		console.log(this.customerNum);
 		this.TestHuman.anchor.set(0.5,0.5);
 		this.game.physics.enable(this.TestHuman, Phaser.Physics.ARCADE);
 		//this.TestHuman.body.velocity.setTo(0,0);
@@ -54,9 +64,31 @@ CustomerManager.prototype.create = function(RandomNum,posX, posY)
 		this.totalCustomers += 1;	
 },
 	
-CustomerManager.prototype.update = function()
+CustomerManager.prototype.LoadBubble = function(RandomNum,posX, posY)
 {
-    
+		switch(RandomNum)
+		{
+			case 0:
+			{
+				//Western Blue
+				this.bubble = this.game.add.sprite(posX, posY, 'WesternBubble');
+			}break;
+			case 1:
+			{
+				//India Red
+				this.bubble = this.game.add.sprite(posX, posY, 'IndianBubble');
+			}break;
+			case 2:
+			{
+				//China Green
+				this.bubble = this.game.add.sprite(posX,posY, 'ChineseBubble');
+			}break;
+		}
+		this.bubble.anchor.set(0.5,0.5);
+},
+	
+CustomerManager.prototype.update = function()
+{ 
 },
 
 CustomerManager.prototype.outScreen = function()
@@ -70,7 +102,6 @@ CustomerManager.prototype.moveCustomer = function()
 	{
 		this.TestHuman.x += 3;
 		this.TestHuman.animations.play('left',10, true);
-//		this.TestHuman.body.velocity.setTo(50,0);
 	 	if(this.TestHuman.x >this.game.world.width*0.6)
 		{
 			if(this.result !=null)
@@ -83,8 +114,8 @@ CustomerManager.prototype.moveCustomer = function()
 	{
 		if(this.bubbleCreate == false)
 		{
-			this.bubble = this.add.sprite(this.world.width*0.2, this.world.height*0.2, 'request');
 			this.tagnum = this.randomCus;
+			console.log("request true");
 			this.bubbleCreate = true;
 		}
 		this.TestHuman.body.velocity.setTo(0,0);
@@ -94,13 +125,42 @@ CustomerManager.prototype.moveCustomer = function()
 		{
 			this.TestHuman.x += 3;
 			this.TestHuman.animations.play('right',10, true);
-//			this.TestHuman.body.velocity.setTo(50,0);
 		}else
 		{
 			this.TestHuman.IsMiddle = true;
 			this.TestHuman.animations.play('still',10, true);
-			this.bubble = this.game.add.sprite(300, 25, 'request');
+			this.CreateBubble();
 			this.bubbleCreate = true;
 		}
 	}
+},
+
+CustomerManager.prototype.CreateBubble = function()
+{
+
+//	this.randomBubble = this.game.rnd.integerInRange(0,0);
+	if (this.customerNum == 0)
+	{
+		this.randomBubble = 0;
+	}
+	else if (this.customerNum == 1)
+	{
+		this.randomBubble = 1;
+	}
+	else if (this.customerNum == 2)
+	{
+		this.randomBubble = 2;
+	}
+	else
+	{
+		this.randomBubble = 0;
+	}
+
+	this.LoadBubble(this.randomBubble,500,120);
+},
+	
+CustomerManager.prototype.destroyBubble = function()
+{
+	this.bubble.destroy();
 };
+	
