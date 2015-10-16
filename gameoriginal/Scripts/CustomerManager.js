@@ -7,7 +7,6 @@ function CustomerManager(game)
 	this.bubbleCreate = false;
 	this.spawnCus = false;
 	this._Request = false;
-	//this.RandomNum = null;
 	this.randomBubble = null;
 	this.customerNum = null;
 	this.Angry = false;
@@ -20,7 +19,7 @@ CustomerManager.prototype.create = function(RandomNum,posX, posY)
 		{
 			case 0:
 			{
-				// Western Customer / RED
+				// Western Customer / GREEN
 				this.TestHuman = this.game.add.sprite(posX, posY, 'WesternSprite');
 				this.customerNum = 0;
 			}break;
@@ -32,17 +31,16 @@ CustomerManager.prototype.create = function(RandomNum,posX, posY)
 			}break;
 			case 2:
 			{
-				//Chinese Customer / YELLOW
+				//Chinese Customer / RED
 				this.TestHuman = this.game.add.sprite(posX,posY, 'ChineseSprite');
 				this.customerNum = 2;
 			}break;
 			case 3:
 			{
-				// Couple Customer / GREEN
-				this.TestHuman = this.game.add.sprite(posX, posY, 'CoupleSprite2');
-				
-			}break;
-			
+				// Medium earth Customer / GREEN
+				this.TestHuman = this.game.add.sprite(posX,posY, 'M_EarthSprite');
+				this.customerNum = 3;
+			}break;	
 		}
 		console.log(this.customerNum);
 		this.TestHuman.anchor.set(0.5,0.5);
@@ -84,6 +82,11 @@ CustomerManager.prototype.LoadBubble = function(RandomNum,posX, posY)
 				//China Green
 				this.bubble = this.game.add.sprite(posX,posY, 'ChineseBubble');
 			}break;
+			case 3:
+			{
+				//Middle eastern Green
+				this.bubble = this.game.add.sprite(posX,posY, 'MiddleEasternBubble');
+			}break;
 		}
 		this.bubble.anchor.set(0.5,0.5);
 },
@@ -101,7 +104,7 @@ CustomerManager.prototype.moveCustomer = function()
 {
 	if(this.TestHuman.done)
 	{
-		this.TestHuman.x += 3;
+		this.TestHuman.x += 5; //this.TestHuman.x += 3;
 		if (this.Angry == false)
 		{
 			this.TestHuman.animations.play('happyRight',10, true);
@@ -131,7 +134,7 @@ CustomerManager.prototype.moveCustomer = function()
 	{
 		if(this.TestHuman.x < this.game.world.width*0.5)
 		{
-			this.TestHuman.x += 3;
+			this.TestHuman.x += 5;
 			this.TestHuman.animations.play('right',10, true);
 		}else
 		{
@@ -159,10 +162,15 @@ CustomerManager.prototype.CreateBubble = function()
 	{
 		this.randomBubble = 2;
 	}
+	else if (this.customerNum == 3)
+	{
+		this.randomBubble = 3;
+	}
 	else
 	{
 		this.randomBubble = 0;
 	}
+
 
 	this.LoadBubble(this.randomBubble,500,120);
 },

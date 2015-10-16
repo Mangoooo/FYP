@@ -24,9 +24,12 @@ theGame.ScorePage.prototype =
 		this.blueScoreImage = this.add.sprite(this.world.width*0.627, this.world.height*0.49, 'blueScore');
         this.blueScoreImage.anchor.set(0.5,0.5);
 		
-		
-		this.tween = this.add.tween(this.redScoreImage.scale).to({ x: 1.5, y: 1.5 }, 1000, Phaser.Easing.Bounce.Out, true);	
-		this.tween.onComplete.add(this.greenTween, this);
+		if(this.ShowGems == true)
+		{
+			console.log(this.ShowGems);
+			this.tween = this.add.tween(this.redScoreImage.scale).to({ x: 1.5, y: 1.5 }, 1000, Phaser.Easing.Bounce.Out, true);	
+			this.tween.onComplete.add(this.greenTween, this);
+		}
 		
         //Button
         this.buttonManager = new ButtonManager(this);
@@ -45,7 +48,7 @@ theGame.ScorePage.prototype =
 	greenTween: function()
 	{
 		this.tween = this.add.tween(this.greenScoreImage.scale).to({ x: 1.5, y: 1.5 }, 1000, Phaser.Easing.Bounce.Out, true);
-//		this.tween.onComplete.add(this.blueTween, this);
+		this.tween.onComplete.add(this.blueTween, this);
 	},
 	blueTween: function()
 	{

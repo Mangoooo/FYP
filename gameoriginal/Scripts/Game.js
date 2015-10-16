@@ -9,9 +9,9 @@ theGame.Game = function(game)
 	
 	////////Gems//////////
 	this.red = null; 
-	this.blue = null;
 	this.green = null;
-	this.purpleGem = null;
+	this.greenGem= null;
+	this.orangeGem = null;
 	
 	////////Images//////////
 	this.clockImage = null;
@@ -33,7 +33,8 @@ theGame.Game = function(game)
 	this.counter = 10;
 	this.timer = 50;
 	this.angle = 360;
-	this.customerArray = [0, 1, 2];
+	this.customerArray = [2, 1, 3, 0]; // 0 - Western / 1 - Indian/ 2 - Chinese/ 3 - Middle Earstern
+//	this.customerArray = [3,0];
 	this.totalCustomers = 0;
 	
 	///////////////////////
@@ -58,22 +59,21 @@ theGame.Game.prototype =
         this.gameBackground.anchor.set(0.5,0.5);
 			
 		//gemTable
-		this.tableImage = this.add.sprite(this.world.width*0.5, this.world.height*0.83, 'gemTable1');
+		this.tableImage = this.add.sprite(this.world.width*0.5, this.world.height*0.88, 'gemTable1');
         this.tableImage.anchor.set(0.5,0.5);
 		
 		// gem 
-       	this.red = this.add.button(this.world.width*0.29, this.world.height*0.79, 'red', this.redclick, this, 1, 0, 2);
+       	this.red = this.add.button(this.world.width*0.365, this.world.height*0.85, 'red', this.redclick, this, 1, 0, 2);
 		this.red.anchor.setTo(0.5,0.5);
 		
-		this.green = this.add.button(this.world.width*0.715, this.world.height*0.79, 'green', this.greenclick, this, 1, 0, 2);
+		this.orangeGem = this.add.button(this.world.width*0.505, this.world.height*0.85, 'orange', this.orangeclick, this, 1, 0, 2);
+		this.orangeGem.anchor.setTo(0.5,0.5);
+		
+		this.green = this.add.button(this.world.width*0.645, this.world.height*0.85, 'green', this.greenclick, this, 1, 0, 2);
 		this.green.anchor.setTo(0.5,0.5);
 		
-		this.blue = this.add.button(this.world.width*0.42, this.world.height*0.89, 'blue', this.blueclick, this, 1, 0, 2);
-		this.blue.anchor.setTo(0.5,0.5);
-		
-		this.purpleGem = this.add.button(this.world.width*0.58, this.world.height*0.89, 'purple', this.purpleclick, this, 1, 0, 2);
-		this.purpleGem.anchor.setTo(0.5,0.5);
-		
+//		this.greenGem = this.add.button(this.world.width*0.645, this.world.height*0.85, 'green', this.MEclick, this, 1, 0, 2);
+//		this.greenGem.anchor.setTo(0.5,0.5);
 		
 		//clock
 		this.clockSkin = this.add.sprite(this.world.width*0.175, this.world.height*0.5, 'clockskin');
@@ -153,6 +153,10 @@ theGame.Game.prototype =
 		{
 			this.moneyImage.frame = 3;
 		}
+		else if(this.money >= 40 && this.money <= 49)
+		{
+			this.moneyImage.frame = 4;
+		}
 		
 		// print out game over image when timer over
 		if (this.timer <= 0 )
@@ -162,7 +166,7 @@ theGame.Game.prototype =
 		}
 
 		//come out next button go to level 2
-		if (this.CusNum >= 3 && this._customer.TestHuman.done == true) // next level
+		if (this.CusNum >= 5 && this._customer.TestHuman.done == true) // next level
 		{
 			this.buttonManager.createScoreButton(this.world.width*0.5, this.world.height*0.5);	
 			this.time.events.stop();
@@ -188,7 +192,7 @@ theGame.Game.prototype =
 	
 	spawnCustomer:function()
     {
-    	if(this.totalCustomers<3)
+    	if(this.totalCustomers<4)
     	{
     		this._customer = new CustomerManager(this);
 			this._customer.create(this.customerArray[this.totalCustomers], 0, 325);
@@ -218,13 +222,35 @@ theGame.Game.prototype =
 		this.timeRun = false;
 	},
 	
-
-	blueclick: function() //Western customer / blue gem is correct
+	redclick: function() //Chinese customer / red gem is correct
 	{
-		if (this.blue.events.onInputDown)
+		if (this.red.events.onInputDown) 
+		{
+			if(this.customerArray[0] == 2 && this._customer.randomBubble == 2) // CUSTOMER ARRAY NUMBER AND SPRITE NUMBER AND BUBBLE NUMBER
+			{
+				this._customer.TestHuman.animations.play('happy',6, true);
+				this.money += 10;
+				this.timeRun = true; 
+				this.ShowGems = true;
+				this._customer.destroyBubble();
+			}else
+			{
+				this.timeRun = true;
+				this._customer.Angry = true;
+				this.ShowGems = false;
+				this._customer.destroyBubble();
+				this._customer.TestHuman.animations.play('angry',10, true);
+			}
+			this.CusNum += 1;
+		}
+	},
+
+	orangeclick: function() //Indian customer / orange gem is correct
+	{
+		if (this.orangeGem.events.onInputDown)
 		{
 			//this.customerArray[0] == 0 && bubble ||(this.customerArray[0] == 0 && bubble2)
-			if(this.customerArray[0] == 0 && this._customer.randomBubble == 0 )
+			if(this.customerArray[1] == 1 && this._customer.randomBubble == 1 )
 			{
 				this._customer.TestHuman.animations.play('happy',10, true);
 				this.money += 10;
@@ -244,34 +270,11 @@ theGame.Game.prototype =
 		}
 	},
 
-	redclick: function() //Indian customer / red gem is correct
-	{
-		if (this.red.events.onInputDown) 
-		{
-			if(this.customerArray[1] == 1 && this._customer.randomBubble == 1)
-			{
-				this._customer.TestHuman.animations.play('happy',6, true);
-				this.money += 10;
-				this.timeRun = true;
-				this.ShowGems = true;
-				this._customer.destroyBubble();
-			}else
-			{
-				this.timeRun = true;
-				this._customer.Angry = true;
-				this.ShowGems = false;
-				this._customer.destroyBubble();
-				this._customer.TestHuman.animations.play('angry',10, true);
-			}
-			this.CusNum += 1;
-		}
-	},
-	
-	greenclick: function() //chinese customer / green gem is correct
+	greenclick: function() //Western customer / green gem is correct
 	{
 		if (this.green.events.onInputDown)
 		{
-			if(this.customerArray[2] == 2 && this._customer.randomBubble == 2)
+			if(this.customerArray[3] == 0 || this.customerArray[2] && this._customer.randomBubble == 0) //western customer array is 3
 			{
 				this._customer.TestHuman.animations.play('happy',10, true);
 				this.money += 10;
@@ -288,19 +291,6 @@ theGame.Game.prototype =
 				this._customer.destroyBubble();
 				this._customer.TestHuman.animations.play('angry',10, true);
 			}
-			this.CusNum += 1;
-		}	
-	},
-			
-	purpleclick: function()
-	{
-		if (this.purpleGem.events.onInputDown)
-		{
-			this.timeRun = true;
-			this._customer.Angry = true;
-			this.ShowGems = false;
-			this._customer.destroyBubble();
-			this._customer.TestHuman.animations.play('angry',10, true);
 			this.CusNum += 1;
 		}	
 	},

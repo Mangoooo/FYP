@@ -51,9 +51,9 @@ theGame.Preloader.prototype =
 //		this.load.image('BBG', 'Assets/images/BG/ButtonBG.png');
 
 		//table
-		this.load.image('gemTable1', 'Assets/images/table1.png');
-		this.load.image('gemTable2', 'Assets/images/table2.png');
-		this.load.image('gemTable3', 'Assets/images/table3.png');
+		this.load.image('gemTable1', 'Assets/images/Table/Table_3Gems.png');
+		this.load.image('gemTable2', 'Assets/images/Table/Table_4Gems.png');
+		this.load.image('gemTable3', 'Assets/images/Table/Table_6Gems.png');
 		
 		//blinking 
 		this.load.spritesheet('blinking', 'Assets/images/BG/blinking.png', 975, 750);
@@ -68,7 +68,7 @@ theGame.Preloader.prototype =
 		this.load.spritesheet('green', 'Assets/images/Gem/green.png', 82, 120);
 		this.load.spritesheet('blue', 'Assets/images/Gem/blue.png', 82, 120);
 		this.load.spritesheet('yellow', 'Assets/images/Gem/yellowGem.png', 82, 120);
-		this.load.spritesheet('purple', 'Assets/images/Gem/purpleGem.png', 82, 120);
+		this.load.spritesheet('white', 'Assets/images/Gem/whiteGem.png', 82, 120);
 		this.load.spritesheet('orange', 'Assets/images/Gem/orangeGem.png', 82, 120);
 		
 		//score gem image(star)
@@ -80,24 +80,25 @@ theGame.Preloader.prototype =
 		this.load.image('purpleScore', 'Assets/images/ScoreGem/scorePurpleGem.png');
 
 		//customer
-		this.load.spritesheet('dude', 'Assets/images/Customer/dude.png', 32, 48);
-		this.load.spritesheet('dude2', 'Assets/images/Customer/dude2.png', 105, 162);
-		this.load.spritesheet('dude3', 'Assets/images/Customer/dude3.png', 32, 48);
-		this.load.spritesheet('dude4', 'Assets/images/Customer/dude4.png', 32, 48);
-		this.load.spritesheet('dude5', 'Assets/images/Customer/dude5.png', 32, 48);
-		this.load.spritesheet('orangedude', 'Assets/images/Customer/orangedude.png', 32, 48);
-		this.load.spritesheet('purpledude', 'Assets/images/Customer/purpledude.png', 32, 48);
+//		this.load.spritesheet('dude', 'Assets/images/Customer/dude.png', 32, 48);
+//		this.load.spritesheet('dude2', 'Assets/images/Customer/dude2.png', 105, 162);
+//		this.load.spritesheet('dude3', 'Assets/images/Customer/dude3.png', 32, 48);
+//		this.load.spritesheet('dude4', 'Assets/images/Customer/dude4.png', 32, 48);
+//		this.load.spritesheet('dude5', 'Assets/images/Customer/dude5.png', 32, 48);
+//		this.load.spritesheet('orangedude', 'Assets/images/Customer/orangedude.png', 32, 48);
+//		this.load.spritesheet('purpledude', 'Assets/images/Customer/purpledude.png', 32, 48);
 		
 		//////////////////////LEVEL 1 CUSTOMER SPRITE////////////////////////////////
 		this.load.spritesheet('ChineseSprite', 'Assets/images/Level1_Sprite/ChineseSprite.png', 153, 200);
 		this.load.spritesheet('IndianSprite', 'Assets/images/Level1_Sprite/IndianSprite.png', 133, 186);
 		this.load.spritesheet('WesternSprite', 'Assets/images/Level1_Sprite/WesternSprite.png', 133, 186);
+		this.load.spritesheet('M_EarthSprite', 'Assets/images/Level1_Sprite/M_EarthSprite.png', 133, 186);
 		
 		
 		//////////////////////LEVEL 2 CUSTOMER SPRITE////////////////////////////////
-		this.load.spritesheet('ChineseSprite2', 'Assets/images/Level2_Sprite/ChineseS2.png', 153, 200);
-		this.load.spritesheet('IndianSprite2', 'Assets/images/Level2_Sprite/IndianS2.png', 133, 186);
-		this.load.spritesheet('WesternSprite2', 'Assets/images/Level2_Sprite/WesternS2.png', 133, 186);
+//		this.load.spritesheet('ChineseSprite2', 'Assets/images/Level2_Sprite/ChineseS2.png', 153, 200);
+//		this.load.spritesheet('IndianSprite2', 'Assets/images/Level2_Sprite/IndianS2.png', 133, 186);
+//		this.load.spritesheet('WesternSprite2', 'Assets/images/Level2_Sprite/WesternS2.png', 133, 186);
 		this.load.spritesheet('CoupleSprite2', 'Assets/images/Level2_Sprite/CoupleS2.png', 133, 186);
 		//angry face
 		this.load.image('angry', 'Assets/images/angryBubble.png');
@@ -108,12 +109,13 @@ theGame.Preloader.prototype =
 		
 		//request bubble
 		this.load.image('request', 'Assets/images/bubble.png');
-		this.load.image('IndianBubble', 'Assets/images/IndianBubble.png');
-		this.load.image('WesternBubble', 'Assets/images/WesternBubble.png');
-		this.load.image('ChineseBubble', 'Assets/images/ChineseBubble.png');
+		this.load.image('IndianBubble', 'Assets/images/SpeechBubble/IndianBubble.png');
+		this.load.image('WesternBubble', 'Assets/images/SpeechBubble/WesternBubble.png');
+		this.load.image('ChineseBubble', 'Assets/images/SpeechBubble/ChineseBubble.png');
+		this.load.image('MiddleEasternBubble', 'Assets/images/SpeechBubble/MiddleEasternBubble.png');
 		
 		//money
-		this.load.spritesheet('moneyImage', 'Assets/images/coin.png', 116, 106);
+		this.load.spritesheet('moneyImage', 'Assets/images/coin.png', 118, 122);
 		
 		//clock
 		this.load.image('clockskin', 'Assets/images/clockskin.png');
