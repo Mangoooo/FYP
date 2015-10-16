@@ -1,85 +1,170 @@
 theGame.Tutorial = function(game)
 {
 	this.game;
-    this.toturialBackground1 = null;
-	this.toturialBackground2 = null;
-	this.toturialBackground3 = null;
-	this.toturialBackground4 = null;
-	this.toturialBackground5 = null;
+	this.add;
+    this.gameBackground = null;
+	this.buttonManager = null;
+    this.music = null;
+    this.uiManager = null; 
 	
-    this.uiManager = null;
-    this.buttonManager = null;
+	////////Gems//////////
+	this.green = null;
+	
+	////////Images//////////
+	this.bubble = null;
+	this.tableImage = null;
+	this.moneyImage = null;
+
+	this.moneyText = null;
+
+	this.money = 0;
+	this.CusNum = 0;
+
+	this.customerArray = [1]; 
+	
+	this.totalCustomers = 0;
+	
+	///////////////////////
+	this.result = null;
+	this.TestHuman = null;
+	this._customer = null;
+	this.randomBubble = null;
+
+	this.timerRun = false;
+	
+
 };
 
 theGame.Tutorial.prototype = 
 {
-    create: function()
+//////////////////////////////////////Preload///////////////////////////////////////
+    preload: function()
     {
         //Screen Background
-//		this.toturialBackground5 = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'ToturialBackGround5');
-//        this.toturialBackground5.anchor.set(0.5,0.5);
-//		this.toturialBackground5.inputEnabled = true;
-//		this.toturialBackground5.events.onInputDown.add(this.tutorial5, this);
-//		
-//		this.toturialBackground4 = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'ToturialBackGround4');
-//        this.toturialBackground4.anchor.set(0.5,0.5);
-//		this.toturialBackground4.inputEnabled = true;
-//		this.toturialBackground4.events.onInputDown.add(this.tutorial4, this);
-//		
-//		this.toturialBackground3 = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'ToturialBackGround3');
-//        this.toturialBackground3.anchor.set(0.5,0.5);
-//		this.toturialBackground3.inputEnabled = true;
-//		this.toturialBackground3.events.onInputDown.add(this.tutorial3, this);
-//		
-//		this.toturialBackground2 = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'ToturialBackGround2');
-//        this.toturialBackground2.anchor.set(0.5,0.5);
-//		this.toturialBackground2.inputEnabled = true;
-//		this.toturialBackground2.events.onInputDown.add(this.tutorial2, this);
-//		
-//        this.toturialBackground1 = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'ToturialBackGround1');
-//        this.toturialBackground1.anchor.set(0.5,0.5);
-//		this.toturialBackground1.inputEnabled = true;
-//		this.toturialBackground1.events.onInputDown.add(this.tutorial1, this);
+        this.gameBackground = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'ToturialBackGround');
+        this.gameBackground.anchor.set(0.5,0.5);
+			
+		//gemTable
+		this.tableImage = this.add.sprite(this.world.width*0.5, this.world.height*0.88, 'TutorialTable');
+        this.tableImage.anchor.set(0.5,0.5);
 		
-		//Button
-        this.buttonManager = new ButtonManager(this);
-        //this.buttonManager.startGameButton(this.world.width*0.5, this.world.height*0.5);
-		this.buttonManager.createSkipButton(this.world.width*0.85, this.world.height*0.85);
-      
-        //Fade in and out
-        theGame.FadeScreen = new FadeManager(this);
-        theGame.FadeScreen.create();
+		// gem 
+		this.orangeGem = this.add.button(this.world.width*0.365, this.world.height*0.85, 'orange', this.redclick, this, 1, 0, 2);
+		this.orangeGem.alpha = 0.5;
+		this.orangeGem.anchor.setTo(0.5,0.5);
+		
+       	this.red = this.add.button(this.world.width*0.505, this.world.height*0.85, 'red', this.orangeclick, this, 1, 0, 2); 
+		this.red.anchor.setTo(0.5,0.5);
+			
+		this.green = this.add.button(this.world.width*0.645, this.world.height*0.85, 'green', this.greenclick, this, 1, 0, 2);
+		this.green.alpha = 0.5;
+		this.green.anchor.setTo(0.5,0.5);
     }, 
+       
+    create: function()
+    {
+		console.log("Tutorial");
+		
+		this.buttonManager = new ButtonManager(this);
+		
+        //spawn the first customer
+		this.spawnCustomer();
+
+		
+		//Money
+//		this.moneyImage = this.add.sprite(this.world.width*0.825, this.world.height*0.5, 'moneyImage');
+//		this.moneyImage.frame = 0;
+//		this.moneyImage.anchor.set(0.5,0.5);
+		
+		// fade manager
+		theGame.FadeScreen = new FadeManager(this);
+        theGame.FadeScreen.create();		
+    },
+
 	update: function()
-   	{
-	  theGame.FadeScreen.update(this.buttonManager.gametype);          
-   	},
+    { 
+		this.timeDown();
+		
+		// move customer
+		this._customer.moveCustomer();
+		
+		//Spawn customer
+		if (this._customer.spawnCus == true)
+		{
+			this.spawnCustomer();
+			this._customer.spawnCus =false;
+		}	
+		
+		//print money box / how many you have
+//		if(this.money >= 10 && this.money <= 19)
+//		{
+//			this.moneyImage.frame = 1;
+//		}
+
+
+		//come out next button go to level 2
+		if (this.CusNum >= 1 && this._customer.TestHuman.done == true) // next level 5
+		{
+			this.buttonManager.createSkipButton(this.world.width*0.5, this.world.height*0.5);	
+		}
+		
+		// call button
+		theGame.FadeScreen.update(this.buttonManager.gametype);	
+    }, 
 	
-	tutorial1: function()
+	spawnCustomer:function()
+    {
+    	if(this.totalCustomers<1)
+    	{
+    		this._customer = new CustomerManager(this);
+			this._customer.create(this.customerArray[this.totalCustomers], 0, 325);
+	        this.totalCustomers++;
+    	}
+    },
+
+	TestTime:function()
 	{
-		this.tween = this.add.tween(this.toturialBackground1).to({alpha:0 }, 1000,"Linear", true,0,0);	
-		this.toturialBackground1.inputEnabled = false;
+		if(this.result !=null)
+		{
+			this.result.destroy();
+		}
 	},
 	
-	tutorial2: function()
+	timeDown: function()
 	{
-		this.tween = this.add.tween(this.toturialBackground2).to({alpha:0 }, 1000,"Linear", true,0,0);	
-		this.toturialBackground2.inputEnabled = false;
+		if(this.timeRun == true)
+		{
+			this.game.time.events.add(Phaser.Timer.SECOND, this.moveToRight, this);
+		}
 	},
-	tutorial3: function()
+	
+	moveToRight: function()
 	{
-		this.tween = this.add.tween(this.toturialBackground3).to({alpha:0 }, 1000,"Linear", true,0,0);	
-		this.toturialBackground3.inputEnabled = false;
+		this._customer.TestHuman.done =true;
+		this.timeRun = false;
 	},
-	tutorial4: function()
+
+	orangeclick: function() //Indian customer / orange gem is correct
 	{
-		this.tween = this.add.tween(this.toturialBackground4).to({alpha:0 }, 1000,"Linear", true,0,0);	
-		this.toturialBackground4.inputEnabled = false;
+		if (this.orangeGem.events.onInputDown)
+		{
+			if(this.customerArray[1] == 1 && this._customer.randomBubble == 1 )
+			{
+				console.log("happy");
+				this._customer.Angry = false;
+				this._customer.TestHuman.animations.play('happy',10, true);
+				this.timeRun = true;
+				this._customer.destroyBubble();
+			}
+			else 
+			{
+				console.log("unhappy");
+				this.timeRun = true;
+				this._customer.Angry = true;
+				this._customer.destroyBubble();
+				this._customer.TestHuman.animations.play('angry',10, true);
+			}
+			this.CusNum += 1;
+		}
 	},
-	tutorial5: function()
-	{
-		this.tween = this.add.tween(this.toturialBackground5).to({alpha:0 }, 1000,"Linear", true,0,0);	
-		this.toturialBackground5.inputEnabled = false;
-//		this.buttonManager.createSkipButton(this.world.width*0.85, this.world.height*0.85);
-	},
-}
+};

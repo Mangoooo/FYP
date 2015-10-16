@@ -105,6 +105,7 @@ CustomerManager.prototype.moveCustomer = function()
 	if(this.TestHuman.done)
 	{
 		this.TestHuman.x += 5; //this.TestHuman.x += 3;
+		
 		if (this.Angry == false)
 		{
 			this.TestHuman.animations.play('happyRight',10, true);

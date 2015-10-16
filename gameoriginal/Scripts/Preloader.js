@@ -38,11 +38,12 @@ theGame.Preloader.prototype =
         this.load.image('GameBackGround', 'Assets/images/BG/game.png');
 		
 		//tutorial
-        this.load.image('ToturialBackGround1', 'Assets/images/BG/tutorial.png');
+        this.load.image('ToturialBackGround', 'Assets/images/BG/tutorial.png');
 		this.load.image('ToturialBackGround2', 'Assets/images/BG/tutorial2.png');
 		this.load.image('ToturialBackGround3', 'Assets/images/BG/tutorial3.png');
 		this.load.image('ToturialBackGround4', 'Assets/images/BG/tutorial4.png');
 		this.load.image('ToturialBackGround5', 'Assets/images/BG/tutorial5.png');
+		
 		//socre page background
 		this.load.image('scoreBackground', 'Assets/images/BG/scorePage.png');
 		//game over
@@ -51,6 +52,7 @@ theGame.Preloader.prototype =
 //		this.load.image('BBG', 'Assets/images/BG/ButtonBG.png');
 
 		//table
+		this.load.image('TutorialTable', 'Assets/images/Table/Tutorial_Table.png');
 		this.load.image('gemTable1', 'Assets/images/Table/Table_3Gems.png');
 		this.load.image('gemTable2', 'Assets/images/Table/Table_4Gems.png');
 		this.load.image('gemTable3', 'Assets/images/Table/Table_6Gems.png');

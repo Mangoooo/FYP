@@ -63,17 +63,14 @@ theGame.Game.prototype =
         this.tableImage.anchor.set(0.5,0.5);
 		
 		// gem 
-       	this.red = this.add.button(this.world.width*0.365, this.world.height*0.85, 'red', this.redclick, this, 1, 0, 2);
-		this.red.anchor.setTo(0.5,0.5);
-		
-		this.orangeGem = this.add.button(this.world.width*0.505, this.world.height*0.85, 'orange', this.orangeclick, this, 1, 0, 2);
+		this.orangeGem = this.add.button(this.world.width*0.365, this.world.height*0.85, 'orange', this.orangeclick, this, 1, 0, 2);
 		this.orangeGem.anchor.setTo(0.5,0.5);
 		
+       	this.red = this.add.button(this.world.width*0.505, this.world.height*0.85, 'red', this.redclick, this, 1, 0, 2); 
+		this.red.anchor.setTo(0.5,0.5);
+			
 		this.green = this.add.button(this.world.width*0.645, this.world.height*0.85, 'green', this.greenclick, this, 1, 0, 2);
 		this.green.anchor.setTo(0.5,0.5);
-		
-//		this.greenGem = this.add.button(this.world.width*0.645, this.world.height*0.85, 'green', this.MEclick, this, 1, 0, 2);
-//		this.greenGem.anchor.setTo(0.5,0.5);
 		
 		//clock
 		this.clockSkin = this.add.sprite(this.world.width*0.175, this.world.height*0.5, 'clockskin');
@@ -96,11 +93,7 @@ theGame.Game.prototype =
 		
 		this.buttonManager = new ButtonManager(this);
 		
-		//////////////random/////////////
-		//shuffle customerArray every start of this level
-        //console.log(this.customerArray);
-//        this.randomCustomer(this.customerArray);
-        console.log("customer array"+this.customerArray);
+        console.log("customer array: "+this.customerArray);
 		
         //spawn the first customer
 		this.spawnCustomer();
@@ -166,7 +159,7 @@ theGame.Game.prototype =
 		}
 
 		//come out next button go to level 2
-		if (this.CusNum >= 5 && this._customer.TestHuman.done == true) // next level
+		if (this.CusNum >= 5 && this._customer.TestHuman.done == true) // next level 5
 		{
 			this.buttonManager.createScoreButton(this.world.width*0.5, this.world.height*0.5);	
 			this.time.events.stop();

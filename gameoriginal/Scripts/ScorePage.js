@@ -24,18 +24,14 @@ theGame.ScorePage.prototype =
 		this.blueScoreImage = this.add.sprite(this.world.width*0.627, this.world.height*0.49, 'blueScore');
         this.blueScoreImage.anchor.set(0.5,0.5);
 		
-		if(this.ShowGems == true)
-		{
-			console.log(this.ShowGems);
-			this.tween = this.add.tween(this.redScoreImage.scale).to({ x: 1.5, y: 1.5 }, 1000, Phaser.Easing.Bounce.Out, true);	
-			this.tween.onComplete.add(this.greenTween, this);
-		}
+		this.tween = this.add.tween(this.redScoreImage.scale).to({ x: 1.5, y: 1.5 }, 1000, Phaser.Easing.Bounce.Out, true);	
+		this.tween.onComplete.add(this.greenTween, this);
 		
         //Button
         this.buttonManager = new ButtonManager(this);
         this.buttonManager.createNextButton(this.world.width*0.5, this.world.height*0.7);
 		
-		  //Fade in and out
+		//Fade in and out
         theGame.FadeScreen = new FadeManager(this);
         theGame.FadeScreen.create();
     }, 
