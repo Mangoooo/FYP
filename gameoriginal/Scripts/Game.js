@@ -21,6 +21,7 @@ theGame.Game = function(game)
 	this.moneyImage = null;
 	this.blinkingImage = null;
 	this.gameOverImage = null;
+	this.tableCoverImage = null;
 	
 	////////Text//////////
 	this.timerText = null;
@@ -81,6 +82,15 @@ theGame.Game.prototype =
         this.clockImage.anchor.set(0.5,0.5);
 		this.clockImage.scale.setTo(0.8,0.8);
 		
+		//gem Table cover
+		this.tableCoverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.88, 'TableCover3');
+        this.tableCoverImage.anchor.set(0.5,0.5);
+		
+			//Money
+		this.moneyImage = this.add.sprite(this.world.width*0.825, this.world.height*0.5, 'moneyImage');
+		this.moneyImage.frame = 0;
+		this.moneyImage.anchor.set(0.5,0.5)
+		
 		//timerText
 //        this.timerText = this.add.text(this.world.centerX, this.world.centerY, ' ', { font: "40px Arial", fill: "#000000", align: "center" });
 //    	this.timerText.anchor.setTo(0.5, 0.5);
@@ -101,10 +111,10 @@ theGame.Game.prototype =
 		//Rotate clock 
 		this.clockImage = this.add.tween(this.clockImage).to( { angle: 360 }, 50000, Phaser.Easing.Linear.None, true);  //50
 		
-		//Money
-		this.moneyImage = this.add.sprite(this.world.width*0.825, this.world.height*0.5, 'moneyImage');
-		this.moneyImage.frame = 0;
-		this.moneyImage.anchor.set(0.5,0.5);
+//		//Money
+//		this.moneyImage = this.add.sprite(this.world.width*0.825, this.world.height*0.5, 'moneyImage');
+//		this.moneyImage.frame = 0;
+//		this.moneyImage.anchor.set(0.5,0.5);
 		
 		// fade manager
 		theGame.FadeScreen = new FadeManager(this);
@@ -122,16 +132,7 @@ theGame.Game.prototype =
 		this.clockImage.angle += 1;
 		
 		this.timeDown();
-		
-		// move customer
-		this._customer.moveCustomer();
-		
-		//Spawn customer
-		if (this._customer.spawnCus == true)
-		{
-			this.spawnCustomer();
-			this._customer.spawnCus =false;
-		}	
+		this.destroyCover();
 		
 		//print money box / how many you have
 		if(this.money >= 10 && this.money <= 19)
@@ -150,6 +151,16 @@ theGame.Game.prototype =
 		{
 			this.moneyImage.frame = 4;
 		}
+		
+		// move customer
+		this._customer.moveCustomer();
+		
+		//Spawn customer
+		if (this._customer.spawnCus == true)
+		{
+			this.spawnCustomer();
+			this._customer.spawnCus =false;
+		}	
 		
 		// print out game over image when timer over
 		if (this.timer <= 0 )
@@ -185,7 +196,7 @@ theGame.Game.prototype =
 	
 	spawnCustomer:function()
     {
-    	if(this.totalCustomers<4)
+    	if(this.totalCustomers < 4)
     	{
     		this._customer = new CustomerManager(this);
 			this._customer.create(this.customerArray[this.totalCustomers], 0, 325);
@@ -213,6 +224,14 @@ theGame.Game.prototype =
 	{
 		this._customer.TestHuman.done =true;
 		this.timeRun = false;
+	},
+	
+	destroyCover: function()
+	{
+		if (this._customer.TestHuman.IsMiddle == true)
+		{
+			this.tableCoverImage.destroy();	
+		}
 	},
 	
 	redclick: function() //Chinese customer / red gem is correct
@@ -267,7 +286,7 @@ theGame.Game.prototype =
 	{
 		if (this.green.events.onInputDown)
 		{
-			if(this.customerArray[3] == 0 || this.customerArray[2] && this._customer.randomBubble == 0) //western customer array is 3
+			if(this.customerArray[3] == 0 && this._customer.randomBubble == 0 || this.customerArray[2] == 3 && this._customer.randomBubble == 3) //western customer array is 3
 			{
 				this._customer.TestHuman.animations.play('happy',10, true);
 				this.money += 10;
@@ -292,6 +311,5 @@ theGame.Game.prototype =
     {
 		this.timer--;
 //		this.timerText.setText('Timer: ' + this.timer); // print timer number
-
     },
 };
