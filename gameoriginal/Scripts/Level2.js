@@ -1,76 +1,76 @@
 theGame.Level2 = function(game)
 {
 	this.game;
+	this.add;
     this.gameBackground = null;
+	this.buttonManager = null;
     this.music = null;
-    this.uiManager = null;  
+    this.uiManager = null; 
 	
-	this.redGem = null; // gem
-	this.greenGem = null;
-	this.blueGem = null;
+	////////Gems//////////
+	this.redGem = null; 
+	this.greenGem= null;
 	this.yellowGem = null;
 	this.orangeGem = null;
 	
+	////////Images//////////
 	this.clockImage = null;
 	this.clockSkin = null;
-	this.angle = 360;
-	
 	this.bubble = null;
-	this.bubbleCreate = false;
+	this.tableImage = null;
+	this.moneyImage = null;
+	this.blinkingImage = null;
+	this.gameOverImage = null;
+	this.tableCoverImage = null;
 	
-    this.counter = 10;
-    this.text = 0;
-    this.selectGemValue = null;
-
-	this.sprite = null;
-	this.sprite2 = null;
-
-	this.setToKill = null;
-	this.countDown = 10;
+	////////Text//////////
+	this.timerText = null;
+	this.CusNumText = null;
+	this.moneyText = null;
 	
-	this.randomCus = null;
-	this.customerArray = [0, 1, 2, 3];
-	this.totalCustomers = 0;
-		
+	////////Value//////////
 	this.money = 0;
-	this.TestHuman = null;
-	this.rnd = null;
-	this._customer = null;
-	this.result = null;
-	
 	this.CusNum = 0;
-    
-    this.totalCustomers = 0;
+	this.counter = 10;
+	this.timer = 40;
+	this.angle = 360;
+//	this.customerArray = [4, 8, 9, 7, 5, 6]; 
+	this.customerArray = [4,8,9,5,7,6]; 
+	this.totalCustomers = 0;
+	
+	///////////////////////
+	this.result = null;
+	this.TestHuman = null;
+	this._customer = null;
+	this.randomBubble = null;
+	this.timerRun = false;
 };
 
 theGame.Level2.prototype = 
 {
+	
+//////////////////////////////////////Preload////////////////////////////////////////
     preload: function()
     {
-//		this.selectGemValue = this.greenObject;
-		
-		//Screen Background
-		this.gameBackground = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'GameBackGround');
+        //Screen Background
+        this.gameBackground = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'GameBackGround');
         this.gameBackground.anchor.set(0.5,0.5);
-		
+			
 		//gemTable
-		this.tableImage = this.add.sprite(this.world.width*0.5, this.world.height*0.83, 'gemTable2');
+		this.tableImage = this.add.sprite(this.world.width*0.5, this.world.height*0.88, 'gemTable2');
         this.tableImage.anchor.set(0.5,0.5);
 		
 		//GEM
-		this.redGem = this.add.button(this.world.width*0.29, this.world.height*0.79, 'red', this.redclick, this, 1, 0, 2);
+		this.redGem = this.add.button(this.world.width*0.29, this.world.height*0.85, 'red', this.redclick, this, 1, 0, 2);
 		this.redGem.anchor.setTo(0.5,0.5);
 		
-		this.greenGem = this.add.button(this.world.width*0.71, this.world.height*0.79, 'green', this.greenclick, this, 1, 0, 2);
+		this.greenGem = this.add.button(this.world.width*0.72, this.world.height*0.85, 'green', this.greenclick, this, 1, 0, 2);
 		this.greenGem.anchor.setTo(0.5,0.5);
 		
-		this.blueGem = this.add.button(this.world.width*0.39, this.world.height*0.88, 'blue', this.blueclick, this, 1, 0, 2);
-		this.blueGem.anchor.setTo(0.5,0.5);
-		
-		this.yellowGem = this.add.button(this.world.width*0.60, this.world.height*0.88, 'yellow', this.yellowclick, this, 1, 0, 2);
+		this.yellowGem = this.add.button(this.world.width*0.574, this.world.height*0.85, 'yellow', this.yellowclick, this, 1, 0, 2);
 		this.yellowGem.anchor.setTo(0.5,0.5);
 		
-		this.orangeGem = this.add.button(this.world.width*0.5, this.world.height*0.79, 'orange', this.orangeclick, this, 1, 0, 2);
+		this.orangeGem = this.add.button(this.world.width*0.435, this.world.height*0.85, 'orange', this.orangeclick, this, 1, 0, 2);
 		this.orangeGem.anchor.setTo(0.5,0.5);
 		
 		//clock
@@ -81,58 +81,53 @@ theGame.Level2.prototype =
 		this.clockImage = this.add.sprite(this.world.width*0.175, this.world.height*0.5, 'clock');
         this.clockImage.anchor.set(0.5,0.5);
 		this.clockImage.scale.setTo(0.8,0.8);
+		
+		//gem Table cover
+		this.tableCoverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.88, 'TableCover4');
+        this.tableCoverImage.anchor.set(0.5,0.5);
+		
+		//Money
+		this.moneyImage = this.add.sprite(this.world.width*0.825, this.world.height*0.5, 'moneyImage');
+		this.moneyImage.frame = 0;
+		this.moneyImage.anchor.set(0.5,0.5)
     }, 
        
     create: function()
     {
 		console.log("level2");
-	
-        this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this); 
+        this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this); // timer
+		
 		this.buttonManager = new ButtonManager(this);
 		
-		/////////////Random customer/////////////////
+        console.log("customer array: "+this.customerArray);
 		
-		//shuffle customerArray every start of this level
-        //console.log(this.customerArray);
-        this.randomCustomer(this.customerArray);
-        //console.log(this.customerArray);
         //spawn the first customer
 		this.spawnCustomer();
 		
-		//Money image and frame start from 0
-		this.moneyImage = this.add.sprite(this.world.width*0.825, this.world.height*0.5, 'moneyImage');
-		this.moneyImage.frame = 0;
-		this.moneyImage.anchor.set(0.5,0.5);
+		//Rotate clock 
+		this.clockImage = this.add.tween(this.clockImage).to( { angle: 360 }, 40000, Phaser.Easing.Linear.None, true);  //50
 		
-		//Clock angele and call clock image
-		this.clockImage = this.add.tween(this.clockImage).to( { angle: 360 }, 20000, Phaser.Easing.Linear.None, true);  //10	
-        //Fade in and out
-        theGame.FadeScreen = new FadeManager(this);
-        theGame.FadeScreen.create();
+		// fade manager
+		theGame.FadeScreen = new FadeManager(this);
+        theGame.FadeScreen.create();	
+		
+		// red blinking image 
+		this.blinkingImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'blinking');
+		this.blinkingImage.alpha = 0.2;
+		this.blinkingImage.anchor.set(0.5,0.5);
+		this.blinkingImage.frame = 1;	
     },
-	
-	spawnCustomer:function()
-    {
-    	if(this.totalCustomers<4)
-    	{
-    		this._customer = new CustomerManager(this);
-			this._customer.create(this.customerArray[this.totalCustomers], 0, 325);
-	        console.log(this.totalCustomers);
-	        this.totalCustomers++;
-	        console.log(this.totalCustomers);
-    	}
-    },
-  
-    update: function()
+
+	update: function()
     { 
-		this._customer.moveCustomer();
+		this.clockImage.angle += 1;
 		
-		if (this._customer.spawnCus == true)
-		{
-			this.spawnCustomer();
-			this._customer.spawnCus =false;
-		}	
+		this.timeDown();
+		this.destroyCover();
 		
+//		console.log(this._customer.TestHuman.x);
+		
+		//print money box / how many you have
 		if(this.money >= 10 && this.money <= 19)
 		{
 			this.moneyImage.frame = 1;
@@ -144,195 +139,203 @@ theGame.Level2.prototype =
 		else if(this.money >= 30 && this.money <= 39)
 		{
 			this.moneyImage.frame = 3;
-		}		
-	
+		}
+		else if(this.money >= 40 && this.money <= 49)
+		{
+			this.moneyImage.frame = 4;
+		}
+		else if(this.money >= 50 && this.money <= 59)
+		{
+			this.moneyImage.frame = 5;
+		}
+		else if(this.money >= 60 && this.money <= 69)
+		{
+			this.moneyImage.frame = 6;
+		}
+
+		// move customer
+		this._customer.moveCustomer();
+		
+		//Spawn customer
+		if (this._customer.spawnCus == true)
+		{
+			this.spawnCustomer();
+			this._customer.spawnCus =false;
+		}	
+		
+		// print out game over image when timer over
 		if (this.timer <= 0 )
 		{
 			this.gameOverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'gameover');
 			this.gameOverImage.anchor.set(0.5,0.5);
 		}
-		
-		if (this.CusNum >= 4 ) // next level
+
+		//come out next button go to level 2
+		if (this.CusNum >= 9 && this._customer.TestHuman.done == true) // next level 5
 		{
 			this.buttonManager.Level2ScoreButton(this.world.width*0.5, this.world.height*0.5);	
 			this.time.events.stop();
-			this.clockImage.stop();
+			this.clockImage.stop();	
 		}
-		if (this.buttonManager.nextLevelClick == true)    
+		
+		// calculate total money
+		if (this.buttonManager.nextLevelClick == true)
 		{	
-//			this.buttonManager.destroyButton();	
-//			this.CusNum = 0;
-//			this.money = 0;
-			this.timer = 20;
 			theGame.money1 = this.money;
 		}
-			theGame.FadeScreen.update(this.buttonManager.gametype);		
-    },
-    
-    randomCustomer: function(array)
+		
+		// call button
+		theGame.FadeScreen.update(this.buttonManager.gametype);	
+		
+		//remind play count down 6S 
+		if (this.timer >= 6) // red image
+		{
+			this.blinkingImage.animations.add('red', [0,1]);
+			this.blinkingImage.play('red', 2 , true);
+		}
+    }, 
+	
+	spawnCustomer:function()
     {
-         for (var i = array.length - 1; i > 0; i--) 
-         {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-        }
-        return array;
+    	if(this.totalCustomers < 6)
+    	{
+    		this._customer = new CustomerManager(this);
+			console.log(this.customerArray);
+			this._customer.create(this.customerArray[this.totalCustomers], 0, 325);
+			console.log(this.totalCustomers);
+	        this.totalCustomers++;
+    	}
     },
 
-	updateCounter: function() 
-    {
-		if (this.counter <= 0)
-		{
-			this.time.events.stop();
-		}
-		else
-		{
-			if(this.startTimer)
-			{
-				this.countDown--;
-				if(this.countDown <= 0)
-       			{
-					//this.result.kill();
-					this.startTimer = false;
-       			}
-			}
-			this.counter--;
-			//this.text.setText('Timer: ' + this.counter);
-		}
-    },
 	TestTime:function()
 	{
-		console.log("haha");
 		if(this.result !=null)
 		{
 			this.result.destroy();
 		}
 	},
-	redclick: function()
+	
+	timeDown: function()
 	{
-		if (this.redGem.events.onInputDown)
+		if(this.timeRun == true)
 		{
-			if(this.customerArray[0])
-			{
-				console.log("red");
-//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-//				this.result.anchor.set(0.5,0.5);
-				this.money += 10;
-				this.CusNum += 1;
-				if(this._customer.bubble != null)
-				{
-					this._customer.bubble.destroy();
-					this._customer.TestHuman.done =true; 
-				}
-			}else
-			{
-				console.log("wrong");
-			}
+			this.game.time.events.add(Phaser.Timer.SECOND, this.moveToRight, this);
 		}
 	},
 	
-	greenclick: function()
+	moveToRight: function()
 	{
-	 	if (this.greenGem.events.onInputDown)
+		this._customer.TestHuman.done = true;
+		this.timeRun = false;
+	},
+	
+	destroyCover: function()
+	{
+		if (this._customer.TestHuman.IsMiddle == true)
 		{
-			if(this.customerArray[1])
+			this.tableCoverImage.destroy();	
+		}
+	},
+	
+	orangeclick: function() 
+	{
+		if (this.orangeGem.events.onInputDown) // orange indian 4
+		{
+			if(this.customerArray[0] == 4 && this._customer.randomBubble == 4 ) 
 			{
-				console.log("GReen");
-//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-//				this.result.anchor.set(0.5,0.5);
+				this._customer.TestHuman.animations.play('happy',10, true);
+				this.money += 10;
+				this.timeRun = true;
+				this.ShowGems = true;
+				this._customer.destroyBubble();
+			}
+			else 
+			{
+				this.timeRun = true;
+				this._customer.Angry = true;
+				this.ShowGems = false;
+				this._customer.destroyBubble();
+				this._customer.TestHuman.animations.play('angry',10, true);
+			}
+			this.CusNum += 1;
+		}
+	},
+	
+	yellowclick: function() //Western customer / yellow gem is correct
+	{
+		if (this.yellowGem.events.onInputDown) // || this.customerArray[2] 
+		{
+			if(this.customerArray[1] == 8 && this._customer.randomBubble == 8 || this.customerArray[4] == 7 && this._customer.randomBubble == 7) 
+			{
+				this._customer.TestHuman.animations.play('happy',10, true);
 				this.money += 10;
 				this.CusNum += 1;
-				if(this._customer.bubble != null)
-				{
-					this._customer.bubble.destroy();
-					this._customer.TestHuman.done =true;
-				}
-				
-			}else
-			{
-				console.log("wrong");
+				this.timeRun = true;
+				this.ShowGems = true;
+				this._customer.destroyBubble();
 			}
-		}
+			else 
+			{
+				this.timeRun = true;
+				this._customer.Angry = true;
+				this.ShowGems = false;
+				this._customer.destroyBubble();
+				this._customer.TestHuman.animations.play('angry',10, true);
+			}
+			this.CusNum += 1;
+		}	
 	},
 
-	orangeclick: function()
+	greenclick: function() //Western customer / green gem is correct
 	{
-		if (this.orangeGem.events.onInputDown)
+		if (this.greenGem.events.onInputDown) //|| this.customerArray[2]
 		{
-			if(this.customerArray[2])
+			if(this.customerArray[2] == 9 && this._customer.randomBubble == 9 || this.customerArray[5] == 6 && this._customer.randomBubble == 6) //western customer array is 3
 			{
-				console.log("orange");
-//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-//				this.result.anchor.set(0.5,0.5);
+				this._customer.TestHuman.animations.play('happy',10, true);
 				this.money += 10;
 				this.CusNum += 1;
-				if(this._customer.bubble != null)
-				{
-					this._customer.bubble.destroy();
-					this._customer.TestHuman.done =true;
-				}
-				
+				this.timeRun = true;
+				this.ShowGems = true;
+				this._customer.destroyBubble();
+			}
+			else 
+			{
+				this.timeRun = true;
+				this._customer.Angry = true;
+				this.ShowGems = false;
+				this._customer.destroyBubble();
+				this._customer.TestHuman.animations.play('angry',10, true);
+			}
+			this.CusNum += 1;
+		}	
+	},
+	
+	redclick: function() //Chinese customer / red gem is correct
+	{
+		if (this.redGem.events.onInputDown) 
+		{
+			if(this.customerArray[3] == 5 && this._customer.randomBubble == 5) // red indian customer
+			{
+				this._customer.TestHuman.animations.play('happy',6, true);
+				this.money += 10;
+				this.timeRun = true; 
+				this.ShowGems = true;
+				this._customer.destroyBubble();
 			}else
 			{
-				console.log("wrong");
+				this.timeRun = true;
+				this._customer.Angry = true;
+				this.ShowGems = false;
+				this._customer.destroyBubble();
+				this._customer.TestHuman.animations.play('angry',10, true);
 			}
+			this.CusNum += 1;
 		}
 	},
 	
-	yellowclick: function()
-	{
-		if (this.yellowGem.events.onInputDown)
-		{
-			if(this.customerArray[3])
-			{
-				console.log("yellow");
-//				this.result = this.add.sprite(this.world.width*0.7, this.world.height*0.3, 'correct');
-//				this.result.anchor.set(0.5,0.5);
-				this.money += 10;
-				this.CusNum += 1;
-				if(this._customer.bubble != null)
-				{
-					this._customer.bubble.destroy();
-					this._customer.TestHuman.done =true;
-					//this.IsMiddle = false;
-				}
-				
-			}else
-			{
-				console.log("wrong");
-			}
-		}
-	},
-
-	blueclick: function()
-	{
-		if (this.blueGem.events.onInputDown)
-		{
-			console.log("wrong");
-        }
-	},
-	
-	TheDestroyer: function(sprite,sprite2)
-	{
-		if(this.checkCombination(sprite,sprite2))
-        {
-			this.startTimer = true;
-//          sprite2.kill(); // destroy gem
-			this.setToKill = sprite;
-//			this.setToKill = true;
-            this.countDown = 1;
-        }
-		else
-		{
-			this.startTimer = true;
-			this.setToKill = sprite;
-//			this.setToKill = true;
-			this.countDown = 1;
-		}
-		
-		//this.money += 10;
-		//this.moneyText.text = 'Money: ' + this.money;
-	},
+	updateCounter: function() 
+    {
+		this.timer--;
+    },
 };

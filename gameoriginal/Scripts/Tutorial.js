@@ -14,6 +14,7 @@ theGame.Tutorial = function(game)
 	this.bubble = null;
 	this.tableImage = null;
 	this.moneyImage = null;
+	this.tableCoverImage = null;
 
 	this.moneyText = null;
 
@@ -49,16 +50,20 @@ theGame.Tutorial.prototype =
         this.tableImage.anchor.set(0.5,0.5);
 		
 		// gem 
-		this.orangeGem = this.add.button(this.world.width*0.365, this.world.height*0.85, 'orange', this.redclick, this, 1, 0, 2);
+		this.orangeGem = this.add.button(this.world.width*0.365, this.world.height*0.85, 'orange', this.redclick);
 		this.orangeGem.alpha = 0.5;
 		this.orangeGem.anchor.setTo(0.5,0.5);
 		
        	this.red = this.add.button(this.world.width*0.505, this.world.height*0.85, 'red', this.orangeclick, this, 1, 0, 2); 
 		this.red.anchor.setTo(0.5,0.5);
 			
-		this.green = this.add.button(this.world.width*0.645, this.world.height*0.85, 'green', this.greenclick, this, 1, 0, 2);
+		this.green = this.add.button(this.world.width*0.645, this.world.height*0.85, 'green', this.greenclick);
 		this.green.alpha = 0.5;
 		this.green.anchor.setTo(0.5,0.5);
+		
+		//gemTable
+		this.tableCoverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.88, 'TableCover3');
+        this.tableCoverImage.anchor.set(0.5,0.5);
     }, 
        
     create: function()
@@ -69,7 +74,7 @@ theGame.Tutorial.prototype =
 		
         //spawn the first customer
 		this.spawnCustomer();
-
+	
 		
 		//Money
 //		this.moneyImage = this.add.sprite(this.world.width*0.825, this.world.height*0.5, 'moneyImage');
@@ -84,6 +89,8 @@ theGame.Tutorial.prototype =
 	update: function()
     { 
 		this.timeDown();
+			this.destroyCover();
+
 		
 		// move customer
 		this._customer.moveCustomer();
@@ -100,8 +107,7 @@ theGame.Tutorial.prototype =
 //		{
 //			this.moneyImage.frame = 1;
 //		}
-
-
+		
 		//come out next button go to level 2
 		if (this.CusNum >= 1 && this._customer.TestHuman.done == true) // next level 5
 		{
@@ -143,12 +149,20 @@ theGame.Tutorial.prototype =
 		this._customer.TestHuman.done =true;
 		this.timeRun = false;
 	},
+	
+	destroyCover: function()
+	{
+		if (this._customer.TestHuman.IsMiddle == true)
+		{
+			this.tableCoverImage.destroy();	
+		}
+	},
 
 	orangeclick: function() //Indian customer / orange gem is correct
 	{
 		if (this.orangeGem.events.onInputDown)
 		{
-			if(this.customerArray[1] == 1 && this._customer.randomBubble == 1 )
+			if(this.customerArray[0] == 1 && this._customer.randomBubble == 1 )
 			{
 				console.log("happy");
 				this._customer.Angry = false;
