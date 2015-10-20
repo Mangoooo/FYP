@@ -10,6 +10,7 @@ function CustomerManager(game)
 	this.randomBubble = null;
 	this.customerNum = null;
 	this.Angry = false;
+//	this.timeRun = false;
 }
 
 CustomerManager.prototype.create = function(RandomNum,posX, posY)
@@ -84,6 +85,60 @@ CustomerManager.prototype.create = function(RandomNum,posX, posY)
 				this.TestHuman = this.game.add.sprite(posX,posY, 'WesternSprite_green');
 				this.customerNum = 9;
 			}break;	
+				
+			//////////////////////LEVEL 3 CUSTOMER SPRITE/////////////////   
+            case 10:
+			{
+				// Western Customer / GREEN
+				this.TestHuman = this.game.add.sprite(posX, posY, 'M_EarthSprite_yellow3');
+				this.customerNum = 10;
+			}break;
+			case 11:
+			{
+				// India Customer / ORANGE
+				this.TestHuman = this.game.add.sprite(posX, posY, 'M_EarthSprite_blue3');
+				this.customerNum = 11;
+			}break;
+			case 12:
+			{
+				//Chinese Customer / RED
+				this.TestHuman = this.game.add.sprite(posX,posY, 'ChineseSprite_white3');
+				this.customerNum = 12;
+			}break;
+			case 13:
+			{
+				// Medium earth Customer / GREEN
+				this.TestHuman = this.game.add.sprite(posX,posY, 'ChineseSprite_red3');
+				this.customerNum = 13;
+			}break;	
+				
+			case 14:
+			{
+				// India Customer / ORANGE
+				this.TestHuman = this.game.add.sprite(posX, posY, 'IndianSprite_white3');
+				this.customerNum = 14;
+			}break;
+				
+			case 15:
+			{
+				// middle earth Customer / GREEN
+				this.TestHuman = this.game.add.sprite(posX,posY, 'IndianSprite_red3');
+				this.customerNum = 15;
+			}break;	
+				
+			case 16:
+			{
+				//Chinese Customer / green
+				this.TestHuman = this.game.add.sprite(posX,posY, 'WesternSprite_blue3');
+				this.customerNum = 16;
+			}break;
+			
+			case 17:
+			{
+				//Chinese Customer / RED
+				this.TestHuman = this.game.add.sprite(posX,posY, 'WesternSprite_white3');
+				this.customerNum = 17;
+			}break;
 		}
 		this.TestHuman.anchor.set(0.5,0.5);
 		this.game.physics.enable(this.TestHuman, Phaser.Physics.ARCADE);
@@ -157,6 +212,48 @@ CustomerManager.prototype.LoadBubble = function(RandomNum,posX, posY)
 			{
 				//Middle eastern Green
 				this.bubble = this.game.add.sprite(posX,posY, 'WesternSolo_Green');
+			}break;
+				
+			//////////////////////LEVEL 3 BUBBLE/////////////////////    
+            case 10:
+			{
+				//Western Blue
+				this.bubble = this.game.add.sprite(posX, posY, 'Chinese_Red');
+			}break;
+			case 11:
+			{
+				//India Red
+				this.bubble = this.game.add.sprite(posX, posY, 'Chinese_White');
+			}break;
+			case 12:
+			{
+				//China Green
+				this.bubble = this.game.add.sprite(posX,posY, 'Indian_Red');
+			}break;
+			case 13:
+			{
+				//Middle eastern Green
+				this.bubble = this.game.add.sprite(posX,posY, 'Indian_White');
+			}break;
+				
+			case 14:
+			{
+				this.bubble = this.game.add.sprite(posX, posY, 'MiddleEastern_Blue');
+			}break;
+				
+			case 15:
+			{
+				this.bubble = this.game.add.sprite(posX, posY, 'MiddleEastern_Yellow');
+			}break;
+				
+			case 16:
+			{
+				this.bubble = this.game.add.sprite(posX,posY, 'WesternCouple_White');
+			}break;
+				
+			case 17:
+			{
+				this.bubble = this.game.add.sprite(posX,posY, 'WesternSolo_Blue');
 			}break;
 		}
 		this.bubble.anchor.set(0.5,0.5);
@@ -262,6 +359,38 @@ CustomerManager.prototype.CreateBubble = function()
 	{
 		this.randomBubble = 9;
 	}
+//	 if (this.customerNum == 10)
+//	{
+//		this.randomBubble = 10;
+//	}
+//	else if (this.customerNum == 11)
+//	{
+//		this.randomBubble = 11;
+//	}
+//	else if (this.customerNum == 12)
+//	{
+//		this.randomBubble = 12;
+//	}
+//	else if (this.customerNum == 13)
+//	{
+//		this.randomBubble = 13;
+//	}
+//	else if (this.customerNum == 14)
+//	{
+//		this.randomBubble = 14;
+//	}
+//	else if (this.customerNum == 15)
+//	{
+//		this.randomBubble = 15;
+//	}
+//	else if (this.customerNum == 16)
+//	{
+//		this.randomBubble = 16;
+//	}
+//	else if (this.customerNum == 17)
+//	{
+//		this.randomBubble = 17;
+//	}
 	else
 	{
 		this.randomBubble = 0;
@@ -270,7 +399,21 @@ CustomerManager.prototype.CreateBubble = function()
 
 	this.LoadBubble(this.randomBubble,500,120);
 },
-	
+
+//CustomerManager.prototype.timeDown = function()
+//{
+//	if(this.timeRun == true)
+//	{
+//		this.game.time.events.add(Phaser.Timer.SECOND, this.moveToRight, this);
+//	}
+//},
+//	
+//CustomerManager.prototype.moveToRight = function()
+//{
+//	this.TestHuman.done = true;
+//	this.timeRun = false;
+//},
+//	
 CustomerManager.prototype.destroyBubble = function()
 {
 	this.bubble.destroy();

@@ -1,6 +1,7 @@
 function ButtonManager(game)
 {
     this.game = game;
+	this.music = null;
     this.startButton = null;
     this.tutorialButton = null;
     this.muteButton = null;
@@ -27,6 +28,8 @@ ButtonManager.prototype.startGame = function()
 {
 	this.gametype = 2;
 	theGame.FadeScreen.OnEnd = true;
+	this.music = this.game.add.audio('clickOn');
+	this.music.play();
 },
 
 ButtonManager.prototype.createSkipButton = function(posx, posy)
@@ -38,11 +41,12 @@ ButtonManager.prototype.skip = function()
 {
 	this.gametype = 1;
 	theGame.FadeScreen.OnEnd = true;
+	this.music = this.game.add.audio('clickOn');
+	this.music.play();
 };
 	
 ButtonManager.prototype.createNextButton = function(posx, posy)
 {
-
     this.nextButton = this.game.add.button(posx, posy, 'nextButton', this.gotoLevel2, this, 0, 0, 1);
     this.nextButton.anchor.set(0.5,0.5);
 },
@@ -51,6 +55,8 @@ ButtonManager.prototype.gotoLevel2 = function()  // NEXT LEVEL
 	this.gametype = 4;
 	this.nextLevelClick = true;
 	theGame.FadeScreen.OnEnd = true;
+	this.music = this.game.add.audio('clickOn');
+	this.music.play();
 };
 	
 ButtonManager.prototype.createLevel3Button = function(posx, posy)
@@ -64,6 +70,8 @@ ButtonManager.prototype.gotoLevel3 = function()  // NEXT LEVEL
 	this.gametype = 6;
 	this.nextLevelClick = true;
 	theGame.FadeScreen.OnEnd = true;
+	this.music = this.game.add.audio('clickOn');
+	this.music.play();
 };
 
     
@@ -77,6 +85,8 @@ ButtonManager.prototype.ShowscorePage = function()
 	this.gametype = 3;
 	this.nextLevelClick = true;
 	theGame.FadeScreen.OnEnd = true;
+	this.music = this.game.add.audio('clickOn');
+	this.music.play();
 };
 	
 ButtonManager.prototype.Level2ScoreButton = function(posx, posy)
@@ -90,6 +100,8 @@ ButtonManager.prototype.Level2score = function()
 	this.gametype = 5;
 	this.nextLevelClick = true;
 	theGame.FadeScreen.OnEnd = true;
+	this.music = this.game.add.audio('clickOn');
+	this.music.play();
 };
 	
 ButtonManager.prototype.destroyButtonR = function()

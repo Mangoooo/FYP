@@ -32,10 +32,9 @@ theGame.Level2 = function(game)
 	this.money = 0;
 	this.CusNum = 0;
 	this.counter = 10;
-	this.timer = 40;
+	this.timer = 40; //40
 	this.angle = 360;
-//	this.customerArray = [4, 8, 9, 7, 5, 6]; 
-	this.customerArray = [4,8,9,5,7,6]; 
+	this.customerArray = [4, 8, 9, 7, 5, 6]; 
 	this.totalCustomers = 0;
 	
 	///////////////////////
@@ -44,6 +43,9 @@ theGame.Level2 = function(game)
 	this._customer = null;
 	this.randomBubble = null;
 	this.timerRun = false;
+	this.playMusic = false;
+	
+	this.timeGo = null;
 };
 
 theGame.Level2.prototype = 
@@ -115,7 +117,7 @@ theGame.Level2.prototype =
 		this.blinkingImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'blinking');
 		this.blinkingImage.alpha = 0.2;
 		this.blinkingImage.anchor.set(0.5,0.5);
-		this.blinkingImage.frame = 1;	
+		this.blinkingImage.frame = 1;
     },
 
 	update: function()
@@ -124,8 +126,6 @@ theGame.Level2.prototype =
 		
 		this.timeDown();
 		this.destroyCover();
-		
-//		console.log(this._customer.TestHuman.x);
 		
 		//print money box / how many you have
 		if(this.money >= 10 && this.money <= 19)
@@ -171,27 +171,35 @@ theGame.Level2.prototype =
 		}
 
 		//come out next button go to level 2
-		if (this.CusNum >= 9 && this._customer.TestHuman.done == true) // next level 5
+		if (this.CusNum >= 6 && this._customer.TestHuman.done == true) // next level 5
 		{
 			this.buttonManager.Level2ScoreButton(this.world.width*0.5, this.world.height*0.5);	
 			this.time.events.stop();
 			this.clockImage.stop();	
+			this.result = null;
+			this.timerRun = false;
 		}
 		
 		// calculate total money
 		if (this.buttonManager.nextLevelClick == true)
 		{	
-			theGame.money1 = this.money;
+			theGame.money2 = this.money;
 		}
 		
 		// call button
 		theGame.FadeScreen.update(this.buttonManager.gametype);	
 		
 		//remind play count down 6S 
-		if (this.timer >= 6) // red image
+		if (this.timer >= 5) // red image
 		{
 			this.blinkingImage.animations.add('red', [0,1]);
 			this.blinkingImage.play('red', 2 , true);
+
+		}
+		else if (this.timer <= 5)
+		{
+			this.music = this.add.audio('closing');
+			this.music.play();
 		}
     }, 
 	
@@ -214,21 +222,7 @@ theGame.Level2.prototype =
 			this.result.destroy();
 		}
 	},
-	
-	timeDown: function()
-	{
-		if(this.timeRun == true)
-		{
-			this.game.time.events.add(Phaser.Timer.SECOND, this.moveToRight, this);
-		}
-	},
-	
-	moveToRight: function()
-	{
-		this._customer.TestHuman.done = true;
-		this.timeRun = false;
-	},
-	
+		
 	destroyCover: function()
 	{
 		if (this._customer.TestHuman.IsMiddle == true)
@@ -237,6 +231,25 @@ theGame.Level2.prototype =
 		}
 	},
 	
+	timeDown: function()
+	{
+		if(this.timeRun == true)
+		{
+			this.timeGo = this.time.create(false);
+			this.timeGo.add(Phaser.Timer.SECOND, this.moveToRight, this);
+			this.timeGo.start();
+			//this.game.time.events.add(Phaser.Timer.SECOND, this.moveToRight, this);
+		}
+	},
+	
+	moveToRight: function()
+	{
+		this.timeGo.stop();
+		console.log("ddddddd2");
+		this._customer.TestHuman.done = true;
+		this.timeRun = false;
+	},
+
 	orangeclick: function() 
 	{
 		if (this.orangeGem.events.onInputDown) // orange indian 4
@@ -246,16 +259,22 @@ theGame.Level2.prototype =
 				this._customer.TestHuman.animations.play('happy',10, true);
 				this.money += 10;
 				this.timeRun = true;
+//				this._customer.timeDown();
 				this.ShowGems = true;
 				this._customer.destroyBubble();
+				this.music = this.add.audio('correct');
+    			this.music.play();
 			}
 			else 
 			{
 				this.timeRun = true;
+//				this._customer.timeDown();
 				this._customer.Angry = true;
 				this.ShowGems = false;
 				this._customer.destroyBubble();
 				this._customer.TestHuman.animations.play('angry',10, true);
+				this.music = this.add.audio('wrong');
+    			this.music.play();
 			}
 			this.CusNum += 1;
 		}
@@ -263,7 +282,7 @@ theGame.Level2.prototype =
 	
 	yellowclick: function() //Western customer / yellow gem is correct
 	{
-		if (this.yellowGem.events.onInputDown) // || this.customerArray[2] 
+		if (this.yellowGem.events.onInputDown)
 		{
 			if(this.customerArray[1] == 8 && this._customer.randomBubble == 8 || this.customerArray[4] == 7 && this._customer.randomBubble == 7) 
 			{
@@ -273,6 +292,8 @@ theGame.Level2.prototype =
 				this.timeRun = true;
 				this.ShowGems = true;
 				this._customer.destroyBubble();
+				this.music = this.add.audio('correct');
+    			this.music.play();
 			}
 			else 
 			{
@@ -281,6 +302,8 @@ theGame.Level2.prototype =
 				this.ShowGems = false;
 				this._customer.destroyBubble();
 				this._customer.TestHuman.animations.play('angry',10, true);
+				this.music = this.add.audio('wrong');
+    			this.music.play();
 			}
 			this.CusNum += 1;
 		}	
@@ -288,7 +311,7 @@ theGame.Level2.prototype =
 
 	greenclick: function() //Western customer / green gem is correct
 	{
-		if (this.greenGem.events.onInputDown) //|| this.customerArray[2]
+		if (this.greenGem.events.onInputDown) 
 		{
 			if(this.customerArray[2] == 9 && this._customer.randomBubble == 9 || this.customerArray[5] == 6 && this._customer.randomBubble == 6) //western customer array is 3
 			{
@@ -298,6 +321,8 @@ theGame.Level2.prototype =
 				this.timeRun = true;
 				this.ShowGems = true;
 				this._customer.destroyBubble();
+				this.music = this.add.audio('correct');
+    			this.music.play();
 			}
 			else 
 			{
@@ -306,6 +331,8 @@ theGame.Level2.prototype =
 				this.ShowGems = false;
 				this._customer.destroyBubble();
 				this._customer.TestHuman.animations.play('angry',10, true);
+				this.music = this.add.audio('wrong');
+    			this.music.play();
 			}
 			this.CusNum += 1;
 		}	
@@ -322,6 +349,8 @@ theGame.Level2.prototype =
 				this.timeRun = true; 
 				this.ShowGems = true;
 				this._customer.destroyBubble();
+				this.music = this.add.audio('correct');
+    			this.music.play();
 			}else
 			{
 				this.timeRun = true;
@@ -329,6 +358,8 @@ theGame.Level2.prototype =
 				this.ShowGems = false;
 				this._customer.destroyBubble();
 				this._customer.TestHuman.animations.play('angry',10, true);
+				this.music = this.add.audio('wrong');
+    			this.music.play();
 			}
 			this.CusNum += 1;
 		}

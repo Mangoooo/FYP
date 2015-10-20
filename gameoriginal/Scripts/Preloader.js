@@ -18,13 +18,20 @@ theGame.Preloader.prototype =
     {
         //sound mute
         theGame.Game_Mute = false;
+		
+		this.load.audio('BGmusic', ['Assets/audio/BGM.mp3']);
+		this.load.audio('correct', ['Assets/audio/correct.mp3']);
+		this.load.audio('wrong', ['Assets/audio/wrong.mp3']);
+		this.load.audio('clickOn', ['Assets/audio/ClickOn.mp3']);
+		this.load.audio('closing', ['Assets/audio/closing.mp3']);
+		this.load.audio('select', ['Assets/audio/select.mp3']);
         
 //        Loading Screen Background
         this.background = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'LoadingScreenBackGround');
         this.background.anchor.set(0.5,0.5);
         
         //Empty Loading bar
-		this.preloadBar = this.add.sprite(this.world.width*0.5, this.world.height*0.51, 'loadingBar');
+		this.preloadBar = this.add.sprite(this.world.width*0.5, this.world.height*0.86, 'loadingBar');
         this.preloadBar.anchor.set(0.5,0.5);
         
         //Loading bar 
@@ -92,14 +99,14 @@ theGame.Preloader.prototype =
 		this.load.spritesheet('M_EarthSprite_yellow', 'Assets/images/Level1_Sprite/M_EarthSprite_yellow.png', 133, 186);
 		this.load.spritesheet('WesternSprite_green', 'Assets/images/Level1_Sprite/WesternSprite_green.png', 133, 186);
 		
-		//////////////////////LEVEL 2 CUSTOMER SPRITE////////////////////////////////
-		this.load.spritesheet('CoupleSprite2', 'Assets/images/Level2_Sprite/CoupleS2.png', 133, 186);
-		//angry face
-		this.load.image('angry', 'Assets/images/angryBubble.png');
-		
-		//wrong and correct image
-		this.load.image('correct', 'Assets/images/Correct.png');
-		this.load.image('wrong', 'Assets/images/Wrong.png');
+		this.load.spritesheet('M_EarthSprite_yellow3', 'Assets/images/Level1_Sprite/M_EarthSprite_yellow3.png', 133, 186);
+		this.load.spritesheet('M_EarthSprite_blue3', 'Assets/images/Level1_Sprite/M_EarthSprite_blue3.png', 133, 186);
+		this.load.spritesheet('ChineseSprite_white3', 'Assets/images/Level1_Sprite/ChineseSprite_white3.png', 133, 186); // 179, 220
+		this.load.spritesheet('ChineseSprite_red3', 'Assets/images/Level1_Sprite/ChineseSprite_red3.png', 133, 186);
+		this.load.spritesheet('IndianSprite_white3', 'Assets/images/Level1_Sprite/IndianSprite_white3.png', 133, 186);
+		this.load.spritesheet('IndianSprite_red3', 'Assets/images/Level1_Sprite/IndianSprite_red3.png', 133, 186);
+		this.load.spritesheet('WesternSprite_blue3', 'Assets/images/Level1_Sprite/WesternSprite_blue3.png', 133, 186);
+		this.load.spritesheet('WesternSprite_white3', 'Assets/images/Level1_Sprite/WesternSprite_white3.png', 133, 186);
 		
 		//request bubble
 		//this.load.image('request', 'Assets/images/bubble.png');
@@ -115,6 +122,17 @@ theGame.Preloader.prototype =
 		this.load.image('MiddleEastern_Yellow', 'Assets/images/SpeechBubble2/MiddleEastern_Yellow.png');
 		this.load.image('WesternCouple_Yellow', 'Assets/images/SpeechBubble2/WesternCouple_Yellow.png');
 		this.load.image('WesternSolo_Green', 'Assets/images/SpeechBubble2/WesternSolo_Green.png');
+		
+		 //Level 3 request bubble
+		this.load.image('Chinese_Red', 'Assets/images/SpeechBubble3/Chinese_Red.png');
+		this.load.image('Chinese_White', 'Assets/images/SpeechBubble3/Chinese_White.png');
+		this.load.image('Indian_Red', 'Assets/images/SpeechBubble3/Indian_Red.png');
+		this.load.image('Indian_White', 'Assets/images/SpeechBubble3/Indian_White.png');
+		this.load.image('MiddleEastern_Blue', 'Assets/images/SpeechBubble3/MiddleEastern_Blue.png');
+		this.load.image('MiddleEastern_Yellow', 'Assets/images/SpeechBubble3/MiddleEastern_Yellow.png');
+        this.load.image('WesternCouple_White', 'Assets/images/SpeechBubble3/WesternCouple_White.png');
+		this.load.image('WesternSolo_Blue', 'Assets/images/SpeechBubble3/WesternSolo_Blue.png');
+        
 		
 		//money
 		this.load.spritesheet('moneyImage', 'Assets/images/coin.png', 118, 122);

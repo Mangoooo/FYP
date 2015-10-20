@@ -6,14 +6,12 @@ theGame.ScorePage = function(game)
 	this.redScoreImage = null;
 	this.greenScoreImage = null;
 	this.blueScoreImage = null;
-	
 };
 
 theGame.ScorePage.prototype = 
 {
     create: function()
 	{
-		console.log("level1");
 		this.scorePageBackground = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'scoreBackground');
 		this.scorePageBackground.anchor.set(0.5,0.5);
 		

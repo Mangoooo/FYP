@@ -32,7 +32,7 @@ theGame.Game = function(game)
 	this.money = 0;
 	this.CusNum = 0;
 	this.counter = 10;
-	this.timer = 50;
+	this.timer = 10;
 	this.angle = 360;
 	this.customerArray = [2, 1, 3, 0]; // 0 - Western / 1 - Indian/ 2 - Chinese/ 3 - Middle Earstern
 //	this.customerArray = [3,0];
@@ -43,10 +43,9 @@ theGame.Game = function(game)
 	this.TestHuman = null;
 	this._customer = null;
 	this.randomBubble = null;
-
 	this.timerRun = false;
 	
-
+	this.timeGo = null;
 };
 
 theGame.Game.prototype = 
@@ -170,11 +169,14 @@ theGame.Game.prototype =
 		}
 
 		//come out next button go to level 2
-		if (this.CusNum >= 5 && this._customer.TestHuman.done == true) // next level 5
+		if (this.CusNum >= 5 && this._customer.TestHuman.done == true) // next level  customer num = 5
 		{
-			this.buttonManager.createScoreButton(this.world.width*0.5, this.world.height*0.5);	
+			this.buttonManager.createScoreButton(this.world.width*0.5, this.world.height*0.5); //createNextButton	
+//			this.buttonManager.createNextButton(this.world.width*0.5, this.world.height*0.5);
 			this.time.events.stop();
 			this.clockImage.stop();	
+			this.result = null;
+			this.timerRun = false;
 		}
 		
 		// calculate total money
@@ -187,13 +189,19 @@ theGame.Game.prototype =
 		theGame.FadeScreen.update(this.buttonManager.gametype);	
 		
 		//remind play count down 6S 
-		if (this.timer >= 6) // red image
+		if (this.timer >= 5) // red image
 		{
 			this.blinkingImage.animations.add('red', [0,1]);
 			this.blinkingImage.play('red', 2 , true);
+
+		}
+		else if (this.timer <= 5)
+		{
+			this.music = this.add.audio('closing');
+			this.music.play();
 		}
     }, 
-	
+
 	spawnCustomer:function()
     {
     	if(this.totalCustomers < 4)
@@ -216,12 +224,16 @@ theGame.Game.prototype =
 	{
 		if(this.timeRun == true)
 		{
-			this.game.time.events.add(Phaser.Timer.SECOND, this.moveToRight, this);
+			this.timeGo = this.time.create(false);
+			this.timeGo.add(Phaser.Timer.SECOND, this.moveToRight, this);
+			this.timeGo.start();
+			//this.game.time.events.add(Phaser.Timer.SECOND, this.moveToRight, this);
 		}
 	},
 	
 	moveToRight: function()
 	{
+		this.timeGo.stop();
 		this._customer.TestHuman.done =true;
 		this.timeRun = false;
 	},
@@ -245,6 +257,8 @@ theGame.Game.prototype =
 				this.timeRun = true; 
 				this.ShowGems = true;
 				this._customer.destroyBubble();
+				this.music = this.add.audio('correct');
+    			this.music.play();
 			}else
 			{
 				this.timeRun = true;
@@ -252,6 +266,8 @@ theGame.Game.prototype =
 				this.ShowGems = false;
 				this._customer.destroyBubble();
 				this._customer.TestHuman.animations.play('angry',10, true);
+				this.music = this.add.audio('wrong');
+				this.music.play();
 			}
 			this.CusNum += 1;
 		}
@@ -269,6 +285,8 @@ theGame.Game.prototype =
 				this.timeRun = true;
 				this.ShowGems = true;
 				this._customer.destroyBubble();
+				this.music = this.add.audio('correct');
+    			this.music.play();
 			}
 			else 
 			{
@@ -277,6 +295,8 @@ theGame.Game.prototype =
 				this.ShowGems = false;
 				this._customer.destroyBubble();
 				this._customer.TestHuman.animations.play('angry',10, true);
+				this.music = this.add.audio('wrong');
+				this.music.play();
 			}
 			this.CusNum += 1;
 		}
@@ -294,6 +314,8 @@ theGame.Game.prototype =
 				this.timeRun = true;
 				this.ShowGems = true;
 				this._customer.destroyBubble();
+				this.music = this.add.audio('correct');
+    			this.music.play();
 			}
 			else 
 			{
@@ -302,6 +324,8 @@ theGame.Game.prototype =
 				this.ShowGems = false;
 				this._customer.destroyBubble();
 				this._customer.TestHuman.animations.play('angry',10, true);
+				this.music = this.add.audio('wrong');
+				this.music.play();
 			}
 			this.CusNum += 1;
 		}	

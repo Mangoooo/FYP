@@ -1,7 +1,7 @@
 theGame.MainMenu = function(game)
 {
     this.mainmenuBackground = null;
-    //this.music = null;
+    this.music = null;
     this.uiManager = null;
     this.buttonManager = null;
 };
@@ -18,10 +18,18 @@ theGame.MainMenu.prototype =
         this.buttonManager = new ButtonManager(this);
         this.buttonManager.startGameButton(this.world.width*0.25, this.world.height*0.8);
 //		this.buttonManager.createNextButton(this.world.width*0.5, this.world.height*0.5);	
-        
+//        this.buttonManager.createLevel3Button(this.world.width*0.5, this.world.height*0.5);
+		
         //Fade in and out
         theGame.FadeScreen = new FadeManager(this);
         theGame.FadeScreen.create();
+		
+			
+		this.music = this.add.audio('BGmusic');
+    	this.music.play();
+//		this.music.volume = 100;
+//        this.music.loop = true;
+
     }, 
     
     update: function()

@@ -64,6 +64,10 @@ theGame.Tutorial.prototype =
 		//gemTable
 		this.tableCoverImage = this.add.sprite(this.world.width*0.5, this.world.height*0.88, 'TableCover3');
         this.tableCoverImage.anchor.set(0.5,0.5);
+		
+		//music
+		
+		
     }, 
        
     create: function()
@@ -169,6 +173,9 @@ theGame.Tutorial.prototype =
 				this._customer.TestHuman.animations.play('happy',10, true);
 				this.timeRun = true;
 				this._customer.destroyBubble();
+				this.music = this.add.audio('correct');
+//				this.music.volume = 100;
+    			this.music.play();
 			}
 			else 
 			{
@@ -177,6 +184,8 @@ theGame.Tutorial.prototype =
 				this._customer.Angry = true;
 				this._customer.destroyBubble();
 				this._customer.TestHuman.animations.play('angry',10, true);
+				this.music = this.add.audio('wrong');
+				this.music.play();
 			}
 			this.CusNum += 1;
 		}
