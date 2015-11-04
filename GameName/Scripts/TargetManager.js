@@ -1,79 +1,101 @@
 function TargetManager(game)
 {
 	this.game = game;
-	this.TargetImage = null;
+	
+	this.BalloonImage = null;
     this.colorBarImage = null;
-	this.targetNum = null;
+	
+	this.balloonNum = null;
+	
 	this.randomBar = null;
-	this.cursors = null;
+	this.bounds = null;
 };
+
+TargetManager.prototype.CreateBounds = function()
+{ 
+		
+	// Display the bounds
+	this.bounds = new Phaser.Rectangle(120, 60, 700, 500); // position x , y  // scale: w h 
+//	 this.bounds = this.game.add.sprite(120, 60, 'Bounds_BG');
+	var graphics = this.game.add.graphics(this.bounds.x, this.bounds.y);
+//	graphics.beginFill(0x000077);
+    graphics.lineStyle(4, 0xffd900, 1);
+    graphics.drawRect(0, 0, this.bounds.width, this.bounds.height);
+	
+},
 
 TargetManager.prototype.create = function(RandomNum,posX, posY)
 {
-	this.game.physics.startSystem(Phaser.Physics.ARCADE);
+//	this.bounds = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'Bounds_BG');
+//	this.bounds.anchor.set(0.5,0.5);
 	switch(RandomNum)
 		{
 			case 0:
 			{
-				this.TargetImage = this.game.add.sprite(posX, posY, "blue");
-				this.targetNum = 0;
+				this.BalloonImage = this.game.add.sprite(posX, posY, "blue");
+				this.balloonNum = 0;
 			}break;
 			case 1:
 			{
-				this.TargetImage = this.game.add.sprite(posX - 100, posY - 100, "green");
-				this.targetNum = 1;
-//				this.game.physics.enable(this.TargetImage, Phaser.Physics.ARCADE);
-//				this.TargetImage.body.velocity.x = -20;
+				this.BalloonImage = this.game.add.sprite(posX - 100, posY - 100, "green");
+				this.balloonNum = 1;
 			}break;
 			case 2:
 			{
-				this.TargetImage = this.game.add.sprite(posX - 500, posY - 100, "orange");
-				this.targetNum = 2;
+				this.BalloonImage = this.game.add.sprite(posX - 400, posY - 100, "orange");
+				this.balloonNum = 2;
 			}break;
 			case 3:
+				  
 			{
-				this.TargetImage = this.game.add.sprite(posX - 200, posY, "red");
-				this.targetNum = 3;
+				this.BalloonImage = this.game.add.sprite(posX - 200, posY, "red");
+				this.balloonNum = 3;
 			}break;
 			case 4:
 			{
-				this.TargetImage = this.game.add.sprite(posX - 400, posY, "white");
-				this.targetNum = 4;
+				this.BalloonImage = this.game.add.sprite(posX - 400, posY, "white");
+				this.balloonNum = 4;
 			}break;
 			case 5:
 			{
-				this.TargetImage = this.game.add.sprite(posX - 600, posY, "yellow");
-				this.targetNum = 5;
+				this.BalloonImage = this.game.add.sprite(posX - 600, posY, "yellow");
+				this.balloonNum = 5;
 			}break;
 		}
-	this.TargetImage.anchor.setTo(0.5,0.5);
+	this.BalloonImage.anchor.setTo(0.5,0.5);
+
+	/////////DESTROY BALLOON/////////////
+//	this.BalloonImage.inputEnabled = true;
+//	this.BalloonImage.input.useHandCursor = true;
+//	this.BalloonImage.events.onInputDown.add(this.destroyTarget, this);
+
 	
-//	this.TargetImage.inputEnabled = true;
-//	this.TargetImage.input.useHandCursor = true;
-//	this.TargetImage.events.onInputDown.add(this.destroyTarget, this);
+	/////////MOVE BALLOON////////////////
+//	this.game.physics.p2.restitution = 1.0;
+//	this.game.physics.p2.enable(this.BalloonImage, false);
+//	this.game.physics.arcade.collide(this.BalloonImage, this.BalloonImage, null, this);
+//	this.BalloonImage.body.collideWorldBounds = true;
+//	this.BalloonImage.body.immovable = true
+//	this.BalloonImage.body.velocity.x = 5;
+//	this.BalloonImage.body.velocity.y = this.BalloonImage.body.velocity.x = 50;
+//	this.BalloonImage.body.fixedRotation = true;
+//	this.BalloonImage.body.damping= 0;
+//	this.BalloonImage.body.mass= 0.1;
 	
-	this.game.physics.enable(this.TargetImage, Phaser.Physics.ARCADE);
-	this.TargetImage.body.collideWorldBounds = true;
-	this.TargetImage.body.velocity.x = 50;
-	this.TargetImage.body.velocity.y = 5;
-	this.game.physics.arcade.overlap(this.TargetImage, null, this);
-	
-//	this.game.physics.enable(this.TargetImage, Phaser.Physics.ARCADE);
-//	this.TargetImage.body.collideWorldBounds = true;
-//	this.TargetImage.body.checkCollision.up = false;
-//	this.TargetImage.body.checkCollision.down = false;
-//	this.TargetImage.body.immovable = true;
+	/////// BALLOON COLLISION INSIDE THE BOUNDS//////////
+	this.game.physics.enable(this.BalloonImage, Phaser.Physics.ARCADE);
+	this.BalloonImage.body.velocity.x = 100;
+	this.BalloonImage.body.velocity.y = 100;
+	this.BalloonImage.body.collideWorldBounds = true;
+	this.BalloonImage.body.bounce.set(1);
+	this.game.physics.arcade.setBounds(120,60,700, 500);
+
 },
 	
 TargetManager.prototype.update = function()
 { 
 	
 },
-
-TargetManager.prototype.moveBallon = function()
-{ 
-	
-},	
 	
 TargetManager.prototype.LoadColorBar = function(RandomNum,posX, posY)
 {
@@ -81,15 +103,15 @@ TargetManager.prototype.LoadColorBar = function(RandomNum,posX, posY)
 		{
 			case 0:
 			{
-				this.colorBarImage = this.game.add.sprite(posX, posY + 100, "bluebar");
+				this.colorBarImage = this.game.add.sprite(posX + 50, posY + 100, "bluebar");
 			}break;
 			case 1:
 			{
-				this.colorBarImage = this.game.add.sprite(posX, posY + 50, "greenbar");
+				this.colorBarImage = this.game.add.sprite(posX + 50, posY + 50, "greenbar");
 			}break;
 			case 2:
 			{
-				this.colorBarImage = this.game.add.sprite(posX, posY, "redbar");
+				this.colorBarImage = this.game.add.sprite(posX + 50, posY, "redbar");
 			}break;	
 		}
 	this.colorBarImage.anchor.set(0.5,0.5);
@@ -130,5 +152,5 @@ TargetManager.prototype.CheckColorBar = function()
 	
 TargetManager.prototype.destroyTarget = function()
 {
-	this.TargetImage.destroy();
+	this.BalloonImage.destroy();
 };

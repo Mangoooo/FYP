@@ -5,16 +5,16 @@ theGame.Game = function(game)
     this.uiManager = null; 
 	
 	this._target = null;
-	this.totalTarget = 0;
-	this.totalBar = 0;
-	this.TargetArray = [0,1,2,3,4,5];
-//	this.TargetArray = [2,1,0];
+	this.totalBallon = 0;
+	this.totalColorBar = 0;
+	this.BalloonArray = [0,1,2,3,4,5];
+	this.ColorBarArray = [2,1,0];
 	
 	this.greenTargetImage = null;
 	this.redTargetImage = null;
 	this.blueTargetImage = null;
 	
-//	this.spawnNextBar = false;
+	this.bounds = false;
 };
 
 
@@ -27,6 +27,10 @@ theGame.Game.prototype =
         //Screen Background
         this.gameBackground = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'GameBackGround');
         this.gameBackground.anchor.set(0.5,0.5);
+		
+//		this.bounds = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'Bounds_BG');
+////		this.bounds.alpha = 0.5;
+//		this.bounds.anchor.set(0.5,0.5);
 		
 //		this.greenTargetImage = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'green');
 //		this.greenTargetImage.anchor.setTo(0.5,0.5);
@@ -51,34 +55,37 @@ theGame.Game.prototype =
 //		}	
 		this.spawnTarget();
 		this.spawnColorBar();
+		
+		this.CheckGreenBar();
+		this._target.CreateBounds();
     },
 	
 	spawnTarget: function()
 	{
-		if (this.totalTarget < 6) 
+		if (this.totalBallon < 6) 
 		{
 			this._target = new TargetManager(this);
-			this._target.create(this.TargetArray[this.totalTarget], 800, 400);
-			this.totalTarget++;
+			this._target.create(this.BalloonArray[this.totalBallon], 800, 400);
+			this.totalBallon++;
 		}
 	},
 	
 	spawnColorBar: function()
 	{
-		if (this.totalBar < 3) 
+		if (this.totalColorBar < 3) 
 		{
 			this._target = new TargetManager(this);
-			this._target.LoadColorBar(this.TargetArray[this.totalBar], 850, 200);
-			this.totalBar++;
+			this._target.LoadColorBar(this.ColorBarArray[this.totalColorBar], 850, 200);
+			this.totalColorBar++;
 		}
 	},
 	
 	CheckGreenBar: function()
 	{
 		console.log(this.TargetArray); //this.TargetImage.inputEnabled = true;
-		if (this._target.TargetImage.events.onInputDown) 
-		{
-			if(this.TargetArray[2] == 0)
+//		if (this._target.TargetImage.events.onInputDown) 
+//		{
+			if(this.BalloonArray[2] == 0 && this.ColorBarArray[0] == 1)
 			{
 				console.log("correct");
 //				this.destroyTarget();
@@ -88,7 +95,7 @@ theGame.Game.prototype =
 			{
 				console.log("wrong");
 			}
-		}	
+//		}	
 	},
 	
 //	CheckRedBar: function()

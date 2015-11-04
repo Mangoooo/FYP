@@ -29,6 +29,7 @@ theGame.Preloader.prototype =
         this.load.image('MainMenuBackGround', 'Assets/images/mainmenu.png');
         this.load.image('GameBackGround', 'Assets/images/game.png');
         this.load.image('ToturialBackGround', 'Assets/images/tutorial.png');
+		this.load.image('Bounds_BG', 'Assets/images/Bounds_BG.png');
 		
 		//Target
 		this.load.image('blue', 'Assets/images/blue_Gem.png');
