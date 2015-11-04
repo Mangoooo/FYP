@@ -43,6 +43,9 @@ theGame.Preloader.prototype =
 		this.load.image('greenbar', 'Assets/images/ColorBar_green.png');
         this.load.image('redbar', 'Assets/images/ColorBar_red.png');
 		this.load.image('bluebar', 'Assets/images/ColorBar_blue.png');
+		this.load.image('orangebar', 'Assets/images/ColorBar_orange.png');
+		this.load.image('yellowbar', 'Assets/images/ColorBar_yellow.png');
+		this.load.image('whitebar', 'Assets/images/ColorBar_white.png');
 		
 		//Life / bullet
 		this.load.image('Bullet', 'Assets/images/Bullet.png');
