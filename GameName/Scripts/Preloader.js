@@ -31,21 +31,21 @@ theGame.Preloader.prototype =
         this.load.image('ToturialBackGround', 'Assets/images/tutorial.png');
 		this.load.image('Bounds_BG', 'Assets/images/Bounds_BG.png');
 		
-		//Target
-		this.load.image('blue', 'Assets/images/blue_Gem.png');
-		this.load.image('green', 'Assets/images/green_Gem.png');
-		this.load.image('orange', 'Assets/images/orange_Gem.png');
-		this.load.image('red', 'Assets/images/red_Gem.png');
-        this.load.image('white', 'Assets/images/white_Gem.png');
-		this.load.image('yellow', 'Assets/images/yellow_Gem.png');
+		//Ballon image
+		this.load.image('yellow', 'Assets/images/Balloon_yellow.png');
+		this.load.image('yellowOrange', 'Assets/images/Balloon_yellowOrange.png');
+		this.load.image('orange', 'Assets/images/Balloon_orange.png');
+		this.load.image('redOrange', 'Assets/images/Balloon_redOrange.png');
+        this.load.image('magenta', 'Assets/images/Balloon_magenta.png');
+		this.load.image('redPurple', 'Assets/images/Balloon_redPurple.png');
 		
 		//Color bar
-		this.load.image('greenbar', 'Assets/images/ColorBar_green.png');
-        this.load.image('redbar', 'Assets/images/ColorBar_red.png');
-		this.load.image('bluebar', 'Assets/images/ColorBar_blue.png');
-		this.load.image('orangebar', 'Assets/images/ColorBar_orange.png');
 		this.load.image('yellowbar', 'Assets/images/ColorBar_yellow.png');
-		this.load.image('whitebar', 'Assets/images/ColorBar_white.png');
+		this.load.image('yellowOrangebar', 'Assets/images/ColorBar_yellowOrange.png');
+		this.load.image('orangebar', 'Assets/images/ColorBar_orange.png');
+		this.load.image('redOrangebar', 'Assets/images/ColorBar_redOrange.png');
+		this.load.image('magentabar', 'Assets/images/ColorBar_magenta.png');
+		this.load.image('redPurplebar', 'Assets/images/ColorBar_redPurple.png');
 		
 		//Life / bullet
 		this.load.image('Bullet', 'Assets/images/Bullet.png');
