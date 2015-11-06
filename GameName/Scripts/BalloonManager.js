@@ -4,9 +4,7 @@ function BalloonManager(game)
 	
 	this.BalloonImage = null;
     this.colorBarImage = null;
-	
 	this.balloonNum = null;
-	
 	this.randomBar = null;
 	this.bounds = null;
 };
@@ -18,7 +16,7 @@ BalloonManager.prototype.create = function(RandomNum,posX, posY)
 		{
 			case 0:
 			{
-				this.BalloonImage = this.game.add.sprite(posX, posY, "yellow");
+				this.BalloonImage = this.game.add.sprite(posX - 20, posY, "yellow");
 				this.balloonNum = 0;
 			}break;
 			case 1:
@@ -50,15 +48,15 @@ BalloonManager.prototype.create = function(RandomNum,posX, posY)
 		this.BalloonImage.anchor.setTo(0.5,0.5);
 		this.BalloonImage.clicked = false;
 		this.BalloonImage.inputEnabled = true;
-		this.BalloonImage.input.useHandCursor = true;
+//		this.BalloonImage.input.useHandCursor = true;
 		this.BalloonImage.events.onInputDown.add(this.checkBalloon, this);
 
 
 		///// BALLOON COLLISION INSIDE THE BOUNDS//////////
 		this.game.physics.enable(this.BalloonImage, Phaser.Physics.ARCADE);
 		this.BalloonImage.body.velocity.x = 0; // 0
-		this.BalloonImage.body.velocity.y = -50; //-50;
-		this.BalloonImage.body.collideWorldBounds = true;
+		this.BalloonImage.body.velocity.y = -10; //-50;
+		this.BalloonImage.body.collideWorldBounds = false;
 		this.BalloonImage.body.bounce.set(1);
 		this.game.physics.arcade.setBounds(130,70,700, 500);
 
@@ -83,10 +81,10 @@ BalloonManager.prototype.update = function()
 BalloonManager.prototype.CreateBounds = function()
 { 
 	// Display the bounds
-	this.bounds = new Phaser.Rectangle(130, 70, 700, 500); // position x , y  // scale: w h 
+	this.bounds = new Phaser.Rectangle(130, 100, 700, 500); // position x , y  // scale: w h 
 	var graphics = this.game.add.graphics(this.bounds.x, this.bounds.y);
 //  graphics.lineStyle(4, 0xffd900, 0);
-    graphics.lineStyle(4, 0xffd900, 1);
+    graphics.lineStyle(4, 0xffd900, 0);
     graphics.drawRect(0, 0, this.bounds.width, this.bounds.height);
 },
 	
