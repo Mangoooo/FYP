@@ -60,14 +60,18 @@ FadeManager.prototype.fadeOut = function(FadeToStateNum)
 			    case 1:
 			    {
 			    	this.OnStart = true;
-			        this.game.state.start('Game');
+			        this.game.state.start('Tutorial');
 			    }break;
 			    case 2:
 			    {
 			    	this.OnStart = true;
-			        this.game.state.start('Tutorial');
+			        this.game.state.start('Game');
 			    }break;
-                    
+                case 3:
+			    {
+			    	this.OnStart = true;
+			        this.game.state.start('gameOver');
+			    }break;  
 			}
 		}
 	}

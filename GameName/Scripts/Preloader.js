@@ -29,7 +29,8 @@ theGame.Preloader.prototype =
         this.load.image('MainMenuBackGround', 'Assets/images/mainmenu.png');
         this.load.image('GameBackGround', 'Assets/images/game.png');
         this.load.image('ToturialBackGround', 'Assets/images/tutorial.png');
-		this.load.image('Bounds_BG', 'Assets/images/Bounds_BG.png');
+//		this.load.image('Bounds_BG', 'Assets/images/Bounds_BG.png');
+		this.load.image('gameOver', 'Assets/images/gameOver.png');
 		
 		//Ballon image
 		this.load.image('yellow', 'Assets/images/Balloon_yellow.png');
@@ -58,6 +59,7 @@ theGame.Preloader.prototype =
         //Button
         this.load.image('startButton', 'Assets/images/Play_button.png');
         this.load.image('skipButton', 'Assets/images/skipButton.png');
+		this.load.image('nextButton', 'Assets/images/nextButton.png');
 		
         //Fade In/Out
         this.load.image('FadeInOut', 'Assets/images/Fade.png');

@@ -48,6 +48,7 @@ BalloonManager.prototype.create = function(RandomNum,posX, posY)
 		this.BalloonImage.anchor.setTo(0.5,0.5);
 		this.BalloonImage.clicked = false;
 		this.BalloonImage.inputEnabled = true;
+		this.BalloonImage.input.pixelPerfectOver = true;
 //		this.BalloonImage.input.useHandCursor = true;
 		this.BalloonImage.events.onInputDown.add(this.checkBalloon, this);
 
@@ -83,7 +84,6 @@ BalloonManager.prototype.CreateBounds = function()
 	// Display the bounds
 	this.bounds = new Phaser.Rectangle(130, 100, 700, 500); // position x , y  // scale: w h 
 	var graphics = this.game.add.graphics(this.bounds.x, this.bounds.y);
-//  graphics.lineStyle(4, 0xffd900, 0);
     graphics.lineStyle(4, 0xffd900, 0);
     graphics.drawRect(0, 0, this.bounds.width, this.bounds.height);
 },
@@ -133,7 +133,8 @@ BalloonManager.prototype.destroyBalloon = function()
 	
 BalloonManager.prototype.destroyColorBar = function()
 {
-	this.colorBarImage.destroy();
+//	this.colorBarImage.destroy();
+	this.colorBarImage.alpha = 0.2;
 },
 	
 BalloonManager.prototype.checkBalloon = function()
