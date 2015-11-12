@@ -40,12 +40,24 @@ ButtonManager.prototype.createButton = function(posx, posy, key, value)
 {
     this.theButton = this.game.add.sprite(posx, posy, key);
     this.theButton.anchor.set(0.5,0.5);
+	this.theButton.frame = 0;
     this.theButton.inputEnabled = true;
     this.theButton.events.onInputDown.add(function(){this.GoToScene(value)}, this);
 }
 
 ButtonManager.prototype.GoToScene = function(gameScene)
 {
+	this.theButton.frame = 1;
     this.gametype = gameScene;
     theGame.FadeScreen.OnEnd = true;
 };
+
+//ButtonManager.prototype.mouseOver = function()
+//{
+//	this.theButton.frame = 1;
+//};
+	
+//ButtonManager.prototype.actionOnClick = function()
+//{
+//    button.setFrames(0,1);
+//};

@@ -53,7 +53,7 @@ BalloonManager.prototype.create = function(RandomNum,posX, posY)
 		this.BalloonImage.events.onInputDown.add(this.checkBalloon, this);
 
 
-		///// BALLOON COLLISION INSIDE THE BOUNDS//////////
+		/////// BALLOON COLLISION INSIDE THE BOUNDS//////////
 		this.game.physics.enable(this.BalloonImage, Phaser.Physics.ARCADE);
 		this.BalloonImage.body.velocity.x = 0; // 0
 		this.BalloonImage.body.velocity.y = -10; //-50;
@@ -79,14 +79,14 @@ BalloonManager.prototype.update = function()
 { 
 },
 	
-BalloonManager.prototype.CreateBounds = function()
-{ 
-	// Display the bounds
-	this.bounds = new Phaser.Rectangle(130, 100, 700, 500); // position x , y  // scale: w h 
-	var graphics = this.game.add.graphics(this.bounds.x, this.bounds.y);
-    graphics.lineStyle(4, 0xffd900, 0);
-    graphics.drawRect(0, 0, this.bounds.width, this.bounds.height);
-},
+//BalloonManager.prototype.CreateBounds = function()
+//{ 
+//	// Display the bounds
+//	this.bounds = new Phaser.Rectangle(130, 100, 700, 500); // position x , y  // scale: w h 
+//	var graphics = this.game.add.graphics(this.bounds.x, this.bounds.y);
+//    graphics.lineStyle(4, 0xffd900, 0);
+//    graphics.drawRect(0, 0, this.bounds.width, this.bounds.height);
+//},
 	
 BalloonManager.prototype.LoadColorBar = function(RandomNum,posX, posY)
 {
@@ -133,7 +133,6 @@ BalloonManager.prototype.destroyBalloon = function()
 	
 BalloonManager.prototype.destroyColorBar = function()
 {
-//	this.colorBarImage.destroy();
 	this.colorBarImage.alpha = 0.2;
 },
 	
@@ -141,3 +140,4 @@ BalloonManager.prototype.checkBalloon = function()
 {
 	this.BalloonImage.clicked = true;
 };
+

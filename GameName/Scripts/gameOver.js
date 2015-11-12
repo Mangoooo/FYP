@@ -16,14 +16,13 @@ theGame.gameOver.prototype =
         
         //Button
         this.buttonManager = new ButtonManager(this);
-        //this.buttonManager.startGameButton(this.world.width*0.177, this.world.height*0.7);
+        this.buttonManager.createButton(this.world.width*0.5, this.world.height*0.5, 'restartButton', 2);
 		
         //Fade in and out
         theGame.FadeScreen = new FadeManager(this);
         theGame.FadeScreen.create();
 		
 		console.log("game over");
-
     }, 
     
     update: function()

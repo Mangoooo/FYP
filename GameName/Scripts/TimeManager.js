@@ -1,6 +1,7 @@
 function TimeManager(game)
 {
     this.game = game;
+	this.buttonManager = null;
     this.totalTime = 0;
     this.currentTime = 0;
     this.timeSet = 0;
@@ -17,7 +18,6 @@ function TimeManager(game)
     
     this.isPuase = false;
     this.gameOver = false;
-//	this.gameOverImage = null;
 }
      
 TimeManager.prototype.createTimeBar = function(posx, posy, key, time) //Time Bar 
@@ -44,13 +44,8 @@ TimeManager.prototype.timeBarCountDown = function(posx, posy)
     if(this.currentTime <= 0)
     {
         this.gameOver = true;
-		
-//		this.buttonManager = new ButtonManager(this);
-//		this.buttonManager.createButton(this.world.width*0.5, this.world.height*0.5, 'nextButton', 3);
-
-//		this.stopDownTime();
     }
-	console.log(this.gameOver);
+//	console.log(this.currentTime);
 };
    
 TimeManager.prototype.createTimerDown = function(time) //Count Down Timer 
@@ -104,7 +99,7 @@ TimeManager.prototype.timeCountUp = function()
 //    this.isPuase = false;
 //    this.timer.resume();
 //}
-//
+
 TimeManager.prototype.timeStop = function() // Stop
 {
     this.timer.stop();

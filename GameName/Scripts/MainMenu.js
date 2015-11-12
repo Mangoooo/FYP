@@ -18,34 +18,36 @@ theGame.MainMenu.prototype =
         
         //Button
         this.buttonManager = new ButtonManager(this);
-//        this.buttonManager.startGameButton(this.world.width*0.5, this.world.height*0.5); 
-        this.buttonManager.createButton(this.world.width*0.5, this.world.height*0.5, 'startButton', 1);
+        this.buttonManager.createButton(this.world.width*0.498, this.world.height*0.82, 'playButton', 1);
+		
+//		this.crossHairImage = this.game.add.sprite(0,0, 'emptycrossHair');
+//		this.crossHairImage.anchor.setTo(0.5,0.5);
+//		this.game.physics.enable(this.crossHairImage, Phaser.Physics.ARCADE);
 		
         //Fade in and out
         theGame.FadeScreen = new FadeManager(this);
         theGame.FadeScreen.create();
 		
-//		this.game.canvas.style.cursor = 'none'; // the cursor is none
-//		this.crossHairImage = this.game.add.sprite(0,0, 'crossHair');
-//		this.crossHairImage.anchor.setTo(0.5,0.5);
-//		this.game.physics.enable(this.crossHairImage, Phaser.Physics.ARCADE);
+		
     }, 
     
     update: function()
     {
         theGame.FadeScreen.update(this.buttonManager.gametype);
 		this.outScreen();
+		
 //		this.crossHairImage.x = this.game.input.mousePointer.x;
-//        this.crossHairImage.y = this.game.input.mousePointer.y;
+//      	this.crossHairImage.y = this.game.input.mousePointer.y;
     }, 
 	
 	outScreen: function()
 	{
-		if(this.game.input.mousePointer.withinGame == false)
-		{
-			console.log("asasf");
-			
-		}
+//		if(this.game.input.mousePointer.withinGame == false)
+//		{
+//			console.log("asasf");
+////			this.game.canvas.style.cursor = 'none'; // the cursor is none
+//			this.game.physics.enable(this.game.input.mousePointer.withinGame, Phaser.Physics.ARCADE);
+//		}
 //		this.game.input.mousePointer.y = this.world.width/2;
 	}
 };
