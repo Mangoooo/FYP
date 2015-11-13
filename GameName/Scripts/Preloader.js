@@ -5,6 +5,10 @@ theGame.Preloader = function(game)
     this.PreloadBarempty = null;
     this.preloadCover = null;
     this.ready = false;
+	
+	this.Lvl1CorrectBalloon = 0;
+	this.Lvl2CorrectBalloon = 0;
+	this.Lvl3CorrectBalloon = 0;
 };
 
 theGame.Preloader.prototype = 
@@ -31,13 +35,19 @@ theGame.Preloader.prototype =
         this.load.image('ToturialBackGround', 'Assets/images/tutorial.png');
 		this.load.image('gameOver', 'Assets/images/gameOver.png');
 		
-		//Ballon image
-		this.load.image('yellow', 'Assets/images/Balloon_yellow.png');
-		this.load.image('yellowOrange', 'Assets/images/Balloon_yellowOrange.png');
-		this.load.image('orange', 'Assets/images/Balloon_orange.png');
-		this.load.image('redOrange', 'Assets/images/Balloon_redOrange.png');
-        this.load.image('magenta', 'Assets/images/Balloon_magenta.png');
-		this.load.image('redPurple', 'Assets/images/Balloon_redPurple.png');
+		//Warm balloon sprite sheet
+		this.load.spritesheet('yellow', 'Assets/images/Warm/warm1.png', 120,120);
+		this.load.spritesheet('yellowOrange', 'Assets/images/Warm/warm2.png', 120,120);
+		this.load.spritesheet('orange', 'Assets/images/Warm/warm3.png', 120,120);
+		this.load.spritesheet('redOrange', 'Assets/images/Warm/warm4.png', 120,120);
+		this.load.spritesheet('magenta', 'Assets/images/Warm/warm5.png', 120,120);
+		this.load.spritesheet('redPurple', 'Assets/images/Warm/warm6.png', 120,120);
+		
+		//Monochromatic balloon sprite sheet
+		this.load.spritesheet('mono1', 'Assets/images/Monochromatic/mono1.png', 120,120);
+		this.load.spritesheet('mono2', 'Assets/images/Monochromatic/mono2.png', 120,120);
+		this.load.spritesheet('mono3', 'Assets/images/Monochromatic/mono3.png', 120,120);
+		this.load.spritesheet('mono4', 'Assets/images/Monochromatic/mono4.png', 120,120);
 		
 		//Color bar
 		this.load.image('yellowbar', 'Assets/images/ColorBar_yellow.png');
@@ -49,10 +59,12 @@ theGame.Preloader.prototype =
 		
 		//Life / bullet
 		this.load.image('Bullet', 'Assets/images/Bullet.png');
+		
+		//UI bar
+		this.load.image('UI_bar', 'Assets/images/UI_bar.png');
 
 		//CrossHair Image
 		this.load.image('crossHair', 'Assets/images/crossHair.png');
-		this.load.image('emptycrossHair', 'Assets/images/emptycrossHair.png');
 		
 		//TimerBar
 		this.load.image('timerBar', 'Assets/images/timerBar.png');
@@ -61,7 +73,6 @@ theGame.Preloader.prototype =
 		this.load.spritesheet('restartButton', 'Assets/images/restartButton.png', 212,64);
 		this.load.spritesheet('playButton', 'Assets/images/playButton.png', 86,86);
         this.load.image('skipButton', 'Assets/images/skipButton.png');
-		
 		
         //Fade In/Out
         this.load.image('FadeInOut', 'Assets/images/Fade.png');

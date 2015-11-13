@@ -7,12 +7,13 @@ theGame.Game = function(game)
 	
 	this._balloon = null;
 	this.totalColorBar = 0;
-	this.BalloonArray = [0,1,2,3,4,5];
+	this.BalloonArray = [0,1,2,3,4,5,6,7,8,9];
 	this.ColorBarArray = [0,1,2,3,4,5];
 	this.tempArray = [];
 	this.tempBarArray = [];
 	
 	this.crossHairImage = null;
+	this.uiImage = null;
 	
 	this.bulletImage1 = null;
 	this.bulletImage2 = null;
@@ -25,6 +26,7 @@ theGame.Game = function(game)
 	this.bulletNum = 0;
 	this.gameScene = 0;
 	this.canClicked = false;
+	this.CorrectBalloon1 = 0;
 };
 
 theGame.Game.prototype = 
@@ -34,6 +36,9 @@ theGame.Game.prototype =
         //Screen Background
         this.gameBackground = this.add.sprite(this.world.width*0.5, this.world.height*0.5, 'GameBackGround');
         this.gameBackground.anchor.set(0.5,0.5);
+		
+		this.uiImage = this.add.sprite(this.world.width*0.5, this.world.height*0.87, 'UI_bar');
+        this.uiImage.anchor.set(0.5,0.5);
 		
 		this.bulletImage1 = this.game.add.sprite(this.world.width*0.1, this.world.height*0.09, 'Bullet');
 		this.bulletImage1.anchor.set(0.5,0.5);
@@ -53,8 +58,8 @@ theGame.Game.prototype =
 		this.bulletImage6 = this.game.add.sprite(this.world.width*0.25, this.world.height*0.09, 'Bullet');
 		this.bulletImage6.anchor.set(0.5,0.5);
 		
-//		this.bulletImage7 = this.game.add.sprite(this.world.width*0.28, this.world.height*0.09, 'Bullet');
-//		this.bulletImage7.anchor.set(0.5,0.5);
+		this.bulletImage7 = this.game.add.sprite(this.world.width*0.28, this.world.height*0.09, 'Bullet');
+		this.bulletImage7.anchor.set(0.5,0.5);
     }, 
     
     create: function()
@@ -62,11 +67,10 @@ theGame.Game.prototype =
 		this.tempArray = []; // restart can click and destroy
 		this.tempBarArray = [];
 		this.timeManager = new TimeManager(this);
-		this.timeManager.createTimeBar(this.world.width*0.4, this.world.height*0.1, 'timerBar', 10); // time position / timer is 60
+		this.timeManager.createTimeBar(this.world.width*0.4, this.world.height*0.1, 'timerBar', 40); // time position / timer is 60
 		
-		this.spawnTarget();
+		this.spawnBalloon();
 		this.spawnColorBar();
-		
 		
 		this.buttonManager = new ButtonManager(this);
 		this.buttonManager.createButton(this.world.width*0.5, this.world.height*0.5, 'nextButton',1);
@@ -82,10 +86,12 @@ theGame.Game.prototype =
     
     update: function()
     {
-		this.CheckRedBar();
+		this.CheckBalloon();
 		this.GotoTimepage();
 //		this.crossHairImage.x = this.game.input.mousePointer.x;
 //        this.crossHairImage.y = this.game.input.mousePointer.y;
+		
+		theGame.Lvl1CorrectBalloon = this.CorrectBalloon1;
 		
 		if (this.bulletNum == 1)
 		{
@@ -111,14 +117,14 @@ theGame.Game.prototype =
 		{
 			this.bulletImage6.destroy();
 		}
-//		else if (this.bulletNum == 7)
-//		{
-//			this.bulletImage6.destroy();
-//		}
+		else if (this.bulletNum == 7)
+		{
+			this.bulletImage7.destroy();
+		}
 		
 		if(this.timeManager.gameOver == true) //game over then  restart
 		{
-//			this.timeManager.timeStop();
+			this.timeManager.timeStop();
 			this.gameScene = 3;
 			theGame.FadeScreen.OnEnd = true;
 			this.Restart();
@@ -129,7 +135,7 @@ theGame.Game.prototype =
 	
 	GotoTimepage: function() // bullet gone then go to time page 
 	{
-		if (this.bulletNum == 2) // 7 
+		if (this.bulletNum == 7) // 7 
 		{
 			this.timeManager.timeStop();
 			this.buttonManager.theButton.inputEnable = true;
@@ -140,9 +146,9 @@ theGame.Game.prototype =
 		theGame.FadeScreen.update(this.gameScene);
 	},
 	
-	spawnTarget: function()
+	spawnBalloon: function()
 	{
-		for (i = 0; i < 6; i++) 
+		for (i = 0; i < 10; i++) 
 		{
 			this._balloon = new BalloonManager(this);
 			this._balloon.create(this.BalloonArray[i], 800, 400);
@@ -152,7 +158,7 @@ theGame.Game.prototype =
 	
 	spawnColorBar: function()
 	{
-		for (j = 0; j < 6; j++)
+		for (j = 0; j < 10; j++)
 		{
 			this._balloon = new BalloonManager(this);
 			this._balloon.LoadColorBar(this.ColorBarArray[j], 850, 200);
@@ -160,26 +166,27 @@ theGame.Game.prototype =
 		}
 	},
 	
-	CheckRedBar: function()
+	CheckBalloon: function()
 	{
 		if (this.canClicked == false)
 		{
-			for(i=0;i<6;i++)
+			for(i=0;i<10;i++)
 			{
 				if(this.tempArray[i].BalloonImage.clicked == true) 
 				{
 					if (this.tempArray[i].balloonNum == this.tempBarArray[i].randomBar)     //blue
 					{
-						this.tempArray[i].destroyBalloon();
 						this.tempBarArray[i].destroyColorBar();
 						this.tempArray[i].BalloonImage.clicked = false;
-
-						this.bulletNum +=1;
+						this.CorrectBalloon1 +=1;
+						console.log(this.CorrectBalloon1);
 					}
-					else 
+					else if(this.tempArray[i].balloonNum != this.tempBarArray[i].randomBar)
 					{
 						this.tempArray[i].BalloonImage.clicked = false;	
 					}
+					this.bulletNum +=1;
+					this.tempArray[i].destroyBalloon();// play animation then destroy
 				}
 			}	
 		}
@@ -197,29 +204,3 @@ theGame.Game.prototype =
 		this.bulletNum = 0;	
 	},
 }
-	
-//	CheckRedBar: function()
-//	{
-//		for(i=0;i<6;i++)
-//		{
-//			if(this.tempArray[i].BalloonImage.clicked == true) 
-//			{
-//				console.log(this.tempArray[i].balloonNum);
-//				console.log(this.tempBarArray[i].randomBar);
-//				this.tempArray[i].BalloonImage.clicked = false;
-//				if (this.tempArray[i].balloonNum == this.tempBarArray[i].randomBar)     //blue
-//				{
-//					console.log("correct");
-//					this.tempArray[i].destroyBalloon();
-//					this.tempBarArray[i].destroyColorBar();
-//					this._balloon.destroyColorBar();
-//					this.tempArray[i].BalloonImage.clicked = false;
-//				}
-//				else 
-//				{
-//					console.log("wrong");
-//					this.tempArray[i].BalloonImage.clicked = false;	
-//				}
-//			}
-//		}	
-//	},
